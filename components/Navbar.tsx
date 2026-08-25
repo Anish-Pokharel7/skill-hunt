@@ -48,45 +48,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Top Institutional Notification Bar */}
-      <div className="bg-[#f3f1ec] border-b border-[#e5e2da] text-xs px-4 py-1.5 text-[#333d37]">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-[#eaf0ec] text-[#1b4332] border border-[#cad2c5]">
-              <Lock className="w-3 h-3" />
-              OFFICIAL SYSTEM &bull; SERVER-SIDE AUTHORIZATION ACTIVE
-            </span>
-            <span className="hidden md:inline text-[#65736a]">
-              Active User: <strong className="text-[#181c1a]">{user?.name || "Guest"}</strong> ({user?.organizationName})
-            </span>
-          </div>
-
-          {/* 9 Roles Quick Selector */}
-          <div className="flex items-center gap-1 overflow-x-auto max-w-full py-0.5">
-            <span className="text-[#65736a] font-medium whitespace-nowrap text-[11px] mr-1 hidden lg:inline">
-              Role Persona:
-            </span>
-            {SEED_USERS.map((u) => {
-              const isCurrent = user?.id === u.id;
-              return (
-                <button
-                  key={u.id}
-                  onClick={() => loginAsRole(u.role)}
-                  disabled={isLoading}
-                  title={`${u.name} - ${u.role} (${u.organizationName})`}
-                  className={`px-2 py-0.5 rounded text-[11px] font-medium transition whitespace-nowrap ${
-                    isCurrent
-                      ? "bg-[#1b4332] text-white font-semibold shadow-xs"
-                      : "bg-[#ffffff] hover:bg-[#eae7df] text-[#333d37] border border-[#d2cebf]"
-                  }`}
-                >
-                  {u.role.replace("BUSINESS_", "BIZ_").replace("GOVERNMENT_", "GOV_")}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
 
       {/* Main Clean Institutional Header */}
       <header className="sticky top-0 z-50 bg-[#ffffff] border-b border-[#e5e2da] shadow-xs">
