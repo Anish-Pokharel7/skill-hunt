@@ -1,0 +1,262 @@
+// Prisma Schema for VERIPRICE: National Supply Chain & Tax Ledger
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id            String   @id @default(cuid())
+  name          String
+  type          String   // GOVERNMENT, TAX_AUTHORITY, MANUFACTURER, IMPORTER, RETAILER_DISTRIBUTOR, AUDIT_FIRM, CONSUMER
+  taxPin        String   @unique
+  licenseNumber String   @unique
+  jurisdiction  String
+  verified      Boolean  @default(false)
+  address       String
+  contactEmail  String
+  createdAt     DateTime @default(now())
+
+  users         User[]
+  batches       BatchItem[]
+  declarations  CustomsDeclaration[]
+  inventory     BusinessInventoryItem[]
+  soldInvoices  Invoice[]              @relation("SellerOrg")
+  boughtInvoices Invoice[]             @relation("BuyerOrg")
+}
+
+model User {
+  id               String       @id @default(cuid())
+  email            String       @unique
+  name             String
+  role             String       // SUPER_ADMIN, TAX_OFFICER, MANUFACTURER, IMPORTER, BUSINESS_EMPLOYEE, AUDITOR, CONSUMER
+  passwordHash     String?
+  orgId            String
+  organization     Organization @relation(fields: [orgId], references: [id])
+  employeeCode     String?
+  designation      String?
+  status           String       @default("ACTIVE")
+  createdAt        DateTime     @default(now())
+
+  issuedInvoices   Invoice[]
+  assignedAlerts   FraudAlert[]
+}
+
+model BatchItem {
+  id                String            @id @default(cuid())
+  batchNumber       String            @unique
+  productName       String
+  category          String
+  hsCode            String
+  description       String?
+  quantity          Int
+  availableQuantity Int
+  unit              String            @default("Units")
+  productionDate    DateTime
+  expiryDate        DateTime?
+  manufacturerOrgId String
+  manufacturer      Organization      @relation(fields: [manufacturerOrgId], references: [id])
+  factoryLocation   String
+  baseCost          Float
+  standardVatRate   Float             @default(0.13)
+  exciseRate        Float             @default(0.0)
+  statutoryMrp      Float
+  status            String            @default("PRODUCED")
+  carbonFootprintKg Float             @default(1.2)
+  provenanceHash    String
+  serialPrefix      String
+  createdAt         DateTime          @default(now())
+
+  passports         ProductPassport[]
+}
+
+model ProductPassport {
+  id                  String                 @id @default(cuid())
+  serialNumber        String                 @unique
+  batchId             String
+  batch               BatchItem              @relation(fields: [batchId], references: [id])
+  batchNumber         String
+  productName         String
+  category            String
+  hsCode              String
+  manufacturerOrgId   String
+  currentHolderOrgId  String
+  statutoryMrp        Float
+  status              String                 @default("PRODUCED")
+  isAuthentic         Boolean                @default(true)
+  isRecalled          Boolean                @default(false)
+  scanCount           Int                    @default(0)
+  lastScannedAt       DateTime?
+  lastScannedLocation String?
+  digitalSignature    String
+  qrPayload           String
+  createdAt           DateTime               @default(now())
+
+  journey             PassportJourneyEvent[]
+}
+
+model PassportJourneyEvent {
+  id           String          @id @default(cuid())
+  passportId   String
+  passport     ProductPassport @relation(fields: [passportId], references: [id], onDelete: Cascade)
+  timestamp    DateTime        @default(now())
+  stage        String          // MANUFACTURED, CUSTOMS_CLEARED, DISTRIBUTED, RETAIL_RECEIVED, POINT_OF_SALE, CONSUMER_VERIFIED, SUSPICIOUS_FLAG
+  actorRole    String
+  actorName    String
+  actorOrgName String
+  location     String
+  details      String
+  hash         String
+  isVerified   Boolean         @default(true)
+}
+
+model CustomsDeclaration {
+  id                   String       @id @default(cuid())
+  consignmentId        String       @unique
+  billOfEntryNo        String       @unique
+  importerOrgId        String
+  importer             Organization @relation(fields: [importerOrgId], references: [id])
+  portOfOrigin         String
+  portOfEntry          String
+  arrivalDate          DateTime
+  hsCode               String
+  productSummary       String
+  declaredValueUsd     Float
+  declaredValueLocal   Float
+  customsDutyRate      Float
+  customsDutyAmount    Float
+  importVatAmount      Float
+  totalCustomsDutyPaid Float
+  clearanceStatus      String       @default("PENDING_DUTY")
+  officerNotes         String?
+  createdAt            DateTime     @default(now())
+}
+
+model BusinessInventoryItem {
+  id               String       @id @default(cuid())
+  businessOrgId    String
+  businessOrg      Organization @relation(fields: [businessOrgId], references: [id])
+  batchId          String
+  batchNumber      String
+  productName      String
+  category         String
+  hsCode           String
+  sku              String
+  stockQuantity    Int
+  unitCost         Float
+  retailPrice      Float
+  statutoryMrp     Float
+  isPriceCompliant Boolean      @default(true)
+  lastRestockedAt  DateTime     @default(now())
+  supplierOrgName  String
+}
+
+model Invoice {
+  id                     String            @id @default(cuid())
+  invoiceNumber          String            @unique
+  irn                    String            @unique
+  invoiceType            String            @default("B2C_RETAIL")
+  sellerOrgId            String
+  sellerOrg              Organization      @relation("SellerOrg", fields: [sellerOrgId], references: [id])
+  sellerName             String
+  sellerTaxPin           String
+  sellerAddress          String
+  buyerOrgId             String?
+  buyerOrg               Organization?     @relation("BuyerOrg", fields: [buyerOrgId], references: [id])
+  buyerName              String
+  buyerTaxPin            String?
+  buyerType              String            @default("INDIVIDUAL_CONSUMER")
+  subtotal               Float
+  totalDiscount          Float             @default(0)
+  totalExcise            Float             @default(0)
+  totalVat               Float             @default(0)
+  grandTotal             Float
+  paymentMethod          String            @default("CARD")
+  fiscalStatus           String            @default("VALIDATED")
+  issuedByUserId         String
+  issuedByUser           User              @relation(fields: [issuedByUserId], references: [id])
+  issuedByName           String
+  qrCodeUrl              String
+  fiscalStampHash        String
+  isPriceGougingDetected Boolean           @default(false)
+  createdAt              DateTime          @default(now())
+
+  items                  InvoiceLineItem[]
+}
+
+model InvoiceLineItem {
+  id            String   @id @default(cuid())
+  invoiceId     String
+  invoice       Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  serialNumber  String?
+  batchId       String
+  batchNumber   String
+  productName   String
+  hsCode        String
+  quantity      Int
+  unitPrice     Float
+  mrp           Float
+  discount      Float    @default(0)
+  taxableAmount Float
+  vatRate       Float    @default(0.13)
+  vatAmount     Float
+  exciseRate    Float    @default(0)
+  exciseAmount  Float    @default(0)
+  totalAmount   Float
+}
+
+model TaxRule {
+  id                 String   @id @default(cuid())
+  hsCode             String   @unique
+  category           String
+  description        String
+  standardVatRate    Float    @default(0.13)
+  exciseDutyRate     Float    @default(0)
+  customsDutyRate    Float    @default(0)
+  luxuryTaxRate      Float    @default(0)
+  maxProfitMarginCap Float    @default(0.20)
+  statutoryPriceCap  Float?
+  updatedByRole      String
+  updatedAt          DateTime @updatedAt
+}
+
+model FraudAlert {
+  id                 String   @id @default(cuid())
+  type               String   // DUPLICATE_SCAN, PRICE_GOUGING, UNREGISTERED_SERIAL, TAX_CAROUSEL_MISMATCH, SUSPICIOUS_VELOCITY, CONSUMER_WHISTLEBLOWER
+  severity           String   @default("MEDIUM")
+  title              String
+  description        String
+  targetSerialNumber String?
+  targetBatchId      String?
+  targetOrgId        String?
+  targetOrgName      String?
+  targetInvoiceId    String?
+  riskScore          Int      @default(50)
+  status             String   @default("OPEN")
+  reportedBy         String
+  assignedOfficerId  String?
+  assignedOfficer    User?    @relation(fields: [assignedOfficerId], references: [id])
+  actionNotes        String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model SystemAuditLog {
+  id           String   @id @default(cuid())
+  timestamp    DateTime @default(now())
+  userId       String
+  userName     String
+  userRole     String
+  orgId        String
+  orgName      String
+  action       String
+  resourceType String
+  resourceId   String
+  ipAddress    String
+  status       String
+  details      String
+}
