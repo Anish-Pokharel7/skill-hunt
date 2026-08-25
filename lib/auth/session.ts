@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { User, UserRole } from "@/lib/db/types";
 import { SEED_USERS } from "@/lib/auth/mock-users";
 
-export const SESSION_COOKIE_NAME = "skillhunt_session_token";
+export const SESSION_COOKIE_NAME = "veriprice_session_token";
 
 export interface SessionData {
   userId: string;

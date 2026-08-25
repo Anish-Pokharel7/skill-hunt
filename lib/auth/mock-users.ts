@@ -78,7 +78,7 @@ export const SEED_ORGS: Record<string, Organization> = {
 export const SEED_USERS: User[] = [
   {
     id: "usr_super_01",
-    email: "superadmin@skillhunt.gov",
+    email: "superadmin@veriprice.gov",
     name: "Sarah Vance",
     role: "SUPER_ADMIN",
     orgId: "org_gov_01",
@@ -89,7 +89,7 @@ export const SEED_USERS: User[] = [
   },
   {
     id: "usr_gov_01",
-    email: "govadmin@skillhunt.gov",
+    email: "govadmin@veriprice.gov",
     name: "Dr. Rajesh Sharma",
     role: "GOVERNMENT_ADMIN",
     orgId: "org_gov_01",
@@ -100,7 +100,7 @@ export const SEED_USERS: User[] = [
   },
   {
     id: "usr_tax_01",
-    email: "taxofficer@skillhunt.gov",
+    email: "taxofficer@veriprice.gov",
     name: "Officer Marcus Sterling",
     role: "TAX_OFFICER",
     orgId: "org_gov_01",
@@ -180,69 +180,60 @@ export const SEED_USERS: User[] = [
 
 export const ROLE_DETAILS: Record<
   string,
-  { label: string; badgeColor: string; description: string; homeRoute: string; icon: string }
+  { label: string; badgeColor: string; description: string; homeRoute: string }
 > = {
   SUPER_ADMIN: {
     label: "Super Admin",
-    badgeColor: "bg-purple-500/20 text-purple-400 border-purple-500/30",
-    description: "Full system administration, tenant onboarding, global master controls, and security auditing.",
+    badgeColor: "bg-[#1b4332] text-white border border-[#143621]",
+    description: "Full system administration, tenant onboarding, master controls, and security audits.",
     homeRoute: "/admin",
-    icon: "ShieldAlert",
   },
   GOVERNMENT_ADMIN: {
     label: "Government Admin",
-    badgeColor: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+    badgeColor: "bg-[#eaf0ec] text-[#1b4332] border border-[#cad2c5]",
     description: "National tax policy, statutory MRP ceilings, compliance mandates, and revenue macro-analytics.",
     homeRoute: "/admin",
-    icon: "Landmark",
   },
   TAX_OFFICER: {
     label: "Tax Officer",
-    badgeColor: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+    badgeColor: "bg-[#fbf3e8] text-[#8a5b14] border border-[#eeddc2]",
     description: "VAT reconciliation audits, customs verification, tax fraud investigations, and penalty enforcement.",
     homeRoute: "/tax-engine",
-    icon: "Scale",
   },
   MANUFACTURER: {
     label: "Manufacturer",
-    badgeColor: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+    badgeColor: "bg-[#eaf0ec] text-[#2d5a45] border border-[#c1d3c8]",
     description: "Production batch registration, DPP QR minting, factory dispatch manifests, and ex-factory tax declaration.",
     homeRoute: "/manufacturer",
-    icon: "Factory",
   },
   IMPORTER: {
     label: "Importer",
-    badgeColor: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30",
+    badgeColor: "bg-[#eef2f6] text-[#2b4c6f] border border-[#d0dbe7]",
     description: "Customs declaration, Port of Entry clearances, import duty calculation, and consignment transfers.",
     homeRoute: "/importer",
-    icon: "Ship",
   },
   BUSINESS_OWNER: {
     label: "Business Owner",
-    badgeColor: "bg-indigo-500/20 text-indigo-400 border-indigo-500/30",
+    badgeColor: "bg-[#f2efe9] text-[#4a4036] border border-[#ded8cc]",
     description: "Full inventory, retail pricing, employee management, POS sales, and input/output VAT return filing.",
     homeRoute: "/business",
-    icon: "Store",
   },
   BUSINESS_EMPLOYEE: {
     label: "Business Employee",
-    badgeColor: "bg-sky-500/20 text-sky-400 border-sky-500/30",
+    badgeColor: "bg-[#f6f5f2] text-[#55524c] border border-[#e2ded6]",
     description: "Scoped operational access: Barcode/QR scanning, Point of Sale checkouts, and e-invoice issuance.",
     homeRoute: "/business",
-    icon: "UserCheck",
   },
   AUDITOR: {
     label: "Auditor",
-    badgeColor: "bg-rose-500/20 text-rose-400 border-rose-500/30",
+    badgeColor: "bg-[#fbeeed] text-[#8c322c] border border-[#f2cfcd]",
     description: "Read-only fiscal provenance ledger inspection, supply chain integrity audits, and anomaly reports.",
     homeRoute: "/reports",
-    icon: "ClipboardCheck",
   },
   CONSUMER: {
     label: "Consumer",
-    badgeColor: "bg-teal-500/20 text-teal-400 border-teal-500/30",
+    badgeColor: "bg-[#f0f4f1] text-[#2d5a45] border border-[#d2ded5]",
     description: "Public product authenticity scans, Digital Product Passport verification, and counterfeit whistleblower reports.",
     homeRoute: "/verify",
-    icon: "QrCode",
   },
 };

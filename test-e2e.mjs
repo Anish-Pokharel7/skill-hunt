@@ -3,7 +3,7 @@ const BASE_URL = "http://localhost:3000";
 
 async function runTests() {
   console.log("==================================================");
-  console.log("RUNNING SKILLHUNT APEXTRACE SECURITY & FUNCTIONAL TESTS");
+  console.log("RUNNING VERIPRICE SECURITY & FUNCTIONAL TESTS");
   console.log("==================================================\n");
 
   let passed = 0;

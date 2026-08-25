@@ -147,7 +147,7 @@ export class FiscalInvoiceEngine {
       fiscalStatus: hasPriceGouging ? "FLAGGED_DISCREPANCY" : "VALIDATED",
       issuedByUserId: params.issuerUser.id,
       issuedByName: params.issuerUser.name,
-      qrCodeUrl: `https://skillhunt.gov/invoices/${invoiceId}`,
+      qrCodeUrl: `https://veriprice.gov/invoices/${invoiceId}`,
       fiscalStampHash,
       isPriceGougingDetected: hasPriceGouging,
       createdAt: timestamp,

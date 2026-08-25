@@ -8,23 +8,18 @@ import {
   ShieldCheck,
   Scale,
   Users,
-  FileCheck,
-  AlertTriangle,
   Lock,
   Plus,
   CheckCircle2,
-  RefreshCw,
   Search,
 } from "lucide-react";
 
 export default function AdminPortalPage() {
   const { user, role, loginAsRole } = useAuth();
   const [taxRules, setTaxRules] = useState<TaxRule[]>([]);
-  const [auditLogs, setAuditLogs] = useState<SystemAuditLog[]>([]);
-  const [orgs, setOrgs] = useState<Organization[]>([]);
-  const [activeTab, setActiveTab] = useState<"overview" | "tax-policy" | "audit-logs" | "tenants">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "tax-policy" | "tenants">("overview");
 
-  // Tax policy edit modal state
+  // Tax policy edit state
   const [selectedHsCode, setSelectedHsCode] = useState("1509.10");
   const [vatRate, setVatRate] = useState("0.13");
   const [exciseRate, setExciseRate] = useState("0.02");
@@ -69,7 +64,7 @@ export default function AdminPortalPage() {
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        setPolicyMessage("Tax policy & statutory MRP ceiling updated on the National Ledger!");
+        setPolicyMessage("National tax policy & MRP ceiling updated successfully.");
         fetchData();
       } else {
         setPolicyMessage(`Error: ${data.message || data.error}`);
@@ -83,24 +78,24 @@ export default function AdminPortalPage() {
 
   if (!isAuthorized) {
     return (
-      <div className="max-w-2xl mx-auto my-12 p-8 rounded-2xl glass-panel border border-rose-500/30 text-center space-y-4">
-        <div className="w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 mx-auto flex items-center justify-center">
-          <Lock className="w-6 h-6" />
+      <div className="max-w-2xl mx-auto my-12 p-8 rounded gov-card text-center space-y-4 border border-[#e5e2da]">
+        <div className="w-10 h-10 rounded bg-[#fbeeed] text-[#8c322c] mx-auto flex items-center justify-center">
+          <Lock className="w-5 h-5" />
         </div>
-        <h2 className="text-xl font-bold text-white">403 Forbidden: Server Role Restriction</h2>
-        <p className="text-xs sm:text-sm text-slate-300">
-          The <strong>Admin & Government Portal</strong> is strictly restricted to <code className="bg-slate-900 px-1.5 py-0.5 rounded text-purple-300">SUPER_ADMIN</code> and <code className="bg-slate-900 px-1.5 py-0.5 rounded text-blue-300">GOVERNMENT_ADMIN</code>. Your current role is <strong className="text-white">{role}</strong>.
+        <h2 className="text-lg font-bold text-[#181c1a]">403 Forbidden: Authorized Directorate Access Only</h2>
+        <p className="text-xs text-[#4c5850]">
+          The <strong>Admin & Government Directorate</strong> is restricted to <code className="bg-[#f3f1ec] px-1.5 py-0.5 rounded text-[#181c1a]">SUPER_ADMIN</code> and <code className="bg-[#f3f1ec] px-1.5 py-0.5 rounded text-[#1b4332]">GOVERNMENT_ADMIN</code>. Your current persona is <strong>{role}</strong>.
         </p>
-        <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={() => loginAsRole("SUPER_ADMIN")}
-            className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition"
+            className="px-4 py-2 rounded bg-[#1b4332] hover:bg-[#143621] text-white font-semibold text-xs transition"
           >
             Switch to Super Admin
           </button>
           <button
             onClick={() => loginAsRole("GOVERNMENT_ADMIN")}
-            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition"
+            className="px-4 py-2 rounded bg-[#f3f1ec] hover:bg-[#eaf0ec] text-[#1b4332] font-semibold text-xs border border-[#cad2c5] transition"
           >
             Switch to Government Admin
           </button>
@@ -112,44 +107,44 @@ export default function AdminPortalPage() {
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#e5e2da]">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-black text-white">Admin & Government Control Center</h1>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40">
+            <h1 className="text-xl font-bold text-[#181c1a]">Admin & Government Directorate</h1>
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#eaf0ec] text-[#1b4332] border border-[#cad2c5]">
               {role}
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
-            National Fiscal Oversight &bull; Statutory MRP Controls &bull; Tenant Validation &bull; Security Audits
+          <p className="text-xs text-[#65736a] mt-0.5">
+            National Fiscal Policy &bull; Statutory MRP Controls &bull; Tenant Organization Registry
           </p>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-white/10 text-xs font-semibold">
+        <div className="flex items-center gap-1 bg-[#ffffff] p-1 rounded border border-[#e5e2da] text-xs font-medium">
           <button
             onClick={() => setActiveTab("overview")}
-            className={`px-3 py-1.5 rounded-lg transition ${
-              activeTab === "overview" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
+            className={`px-3 py-1.5 rounded transition ${
+              activeTab === "overview" ? "bg-[#1b4332] text-white font-semibold" : "text-[#4c5850] hover:text-[#181c1a]"
             }`}
           >
             Overview
           </button>
           <button
             onClick={() => setActiveTab("tax-policy")}
-            className={`px-3 py-1.5 rounded-lg transition ${
-              activeTab === "tax-policy" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
+            className={`px-3 py-1.5 rounded transition ${
+              activeTab === "tax-policy" ? "bg-[#1b4332] text-white font-semibold" : "text-[#4c5850] hover:text-[#181c1a]"
             }`}
           >
-            Tax Policies
+            Tax Policies & MRP
           </button>
           <button
             onClick={() => setActiveTab("tenants")}
-            className={`px-3 py-1.5 rounded-lg transition ${
-              activeTab === "tenants" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
+            className={`px-3 py-1.5 rounded transition ${
+              activeTab === "tenants" ? "bg-[#1b4332] text-white font-semibold" : "text-[#4c5850] hover:text-[#181c1a]"
             }`}
           >
-            Tenants
+            Tenant Registry
           </button>
         </div>
       </div>
@@ -158,47 +153,46 @@ export default function AdminPortalPage() {
       {activeTab === "overview" && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-            <div className="p-5 rounded-2xl glass-panel border border-white/10 space-y-1">
-              <span className="text-xs text-slate-400 font-medium">National Fiscal Volume</span>
-              <div className="text-2xl font-black text-white font-mono">$1,420,850,000</div>
-              <span className="text-[11px] text-emerald-400 font-semibold">+14.2% YoY Tax Compliance</span>
+            <div className="p-4 rounded gov-card space-y-1">
+              <span className="text-xs text-[#65736a]">National Trade Volume</span>
+              <div className="text-xl font-bold text-[#181c1a] font-mono">$1,420,850,000</div>
+              <span className="text-[11px] text-[#1b4332] font-medium">+14.2% YoY Compliance</span>
             </div>
-            <div className="p-5 rounded-2xl glass-panel border border-white/10 space-y-1">
-              <span className="text-xs text-slate-400 font-medium">13% Output VAT Reconciled</span>
-              <div className="text-2xl font-black text-cyan-400 font-mono">$184,710,500</div>
-              <span className="text-[11px] text-slate-400">Automated ITC matching</span>
+            <div className="p-4 rounded gov-card space-y-1">
+              <span className="text-xs text-[#65736a]">13% Output VAT Reconciled</span>
+              <div className="text-xl font-bold text-[#1b4332] font-mono">$184,710,500</div>
+              <span className="text-[11px] text-[#65736a]">Automated ITC Matching</span>
             </div>
-            <div className="p-5 rounded-2xl glass-panel border border-white/10 space-y-1">
-              <span className="text-xs text-slate-400 font-medium">Active Tenants (Orgs)</span>
-              <div className="text-2xl font-black text-purple-400 font-mono">14,280</div>
-              <span className="text-[11px] text-slate-400">Mfg, Importers, Retailers</span>
+            <div className="p-4 rounded gov-card space-y-1">
+              <span className="text-xs text-[#65736a]">Registered Tenants</span>
+              <div className="text-xl font-bold text-[#181c1a] font-mono">14,280</div>
+              <span className="text-[11px] text-[#65736a]">Mfg, Importers, Retailers</span>
             </div>
-            <div className="p-5 rounded-2xl glass-panel border border-white/10 space-y-1">
-              <span className="text-xs text-slate-400 font-medium">Statutory Violations</span>
-              <div className="text-2xl font-black text-rose-400 font-mono">3 Open</div>
-              <span className="text-[11px] text-rose-400 font-semibold">Assigned to Tax Officers</span>
+            <div className="p-4 rounded gov-card space-y-1">
+              <span className="text-xs text-[#65736a]">Open Violation Cases</span>
+              <div className="text-xl font-bold text-[#8c322c] font-mono">3 Active</div>
+              <span className="text-[11px] text-[#8c322c] font-medium">Assigned to Tax Officers</span>
             </div>
           </div>
 
-          {/* Quick Info Matrix */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-5 rounded-2xl glass-panel border border-white/10 space-y-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Scale className="w-4 h-4 text-cyan-400" />
-                Statutory Tax Rates & MRP Ceilings
+            <div className="p-5 rounded gov-card space-y-3">
+              <h3 className="text-sm font-bold text-[#181c1a] flex items-center gap-2">
+                <Scale className="w-4 h-4 text-[#1b4332]" />
+                Current Statutory Tax Rates & Margins
               </h3>
-              <div className="divide-y divide-white/5 text-xs">
+              <div className="divide-y divide-[#e5e2da] text-xs">
                 {taxRules.map((rule) => (
                   <div key={rule.hsCode} className="py-2.5 flex items-center justify-between">
                     <div>
-                      <div className="font-bold text-white">{rule.category}</div>
-                      <div className="text-[11px] text-slate-400 font-mono">HS: {rule.hsCode}</div>
+                      <div className="font-semibold text-[#181c1a]">{rule.category}</div>
+                      <div className="text-[11px] text-[#65736a] font-mono">HS: {rule.hsCode}</div>
                     </div>
-                    <div className="text-right">
-                      <div className="font-mono text-cyan-300">
-                        VAT: {(rule.standardVatRate * 100).toFixed(0)}% | Excise: {(rule.exciseDutyRate * 100).toFixed(0)}%
+                    <div className="text-right font-mono">
+                      <div className="text-[#1b4332] font-bold">
+                        VAT {(rule.standardVatRate * 100).toFixed(0)}% | Excise {(rule.exciseDutyRate * 100).toFixed(0)}%
                       </div>
-                      <div className="text-[11px] text-slate-400">
+                      <div className="text-[11px] text-[#65736a]">
                         Max Margin: {(rule.maxProfitMarginCap * 100).toFixed(0)}%
                       </div>
                     </div>
@@ -207,28 +201,28 @@ export default function AdminPortalPage() {
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl glass-panel border border-white/10 space-y-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                Zero-Trust Server Policy Status
+            <div className="p-5 rounded gov-card space-y-3">
+              <h3 className="text-sm font-bold text-[#181c1a] flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-[#1b4332]" />
+                Server Policy & Compliance Guarantees
               </h3>
-              <div className="space-y-2 text-xs text-slate-300">
-                <div className="p-3 rounded-xl bg-slate-900/80 border border-white/5 flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+              <div className="space-y-2 text-xs text-[#333d37]">
+                <div className="p-3 rounded bg-[#f8f7f4] border border-[#e5e2da] flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-[#1b4332] shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-white">Anti-IDOR Tenant Guard:</strong> All invoice, batch, and inventory queries strictly enforce tenant boundaries on the server.
+                    <strong className="text-[#181c1a]">Anti-IDOR Tenant Guard:</strong> Invoices, batches, and inventory records strictly enforce tenant boundaries on every server route.
                   </div>
                 </div>
-                <div className="p-3 rounded-xl bg-slate-900/80 border border-white/5 flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <div className="p-3 rounded bg-[#f8f7f4] border border-[#e5e2da] flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-[#1b4332] shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-white">Statutory Price Gouging Shield:</strong> Point-of-sale transactions exceeding statutory MRP ceilings trigger automatic server-side blocking & fraud flags.
+                    <strong className="text-[#181c1a]">Statutory MRP Shield:</strong> Point-of-sale transactions exceeding statutory MRP caps trigger automatic server-side fraud flags.
                   </div>
                 </div>
-                <div className="p-3 rounded-xl bg-slate-900/80 border border-white/5 flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <div className="p-3 rounded bg-[#f8f7f4] border border-[#e5e2da] flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-[#1b4332] shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-white">Digital Product Passport Registry:</strong> Cryptographic signatures verified on each consumer scan.
+                    <strong className="text-[#181c1a]">Cryptographic DPP Registry:</strong> Tamper-evident hash chains verified on each consumer check.
                   </div>
                 </div>
               </div>
@@ -239,17 +233,17 @@ export default function AdminPortalPage() {
 
       {/* Tab: Tax Policy Configuration */}
       {activeTab === "tax-policy" && (
-        <div className="p-6 rounded-2xl glass-panel border border-white/10 max-w-2xl mx-auto space-y-5">
+        <div className="p-6 rounded gov-card max-w-2xl mx-auto space-y-4">
           <div>
-            <h3 className="text-base font-bold text-white">National Tax Rate & MRP Ceiling Editor</h3>
-            <p className="text-xs text-slate-400">
-              Modifying these policies immediately updates the server tax engine and POS anti-gouging checks nationwide.
+            <h3 className="text-sm font-bold text-[#181c1a]">National Tax Rate & MRP Ceiling Editor</h3>
+            <p className="text-xs text-[#65736a]">
+              Policy adjustments take immediate effect across all retail POS registers and customs clearance terminals.
             </p>
           </div>
 
-          <form onSubmit={handleUpdatePolicy} className="space-y-4 text-xs">
+          <form onSubmit={handleUpdatePolicy} className="space-y-3 text-xs">
             <div>
-              <label className="block text-slate-300 font-medium mb-1">Select Commodity (HS Code)</label>
+              <label className="block text-[#333d37] font-medium mb-1">Select Commodity (HS Code)</label>
               <select
                 value={selectedHsCode}
                 onChange={(e) => {
@@ -262,10 +256,10 @@ export default function AdminPortalPage() {
                     setPriceCap(found.statutoryPriceCap?.toString() || "");
                   }
                 }}
-                className="glass-input w-full"
+                className="gov-input w-full font-mono"
               >
                 {taxRules.map((r) => (
-                  <option key={r.hsCode} value={r.hsCode} className="bg-slate-900">
+                  <option key={r.hsCode} value={r.hsCode}>
                     {r.hsCode} - {r.category} ({r.description})
                   </option>
                 ))}
@@ -274,24 +268,24 @@ export default function AdminPortalPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Standard VAT Rate (0.13 = 13%)</label>
+                <label className="block text-[#333d37] font-medium mb-1">Standard VAT Rate (0.13 = 13%)</label>
                 <input
                   type="number"
                   step="0.01"
                   value={vatRate}
                   onChange={(e) => setVatRate(e.target.value)}
-                  className="glass-input w-full font-mono"
+                  className="gov-input w-full font-mono"
                   required
                 />
               </div>
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Excise Duty Rate (0.02 = 2%)</label>
+                <label className="block text-[#333d37] font-medium mb-1">Excise Duty Rate (0.02 = 2%)</label>
                 <input
                   type="number"
                   step="0.01"
                   value={exciseRate}
                   onChange={(e) => setExciseRate(e.target.value)}
-                  className="glass-input w-full font-mono"
+                  className="gov-input w-full font-mono"
                   required
                 />
               </div>
@@ -299,23 +293,23 @@ export default function AdminPortalPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Max Profit Margin Cap (0.25 = 25%)</label>
+                <label className="block text-[#333d37] font-medium mb-1">Max Profit Margin Cap (0.25 = 25%)</label>
                 <input
                   type="number"
                   step="0.01"
                   value={marginCap}
                   onChange={(e) => setMarginCap(e.target.value)}
-                  className="glass-input w-full font-mono"
+                  className="gov-input w-full font-mono"
                   required
                 />
               </div>
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Statutory MRP Cap ($ USD / Local)</label>
+                <label className="block text-[#333d37] font-medium mb-1">Statutory MRP Cap ($ USD / Local)</label>
                 <input
                   type="number"
                   value={priceCap}
                   onChange={(e) => setPriceCap(e.target.value)}
-                  className="glass-input w-full font-mono"
+                  className="gov-input w-full font-mono"
                   placeholder="Optional price ceiling"
                 />
               </div>
@@ -324,14 +318,14 @@ export default function AdminPortalPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-2.5 rounded bg-[#1b4332] hover:bg-[#143621] text-white font-semibold text-xs transition cursor-pointer"
             >
               {isLoading ? "Broadcasting to Ledger..." : "Update National Policy"}
             </button>
 
             {policyMessage && (
-              <div className={`p-3 rounded-lg text-xs font-semibold ${
-                policyMessage.includes("Error") ? "bg-rose-500/20 text-rose-300" : "bg-emerald-500/20 text-emerald-300"
+              <div className={`p-2.5 rounded text-xs font-semibold ${
+                policyMessage.includes("Error") ? "bg-[#fbeeed] text-[#8c322c]" : "bg-[#eaf0ec] text-[#1b4332]"
               }`}>
                 {policyMessage}
               </div>
@@ -342,15 +336,15 @@ export default function AdminPortalPage() {
 
       {/* Tab: Tenants */}
       {activeTab === "tenants" && (
-        <div className="p-6 rounded-2xl glass-panel border border-white/10 space-y-4">
-          <h3 className="text-base font-bold text-white">Registered Organizations & Tenant Ledger</h3>
-          <p className="text-xs text-slate-400">
-            Multi-tenant entities isolated under strict server-side partition keys.
+        <div className="p-5 rounded gov-card space-y-4">
+          <h3 className="text-sm font-bold text-[#181c1a]">Accredited Organization Directory</h3>
+          <p className="text-xs text-[#65736a]">
+            Commercial tenants verified and partitioned on the National Ledger.
           </p>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-white/10 text-slate-400 font-mono">
+            <table className="w-full text-left text-xs border border-[#e5e2da]">
+              <thead className="bg-[#f8f7f4] border-b border-[#e5e2da] text-[#4c5850] font-mono">
                 <tr>
                   <th className="py-2 px-3">Organization</th>
                   <th className="py-2 px-3">Type</th>
@@ -359,27 +353,27 @@ export default function AdminPortalPage() {
                   <th className="py-2 px-3">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 text-slate-300">
-                <tr className="hover:bg-slate-900/40">
-                  <td className="py-3 px-3 font-semibold text-white">Apex BioTech & Consumer Goods Mfg Ltd</td>
-                  <td className="py-3 px-3"><span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">MANUFACTURER</span></td>
-                  <td className="py-3 px-3 font-mono">MFG-PAN-9948201</td>
-                  <td className="py-3 px-3 font-mono">MFG-IND-8849-01</td>
-                  <td className="py-3 px-3 text-emerald-400 font-bold">Verified</td>
+              <tbody className="divide-y divide-[#e5e2da] text-[#333d37]">
+                <tr className="hover:bg-[#f8f7f4]">
+                  <td className="py-2.5 px-3 font-semibold text-[#181c1a]">Apex BioTech & Consumer Goods Mfg Ltd</td>
+                  <td className="py-2.5 px-3"><span className="px-1.5 py-0.2 rounded bg-[#eaf0ec] text-[#1b4332] border border-[#cad2c5]">MANUFACTURER</span></td>
+                  <td className="py-2.5 px-3 font-mono">MFG-PAN-9948201</td>
+                  <td className="py-2.5 px-3 font-mono">MFG-IND-8849-01</td>
+                  <td className="py-2.5 px-3 text-[#1b4332] font-semibold">Verified</td>
                 </tr>
-                <tr className="hover:bg-slate-900/40">
-                  <td className="py-3 px-3 font-semibold text-white">Pacific Horizon Logistics & Importers Corp</td>
-                  <td className="py-3 px-3"><span className="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">IMPORTER</span></td>
-                  <td className="py-3 px-3 font-mono">IMP-PAN-4410982</td>
-                  <td className="py-3 px-3 font-mono">IMP-CUST-7721-04</td>
-                  <td className="py-3 px-3 text-emerald-400 font-bold">Verified</td>
+                <tr className="hover:bg-[#f8f7f4]">
+                  <td className="py-2.5 px-3 font-semibold text-[#181c1a]">Pacific Horizon Logistics & Importers Corp</td>
+                  <td className="py-2.5 px-3"><span className="px-1.5 py-0.2 rounded bg-[#eef2f6] text-[#2b4c6f] border border-[#d0dbe7]">IMPORTER</span></td>
+                  <td className="py-2.5 px-3 font-mono">IMP-PAN-4410982</td>
+                  <td className="py-2.5 px-3 font-mono">IMP-CUST-7721-04</td>
+                  <td className="py-2.5 px-3 text-[#1b4332] font-semibold">Verified</td>
                 </tr>
-                <tr className="hover:bg-slate-900/40">
-                  <td className="py-3 px-3 font-semibold text-white">Metro Retail Distribution & SuperMart Pvt Ltd</td>
-                  <td className="py-3 px-3"><span className="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">RETAILER</span></td>
-                  <td className="py-3 px-3 font-mono">BIZ-VAT-8823104</td>
-                  <td className="py-3 px-3 font-mono">RET-REG-3391-22</td>
-                  <td className="py-3 px-3 text-emerald-400 font-bold">Verified</td>
+                <tr className="hover:bg-[#f8f7f4]">
+                  <td className="py-2.5 px-3 font-semibold text-[#181c1a]">Metro Retail Distribution & SuperMart Pvt Ltd</td>
+                  <td className="py-2.5 px-3"><span className="px-1.5 py-0.2 rounded bg-[#f2efe9] text-[#4a4036] border border-[#ded8cc]">RETAILER</span></td>
+                  <td className="py-2.5 px-3 font-mono">BIZ-VAT-8823104</td>
+                  <td className="py-2.5 px-3 font-mono">RET-REG-3391-22</td>
+                  <td className="py-2.5 px-3 text-[#1b4332] font-semibold">Verified</td>
                 </tr>
               </tbody>
             </table>

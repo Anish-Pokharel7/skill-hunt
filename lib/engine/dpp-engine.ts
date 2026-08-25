@@ -72,7 +72,7 @@ export class DigitalProductPassportEngine {
         `${serialNumber}:${genesisHash}`
       )}`;
 
-      const verifyUrl = `https://skillhunt.gov/verify/${serialNumber}?sig=${signature.substring(0, 16)}`;
+      const verifyUrl = `https://veriprice.gov/verify/${serialNumber}?sig=${signature.substring(0, 16)}`;
 
       const initialEvent: PassportJourneyEvent = {
         id: `j_${passportId}_01`,

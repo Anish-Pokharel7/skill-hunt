@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/components/AuthContext";
-import { ROLE_DETAILS } from "@/lib/auth/mock-users";
 import {
   ShieldCheck,
   Building2,
@@ -19,24 +18,19 @@ import {
   CheckCircle2,
   XCircle,
   ArrowRight,
-  Sparkles,
   Lock,
-  Zap,
-  Globe,
-  Layers,
-  Cpu,
 } from "lucide-react";
 
 export default function HomePage() {
-  const { user, role, loginAsRole } = useAuth();
+  const { user, role } = useAuth();
   const [quickSerial, setQuickSerial] = useState("APX-OIL-901-000184");
   const [verifyResult, setVerifyResult] = useState<any>(null);
   const [isVerifying, setIsVerifying] = useState(false);
 
   const sampleSerials = [
-    { label: "Olive Oil (Genuine)", serial: "APX-OIL-901-000184", status: "VALID" },
-    { label: "5G Phone (Imported & Sold)", serial: "PAC-PHN-801-000492", status: "VALID" },
-    { label: "Pharma Clone (Counterfeit)", serial: "APX-MED-442-999999", status: "INVALID" },
+    { label: "Virgin Olive Oil (Genuine)", serial: "APX-OIL-901-000184", status: "VALID" },
+    { label: "5G Smartphone (Imported & Sold)", serial: "PAC-PHN-801-000492", status: "VALID" },
+    { label: "Cloned Pharma Batch (Counterfeit)", serial: "APX-MED-442-999999", status: "INVALID" },
   ];
 
   const handleQuickVerify = async (serialToTest?: string) => {
@@ -50,7 +44,7 @@ export default function HomePage() {
     } catch {
       setVerifyResult({
         isAuthentic: false,
-        message: "Failed to verify serial code.",
+        message: "Failed to connect to the National Verification Gateway.",
       });
     } finally {
       setIsVerifying(false);
@@ -59,141 +53,125 @@ export default function HomePage() {
 
   const portals = [
     {
-      title: "Admin & Government Portal",
-      description: "National oversight, tax policies, tenant organization validation, and system audit logs.",
+      title: "Admin & Government Directorate",
+      description: "National tax policy, statutory MRP ceilings, organization licensing, and system audit logs.",
       href: "/admin",
       icon: Building2,
       roles: ["SUPER_ADMIN", "GOVERNMENT_ADMIN"],
-      accent: "from-purple-500/20 to-blue-500/20 border-purple-500/30 text-purple-400",
     },
     {
-      title: "Manufacturer Portal",
-      description: "Batch creation, factory tax declaration, statutory MRP setting, and cryptographic DPP minting.",
+      title: "Manufacturer Production Portal",
+      description: "Production batch registration, ex-factory tax calculation, MRP caps, and DPP serial minting.",
       href: "/manufacturer",
       icon: Factory,
       roles: ["MANUFACTURER", "SUPER_ADMIN"],
-      accent: "from-emerald-500/20 to-teal-500/20 border-emerald-500/30 text-emerald-400",
     },
     {
-      title: "Importer Portal",
-      description: "Customs declaration, Bill of Entry filings, automated import duty & VAT calculation.",
+      title: "Importer Customs Portal",
+      description: "Customs declaration, Bill of Entry filings, and automated import duty & VAT calculation.",
       href: "/importer",
       icon: Ship,
       roles: ["IMPORTER", "SUPER_ADMIN"],
-      accent: "from-cyan-500/20 to-blue-500/20 border-cyan-500/30 text-cyan-400",
     },
     {
       title: "Business & Retail POS Portal",
-      description: "Inventory stock management, Inbound QR receiver, POS checkout, and MRP price-gouging enforcement.",
+      description: "Store inventory, batch receipt, point-of-sale checkout, and statutory price compliance checks.",
       href: "/business",
       icon: Store,
       roles: ["BUSINESS_OWNER", "BUSINESS_EMPLOYEE", "SUPER_ADMIN"],
-      accent: "from-indigo-500/20 to-sky-500/20 border-indigo-500/30 text-indigo-400",
     },
     {
-      title: "Tax & Price Engine",
-      description: "Multi-tier VAT (13%), Excise, Customs Duty, Input Tax Credit (ITC) reconciliation & MRP ceilings.",
+      title: "Tax & Price Compliance Engine",
+      description: "13% Standard VAT, Excise, Customs Duty, Input Tax Credit (ITC) reconciliation, and MRP ceilings.",
       href: "/tax-engine",
       icon: Scale,
       roles: ["TAX_OFFICER", "GOVERNMENT_ADMIN", "SUPER_ADMIN"],
-      accent: "from-amber-500/20 to-yellow-500/20 border-amber-500/30 text-amber-400",
     },
     {
-      title: "QR Product Passport (DPP)",
-      description: "Cryptographic product identities, dynamic QR codes, and immutable supply chain journey timelines.",
+      title: "Digital Product Passport (DPP) Registry",
+      description: "Cryptographic product identities, dynamic QR codes, and immutable custody chain timelines.",
       href: "/passport",
       icon: QrCode,
       roles: ["ALL"],
-      accent: "from-teal-500/20 to-emerald-500/20 border-teal-500/30 text-teal-400",
     },
     {
       title: "Fiscal E-Invoice System",
-      description: "Cryptographically verified IRN invoices with anti-IDOR server security and tax itemization.",
+      description: "Cryptographically verified IRN invoices with anti-IDOR server security and 13% VAT breakdown.",
       href: "/invoices",
       icon: FileText,
       roles: ["ALL"],
-      accent: "from-blue-500/20 to-indigo-500/20 border-blue-500/30 text-blue-400",
     },
     {
-      title: "Fraud & Risk Detection Desk",
-      description: "AI anomaly detection for duplicate QR scans, price gouging spikes, and carousel VAT evasion.",
+      title: "Fraud & Risk Enforcement Desk",
+      description: "Anomaly detection for duplicate QR scans, price gouging spikes, and carousel VAT evasion.",
       href: "/fraud-desk",
       icon: AlertTriangle,
       roles: ["TAX_OFFICER", "GOVERNMENT_ADMIN", "AUDITOR", "SUPER_ADMIN"],
-      accent: "from-rose-500/20 to-amber-500/20 border-rose-500/30 text-rose-400",
     },
     {
-      title: "Reports & Audit Ledger",
-      description: "Tax collections gap analysis, revenue reconciliation ledgers, and forensic audit logs.",
+      title: "Reports & Forensic Audit Ledger",
+      description: "Tax collections gap analysis, revenue reconciliation ledgers, and zero-trust access audit logs.",
       href: "/reports",
       icon: BarChart3,
       roles: ["AUDITOR", "TAX_OFFICER", "GOVERNMENT_ADMIN", "SUPER_ADMIN"],
-      accent: "from-violet-500/20 to-pink-500/20 border-violet-500/30 text-violet-400",
     },
     {
-      title: "Consumer Verification Portal",
-      description: "Public instant product authenticity validation, provenance inspection, and whistleblower reporting.",
+      title: "Citizen Product Verification Gateway",
+      description: "Public authenticity verification, Maximum Retail Price inspection, and whistleblower reporting.",
       href: "/verify",
       icon: Search,
       roles: ["ALL"],
-      accent: "from-sky-500/20 to-cyan-500/20 border-sky-500/30 text-sky-400",
     },
   ];
 
   return (
-    <div className="space-y-12">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-3xl glass-panel-glow border border-blue-500/20 p-8 sm:p-12 bg-gradient-to-b from-slate-900/90 via-slate-950 to-slate-900">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-        <div className="relative z-10 max-w-3xl space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-xs font-semibold text-blue-300">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            Next-Gen National Fiscal & Provenance Infrastructure
+    <div className="space-y-10">
+      {/* Official Government Banner / Hero */}
+      <section className="gov-card p-6 sm:p-10 bg-[#ffffff] border border-[#e5e2da]">
+        <div className="max-w-3xl space-y-4">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold bg-[#eaf0ec] text-[#1b4332] border border-[#cad2c5]">
+            <ShieldCheck className="w-4 h-4 text-[#1b4332]" />
+            National Directorate for Fiscal Provenance & Price Compliance
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
-            Cryptographic Supply Chain &{" "}
-            <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">
-              Fiscal Compliance Engine
-            </span>
+          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-[#163828] leading-tight">
+            National Supply Chain Provenance, Tax & Price Engine
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
-            Eliminate counterfeit circulation, enforce statutory Maximum Retail Prices (MRP), automate 13% cascading VAT reconciliation, and secure multi-tier trade with <strong>strict server-side authorization</strong> across 9 specialized user roles.
+          <p className="text-sm sm:text-base text-[#4c5850] leading-relaxed">
+            VERIPRICE provides complete supply chain transparency, enforces statutory Maximum Retail Prices (MRP), automates 13% cascading VAT reconciliation, and safeguards trade with <strong>strict server-side authorization</strong> across 9 specialized user roles.
           </p>
 
-          {/* Quick Stat Pill Grid */}
+          {/* Institutional Stats Summary */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-white/5">
-              <span className="text-xs text-slate-400 font-medium block">Tracked Revenue</span>
-              <span className="text-xl font-extrabold text-white font-mono">$1.42 Billion</span>
+            <div className="p-3.5 rounded bg-[#f8f7f4] border border-[#e5e2da]">
+              <span className="text-[11px] text-[#65736a] block">National Trade Volume</span>
+              <span className="text-lg font-bold text-[#181c1a] font-mono">$1.42 Billion</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-white/5">
-              <span className="text-xs text-slate-400 font-medium block">DPP Passports Minted</span>
-              <span className="text-xl font-extrabold text-cyan-400 font-mono">1,280,450</span>
+            <div className="p-3.5 rounded bg-[#f8f7f4] border border-[#e5e2da]">
+              <span className="text-[11px] text-[#65736a] block">DPP Passports Minted</span>
+              <span className="text-lg font-bold text-[#1b4332] font-mono">1,280,450</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-white/5">
-              <span className="text-xs text-slate-400 font-medium block">Standard Tax Rate</span>
-              <span className="text-xl font-extrabold text-emerald-400 font-mono">13% VAT</span>
+            <div className="p-3.5 rounded bg-[#f8f7f4] border border-[#e5e2da]">
+              <span className="text-[11px] text-[#65736a] block">Statutory Tax Standard</span>
+              <span className="text-lg font-bold text-[#2d5a45] font-mono">13% VAT</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-white/5">
-              <span className="text-xs text-slate-400 font-medium block">Fraud Anomaly Defense</span>
-              <span className="text-xl font-extrabold text-rose-400 font-mono">4,892 Blocked</span>
+            <div className="p-3.5 rounded bg-[#f8f7f4] border border-[#e5e2da]">
+              <span className="text-[11px] text-[#65736a] block">Violations Intercepted</span>
+              <span className="text-lg font-bold text-[#8c322c] font-mono">4,892 Cases</span>
             </div>
           </div>
         </div>
 
-        {/* Live Interactive DPP Quick-Scanner Card */}
-        <div className="mt-8 pt-8 border-t border-white/10">
-          <div className="bg-slate-900/90 rounded-2xl p-5 border border-white/10 max-w-3xl">
-            <div className="flex items-center justify-between mb-3">
+        {/* Public Citizen Serial Authenticity Quick-Verifier */}
+        <div className="mt-8 pt-6 border-t border-[#e5e2da]">
+          <div className="bg-[#f7f6f2] rounded-md p-5 border border-[#e5e2da] max-w-3xl">
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <QrCode className="w-5 h-5 text-cyan-400" />
-                <span className="text-sm font-bold text-white">Live DPP Serial Authenticity Quick-Verifier</span>
+                <QrCode className="w-4 h-4 text-[#1b4332]" />
+                <span className="text-sm font-bold text-[#181c1a]">Citizen Product Authenticity Verifier</span>
               </div>
-              <span className="text-[11px] text-slate-400">Zero Login Required (Consumer Mode)</span>
+              <span className="text-xs text-[#65736a]">No Login Required</span>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-2">
@@ -202,21 +180,21 @@ export default function HomePage() {
                 value={quickSerial}
                 onChange={(e) => setQuickSerial(e.target.value)}
                 placeholder="Enter Product Serial (e.g. APX-OIL-901-000184)"
-                className="glass-input flex-1 font-mono text-xs sm:text-sm"
+                className="gov-input flex-1 font-mono text-xs sm:text-sm"
               />
               <button
                 onClick={() => handleQuickVerify()}
                 disabled={isVerifying}
-                className="px-5 py-2.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-cyan-500/20"
+                className="px-5 py-2.5 rounded bg-[#1b4332] hover:bg-[#143621] text-white font-semibold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
               >
-                {isVerifying ? "Verifying..." : "Verify Serial"}
+                {isVerifying ? "Verifying..." : "Verify Serial Code"}
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Sample Serial Quick Clickers */}
-            <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-              <span className="text-slate-400">Quick Test Samples:</span>
+            {/* Sample Clickers */}
+            <div className="mt-2.5 flex flex-wrap items-center gap-2 text-xs">
+              <span className="text-[#65736a]">Test Serial Numbers:</span>
               {sampleSerials.map((s) => (
                 <button
                   key={s.serial}
@@ -224,10 +202,10 @@ export default function HomePage() {
                     setQuickSerial(s.serial);
                     handleQuickVerify(s.serial);
                   }}
-                  className={`px-2.5 py-1 rounded-md text-[11px] font-mono border transition ${
+                  className={`px-2 py-0.5 rounded text-[11px] font-mono border transition ${
                     s.status === "VALID"
-                      ? "bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
-                      : "bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border-rose-500/30"
+                      ? "bg-[#ffffff] hover:bg-[#eaf0ec] text-[#1b4332] border-[#cad2c5]"
+                      : "bg-[#ffffff] hover:bg-[#fbeeed] text-[#8c322c] border-[#f2cfcd]"
                   }`}
                 >
                   {s.label}
@@ -235,40 +213,40 @@ export default function HomePage() {
               ))}
             </div>
 
-            {/* Quick Verification Output */}
+            {/* Quick Result */}
             {verifyResult && (
               <div
-                className={`mt-4 p-4 rounded-xl border animate-in fade-in duration-300 ${
+                className={`mt-4 p-4 rounded border ${
                   verifyResult.isAuthentic
-                    ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-200"
-                    : "bg-rose-950/40 border-rose-500/40 text-rose-200"
+                    ? "bg-[#f4f7f5] border-[#cad2c5] text-[#163828]"
+                    : "bg-[#fdf3f2] border-[#f2cfcd] text-[#8c322c]"
                 }`}
               >
                 <div className="flex items-start gap-3">
                   {verifyResult.isAuthentic ? (
-                    <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-5 h-5 text-[#1b4332] shrink-0 mt-0.5" />
                   ) : (
-                    <XCircle className="w-6 h-6 text-rose-400 shrink-0 mt-0.5" />
+                    <XCircle className="w-5 h-5 text-[#8c322c] shrink-0 mt-0.5" />
                   )}
                   <div className="space-y-1 text-xs">
                     <div className="font-bold text-sm">
                       {verifyResult.isAuthentic ? "VERIFIED GENUINE PRODUCT" : "COUNTERFEIT / ANOMALY DETECTED"}
                     </div>
-                    <p>{verifyResult.message}</p>
+                    <p className="text-[#333d37]">{verifyResult.message}</p>
                     {verifyResult.passport && (
-                      <div className="pt-2 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] font-mono">
-                        <div>Product: <strong className="text-white">{verifyResult.passport.productName}</strong></div>
-                        <div>Batch: <strong className="text-white">{verifyResult.passport.batchNumber}</strong></div>
-                        <div>Statutory MRP: <strong className="text-emerald-300">${verifyResult.passport.statutoryMrp}</strong></div>
-                        <div>Holder: <strong className="text-white">{verifyResult.passport.currentHolderName}</strong></div>
+                      <div className="pt-2 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] font-mono text-[#333d37]">
+                        <div>Product: <strong>{verifyResult.passport.productName}</strong></div>
+                        <div>Batch: <strong>{verifyResult.passport.batchNumber}</strong></div>
+                        <div>Statutory MRP: <strong className="text-[#1b4332]">${verifyResult.passport.statutoryMrp}</strong></div>
+                        <div>Holder: <strong>{verifyResult.passport.currentHolderName}</strong></div>
                       </div>
                     )}
-                    <div className="pt-2">
+                    <div className="pt-1.5">
                       <Link
                         href={`/verify/${encodeURIComponent(quickSerial)}`}
-                        className="text-cyan-400 hover:underline font-medium inline-flex items-center gap-1 text-xs"
+                        className="text-[#1b4332] hover:underline font-semibold inline-flex items-center gap-1 text-xs"
                       >
-                        Inspect Full Cryptographic Journey &rarr;
+                        Inspect Complete Supply Chain Journey &rarr;
                       </Link>
                     </div>
                   </div>
@@ -279,18 +257,18 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 10 Module Portals Launchpad */}
+      {/* 10 Module Portals Directory */}
       <section className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#e5e2da] pb-3">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-white">System Portals & Workspaces</h2>
-            <p className="text-xs sm:text-sm text-slate-400">
-              Each portal implements server-side role and tenant authorization safeguards.
+            <h2 className="text-lg sm:text-xl font-bold text-[#181c1a]">Official Directory & Workspaces</h2>
+            <p className="text-xs text-[#65736a]">
+              Each portal implements server-side role and tenant authorization controls.
             </p>
           </div>
-          <div className="flex items-center gap-2 text-xs font-mono text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
-            <Lock className="w-3.5 h-3.5 text-emerald-400" />
-            Active Role: <span className="text-white font-bold">{role}</span>
+          <div className="flex items-center gap-1.5 text-xs font-mono text-[#4c5850] bg-[#ffffff] px-2.5 py-1 rounded border border-[#e5e2da]">
+            <Lock className="w-3.5 h-3.5 text-[#1b4332]" />
+            Active Role: <span className="text-[#181c1a] font-bold">{role}</span>
           </div>
         </div>
 
@@ -303,40 +281,40 @@ export default function HomePage() {
             return (
               <div
                 key={portal.title}
-                className="group relative p-5 rounded-2xl glass-panel border border-white/10 hover:border-cyan-500/40 transition-all duration-300 flex flex-col justify-between"
+                className="gov-card p-4 flex flex-col justify-between hover:border-[#1b4332] transition"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className={`p-2.5 rounded-xl border bg-gradient-to-br ${portal.accent}`}>
-                      <portal.icon className="w-5 h-5" />
+                  <div className="flex items-center justify-between mb-2.5">
+                    <div className="p-2 rounded bg-[#f3f1ec] text-[#1b4332] border border-[#e5e2da]">
+                      <portal.icon className="w-4 h-4" />
                     </div>
                     {hasRole ? (
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#eaf0ec] text-[#1b4332] border border-[#cad2c5]">
                         Authorized
                       </span>
                     ) : (
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#f3f1ec] text-[#65736a] border border-[#e5e2da] flex items-center gap-1">
                         <Lock className="w-2.5 h-2.5" />
                         Role Restricted
                       </span>
                     )}
                   </div>
 
-                  <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors mb-1.5">
+                  <h3 className="text-sm font-bold text-[#181c1a] mb-1">
                     {portal.title}
                   </h3>
-                  <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                  <p className="text-xs text-[#65736a] leading-relaxed mb-3">
                     {portal.description}
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-white/5 flex items-center justify-between">
-                  <div className="text-[10px] font-mono text-slate-500">
-                    Roles: {portal.roles.join(", ").replace("SUPER_ADMIN", "ADMIN")}
-                  </div>
+                <div className="pt-3 border-t border-[#e5e2da] flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-[#8c9890]">
+                    {portal.roles.join(", ").replace("SUPER_ADMIN", "ADMIN")}
+                  </span>
                   <Link
                     href={portal.href}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-cyan-400 group-hover:translate-x-1 transition-transform"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#1b4332] hover:underline"
                   >
                     Open Portal &rarr;
                   </Link>
@@ -347,48 +325,48 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Security & Authorization Architecture Highlights */}
-      <section className="p-6 sm:p-8 rounded-2xl glass-panel border border-white/10 space-y-6">
-        <div className="max-w-2xl">
-          <span className="text-xs font-bold font-mono text-cyan-400 uppercase tracking-wider">
-            Zero-Trust Server Security
+      {/* Security Architecture Guarantees */}
+      <section className="gov-card p-6 border border-[#e5e2da] space-y-4">
+        <div>
+          <span className="text-[11px] font-bold font-mono text-[#1b4332] uppercase tracking-wider">
+            Statutory Safeguards
           </span>
-          <h2 className="text-xl sm:text-2xl font-bold text-white mt-1">
+          <h2 className="text-lg font-bold text-[#181c1a] mt-0.5">
             Server-Enforced Authorization & Anti-IDOR Protections
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400 mt-2">
-            The platform never relies on hiding frontend buttons as security. All operations are strictly guarded at the server level.
+          <p className="text-xs text-[#65736a]">
+            VERIPRICE enforces strict multi-tenant boundary checks on every server endpoint. A user cannot access another tenant&apos;s records simply by changing an ID in the URL.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-4 rounded-xl bg-slate-900/60 border border-white/5 space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center">
-              <Lock className="w-4 h-4" />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+          <div className="p-3.5 rounded bg-[#f8f7f4] border border-[#e5e2da] space-y-1.5">
+            <div className="font-bold text-[#181c1a] flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-[#1b4332]" />
+              Anti-IDOR Isolation
             </div>
-            <h3 className="text-sm font-bold text-white">Anti-IDOR Isolation</h3>
-            <p className="text-xs text-slate-400">
-              Users cannot access invoices, batches, or inventory belonging to another tenant simply by changing an ID in the URL.
+            <p className="text-[#4c5850]">
+              Invoices, batch certificates, and stock ledgers are cryptographically tied to organization IDs.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-900/60 border border-white/5 space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-              <Scale className="w-4 h-4" />
+          <div className="p-3.5 rounded bg-[#f8f7f4] border border-[#e5e2da] space-y-1.5">
+            <div className="font-bold text-[#181c1a] flex items-center gap-1.5">
+              <Scale className="w-3.5 h-3.5 text-[#1b4332]" />
+              Statutory MRP Enforcement
             </div>
-            <h3 className="text-sm font-bold text-white">Real-Time MRP & VAT</h3>
-            <p className="text-xs text-slate-400">
-              POS sales exceeding statutory Maximum Retail Prices (MRP) or 13% VAT rules trigger automated price gouging alerts.
+            <p className="text-[#4c5850]">
+              POS checkouts attempting to exceed legal Maximum Retail Prices are automatically flagged and recorded.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-900/60 border border-white/5 space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
-              <QrCode className="w-4 h-4" />
+          <div className="p-3.5 rounded bg-[#f8f7f4] border border-[#e5e2da] space-y-1.5">
+            <div className="font-bold text-[#181c1a] flex items-center gap-1.5">
+              <QrCode className="w-3.5 h-3.5 text-[#1b4332]" />
+              Cryptographic DPP Passports
             </div>
-            <h3 className="text-sm font-bold text-white">Cryptographic DPP Passports</h3>
-            <p className="text-xs text-slate-400">
-              Every serial item possesses an immutable hash-chained provenance history from factory cleanroom to retail register.
+            <p className="text-[#4c5850]">
+              Each serial unit possesses a tamper-evident hash chain from manufacturing facility to consumer verification.
             </p>
           </div>
         </div>

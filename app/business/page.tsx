@@ -5,18 +5,13 @@ import { useAuth } from "@/components/AuthContext";
 import { BusinessInventoryItem, BatchItem } from "@/lib/db/types";
 import {
   Store,
-  QrCode,
   ShoppingCart,
   Receipt,
   Plus,
-  Scale,
   ShieldCheck,
   AlertTriangle,
   Lock,
-  CheckCircle2,
   Trash2,
-  UserCheck,
-  Sparkles,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -26,7 +21,7 @@ export default function BusinessPortalPage() {
   const [availableBatches, setAvailableBatches] = useState<BatchItem[]>([]);
   const [activeTab, setActiveTab] = useState<"inventory" | "pos" | "receive">("inventory");
 
-  // Inbound Stock Receive State
+  // Inbound Stock State
   const [selectedBatchId, setSelectedBatchId] = useState("");
   const [receiveQty, setReceiveQty] = useState("100");
   const [retailPrice, setRetailPrice] = useState("");
@@ -93,7 +88,7 @@ export default function BusinessPortalPage() {
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        setReceiveStatus("Inbound stock verified & stocked into inventory successfully!");
+        setReceiveStatus("Inbound batch verified and stocked successfully.");
         fetchInventory();
       } else {
         setReceiveStatus(`Error: ${data.message || data.error}`);
@@ -122,7 +117,7 @@ export default function BusinessPortalPage() {
 
   const handlePosCheckout = async () => {
     if (cart.length === 0) return;
-    setPosStatus("Processing fiscal e-invoice on server...");
+    setPosStatus("Issuing official fiscal e-invoice...");
     try {
       const itemsPayload = cart.map((c) => ({
         batchId: c.item.batchId,
@@ -151,9 +146,9 @@ export default function BusinessPortalPage() {
         setLastIssuedInvoice(data.invoice);
         setCart([]);
         if (data.priceGougingWarnings?.length > 0) {
-          setPosStatus(`FLAGGED: Fiscal Invoice ${data.invoice.invoiceNumber} recorded with Price Gouging Violation!`);
+          setPosStatus(`FLAGGED: Invoice ${data.invoice.invoiceNumber} recorded with Price Gouging Violation.`);
         } else {
-          setPosStatus(`Success: Fiscal E-Invoice ${data.invoice.invoiceNumber} issued with IRN hash!`);
+          setPosStatus(`Success: Fiscal Invoice ${data.invoice.invoiceNumber} registered with IRN.`);
         }
         fetchInventory();
       } else {
@@ -166,26 +161,26 @@ export default function BusinessPortalPage() {
 
   if (!isAuthorized) {
     return (
-      <div className="max-w-2xl mx-auto my-12 p-8 rounded-2xl glass-panel border border-rose-500/30 text-center space-y-4">
-        <div className="w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 mx-auto flex items-center justify-center">
-          <Lock className="w-6 h-6" />
+      <div className="max-w-2xl mx-auto my-12 p-8 rounded gov-card text-center space-y-4 border border-[#e5e2da]">
+        <div className="w-10 h-10 rounded bg-[#fbeeed] text-[#8c322c] mx-auto flex items-center justify-center">
+          <Lock className="w-5 h-5" />
         </div>
-        <h2 className="text-xl font-bold text-white">403 Forbidden: Business Portal Restricted</h2>
-        <p className="text-xs sm:text-sm text-slate-300">
-          The <strong>Business & Retail POS Portal</strong> requires <code className="bg-slate-900 px-1.5 py-0.5 rounded text-indigo-300">BUSINESS_OWNER</code> or <code className="bg-slate-900 px-1.5 py-0.5 rounded text-sky-300">BUSINESS_EMPLOYEE</code>.
+        <h2 className="text-lg font-bold text-[#181c1a]">403 Forbidden: Business License Required</h2>
+        <p className="text-xs text-[#4c5850]">
+          The <strong>Business & POS Portal</strong> requires <code className="bg-[#f3f1ec] px-1.5 py-0.5 rounded text-[#1b4332]">BUSINESS_OWNER</code> or <code className="bg-[#f3f1ec] px-1.5 py-0.5 rounded text-[#1b4332]">BUSINESS_EMPLOYEE</code>.
         </p>
-        <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={() => loginAsRole("BUSINESS_OWNER")}
-            className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition"
+            className="px-4 py-2 rounded bg-[#1b4332] hover:bg-[#143621] text-white font-semibold text-xs transition"
           >
             Switch to Business Owner (Kavita)
           </button>
           <button
             onClick={() => loginAsRole("BUSINESS_EMPLOYEE")}
-            className="px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs transition"
+            className="px-4 py-2 rounded bg-[#f3f1ec] hover:bg-[#eaf0ec] text-[#1b4332] font-semibold text-xs border border-[#cad2c5] transition"
           >
-            Switch to Business Cashier (Rohan)
+            Switch to Cashier (Rohan)
           </button>
         </div>
       </div>
@@ -195,33 +190,33 @@ export default function BusinessPortalPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#e5e2da]">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-black text-white">Metro Retail & POS Operations</h1>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40">
-              {role === "BUSINESS_EMPLOYEE" ? "Scoped POS Operator" : "Business Owner"}
+            <h1 className="text-xl font-bold text-[#181c1a]">Metro Retail Distribution & POS Terminal</h1>
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#eaf0ec] text-[#1b4332] border border-[#cad2c5]">
+              {role === "BUSINESS_EMPLOYEE" ? "Scoped POS Cashier" : "Business Owner"}
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
-            {user?.organizationName} &bull; Tax PIN: <code className="text-cyan-300 font-mono">BIZ-VAT-8823104</code>
+          <p className="text-xs text-[#65736a] mt-0.5">
+            {user?.organizationName} &bull; Tax PIN: <code className="text-[#1b4332] font-mono">BIZ-VAT-8823104</code>
           </p>
         </div>
 
         {/* Tab Controls */}
-        <div className="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-white/10 text-xs font-semibold self-start sm:self-auto">
+        <div className="flex items-center gap-1 bg-[#ffffff] p-1 rounded border border-[#e5e2da] text-xs font-medium self-start sm:self-auto">
           <button
             onClick={() => setActiveTab("inventory")}
-            className={`px-3 py-1.5 rounded-lg transition ${
-              activeTab === "inventory" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
+            className={`px-3 py-1.5 rounded transition ${
+              activeTab === "inventory" ? "bg-[#1b4332] text-white font-semibold" : "text-[#4c5850] hover:text-[#181c1a]"
             }`}
           >
-            Stock Inventory
+            Store Inventory
           </button>
           <button
             onClick={() => setActiveTab("pos")}
-            className={`px-3 py-1.5 rounded-lg transition ${
-              activeTab === "pos" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
+            className={`px-3 py-1.5 rounded transition ${
+              activeTab === "pos" ? "bg-[#1b4332] text-white font-semibold" : "text-[#4c5850] hover:text-[#181c1a]"
             }`}
           >
             Point of Sale (POS)
@@ -229,8 +224,8 @@ export default function BusinessPortalPage() {
           {isOwner && (
             <button
               onClick={() => setActiveTab("receive")}
-              className={`px-3 py-1.5 rounded-lg transition ${
-                activeTab === "receive" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
+              className={`px-3 py-1.5 rounded transition ${
+                activeTab === "receive" ? "bg-[#1b4332] text-white font-semibold" : "text-[#4c5850] hover:text-[#181c1a]"
               }`}
             >
               Inbound Stock In
@@ -239,61 +234,61 @@ export default function BusinessPortalPage() {
         </div>
       </div>
 
-      {/* Tab 1: Inventory Grid */}
+      {/* Tab 1: Inventory */}
       {activeTab === "inventory" && (
-        <div className="p-5 rounded-2xl glass-panel border border-white/10 space-y-4">
+        <div className="p-5 rounded gov-card space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <Store className="w-4 h-4 text-indigo-400" />
-              Live Store Inventory & MRP Compliance
+            <h3 className="text-sm font-bold text-[#181c1a] flex items-center gap-1.5">
+              <Store className="w-4 h-4 text-[#1b4332]" />
+              Store Inventory & Statutory Price Compliance
             </h3>
-            <span className="text-xs text-slate-400 font-mono">{inventory.length} Stock Units</span>
+            <span className="text-xs text-[#65736a] font-mono">{inventory.length} Stock Units</span>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-white/10 text-slate-400 font-mono">
+            <table className="w-full text-left text-xs border border-[#e5e2da]">
+              <thead className="bg-[#f8f7f4] border-b border-[#e5e2da] text-[#4c5850] font-mono">
                 <tr>
-                  <th className="py-2.5 px-3">SKU / Item</th>
-                  <th className="py-2.5 px-3">Batch Reference</th>
-                  <th className="py-2.5 px-3">In Stock</th>
-                  {isOwner && <th className="py-2.5 px-3">Wholesale Cost</th>}
-                  <th className="py-2.5 px-3">Retail Price</th>
-                  <th className="py-2.5 px-3">Statutory MRP</th>
-                  <th className="py-2.5 px-3">Compliance</th>
-                  <th className="py-2.5 px-3">Actions</th>
+                  <th className="py-2 px-3">SKU / Item</th>
+                  <th className="py-2 px-3">Batch Reference</th>
+                  <th className="py-2 px-3">In Stock</th>
+                  {isOwner && <th className="py-2 px-3">Wholesale Cost</th>}
+                  <th className="py-2 px-3">Retail Price</th>
+                  <th className="py-2 px-3">Statutory MRP</th>
+                  <th className="py-2 px-3">Compliance</th>
+                  <th className="py-2 px-3">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 text-slate-300">
+              <tbody className="divide-y divide-[#e5e2da] text-[#333d37]">
                 {inventory.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-900/60 transition">
-                    <td className="py-3 px-3 font-semibold text-white">
+                  <tr key={item.id} className="hover:bg-[#f8f7f4] transition">
+                    <td className="py-2.5 px-3 font-semibold text-[#181c1a]">
                       <div>{item.productName}</div>
-                      <div className="text-[10px] text-slate-400 font-mono">{item.sku} ({item.hsCode})</div>
+                      <div className="text-[10px] text-[#65736a] font-mono">{item.sku} ({item.hsCode})</div>
                     </td>
-                    <td className="py-3 px-3 font-mono text-cyan-300">{item.batchNumber}</td>
-                    <td className="py-3 px-3 font-mono font-bold">{item.stockQuantity}</td>
-                    {isOwner && <td className="py-3 px-3 font-mono text-slate-400">${item.unitCost}</td>}
-                    <td className="py-3 px-3 font-mono font-bold text-white">${item.retailPrice}</td>
-                    <td className="py-3 px-3 font-mono text-emerald-400">${item.statutoryMrp}</td>
-                    <td className="py-3 px-3">
+                    <td className="py-2.5 px-3 font-mono text-[#1b4332]">{item.batchNumber}</td>
+                    <td className="py-2.5 px-3 font-mono font-bold">{item.stockQuantity}</td>
+                    {isOwner && <td className="py-2.5 px-3 font-mono text-[#65736a]">${item.unitCost}</td>}
+                    <td className="py-2.5 px-3 font-mono font-bold text-[#181c1a]">${item.retailPrice}</td>
+                    <td className="py-2.5 px-3 font-mono text-[#1b4332]">${item.statutoryMrp}</td>
+                    <td className="py-2.5 px-3">
                       {item.isPriceCompliant ? (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-[#eaf0ec] text-[#1b4332] border border-[#cad2c5]">
                           MRP COMPLIANT
                         </span>
                       ) : (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
-                          PRICE GOUGING
+                        <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-[#fbeeed] text-[#8c322c] border border-[#f2cfcd]">
+                          OVERCHARGED
                         </span>
                       )}
                     </td>
-                    <td className="py-3 px-3">
+                    <td className="py-2.5 px-3">
                       <button
                         onClick={() => {
                           addToCart(item);
                           setActiveTab("pos");
                         }}
-                        className="px-2.5 py-1 rounded bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-[11px] inline-flex items-center gap-1 transition"
+                        className="px-2.5 py-1 rounded bg-[#1b4332] hover:bg-[#143621] text-white font-semibold text-[11px] inline-flex items-center gap-1 transition"
                       >
                         <ShoppingCart className="w-3 h-3" />
                         Add to POS
@@ -307,13 +302,13 @@ export default function BusinessPortalPage() {
         </div>
       )}
 
-      {/* Tab 2: Point of Sale (POS) Checkout */}
+      {/* Tab 2: POS Checkout */}
       {activeTab === "pos" && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Item Catalog (2 Cols) */}
-          <div className="lg:col-span-2 p-5 rounded-2xl glass-panel border border-white/10 space-y-4">
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <ShoppingCart className="w-4 h-4 text-cyan-400" />
+          {/* Catalog (2 Cols) */}
+          <div className="lg:col-span-2 p-5 rounded gov-card space-y-3">
+            <h3 className="text-sm font-bold text-[#181c1a] flex items-center gap-1.5">
+              <ShoppingCart className="w-4 h-4 text-[#1b4332]" />
               Select Products for Checkout
             </h3>
 
@@ -322,79 +317,76 @@ export default function BusinessPortalPage() {
                 <div
                   key={item.id}
                   onClick={() => addToCart(item)}
-                  className="p-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-white/10 hover:border-cyan-500/40 transition cursor-pointer flex flex-col justify-between"
+                  className="p-3 rounded bg-[#f8f7f4] hover:bg-[#ffffff] border border-[#e5e2da] hover:border-[#1b4332] transition cursor-pointer flex flex-col justify-between"
                 >
                   <div>
-                    <h4 className="text-sm font-bold text-white">{item.productName}</h4>
-                    <div className="text-[11px] text-slate-400 font-mono mt-0.5">
+                    <h4 className="text-xs font-bold text-[#181c1a]">{item.productName}</h4>
+                    <div className="text-[10px] text-[#65736a] font-mono mt-0.5">
                       Batch: {item.batchNumber} | Stock: {item.stockQuantity}
                     </div>
                   </div>
 
-                  <div className="mt-3 pt-2 border-t border-white/5 flex items-center justify-between">
-                    <div>
-                      <span className="text-xs text-slate-400">Retail: </span>
-                      <span className="text-sm font-mono font-bold text-cyan-400">${item.retailPrice}</span>
-                    </div>
-                    <span className="text-[10px] font-mono text-emerald-400">MRP: ${item.statutoryMrp}</span>
+                  <div className="mt-2.5 pt-2 border-t border-[#e5e2da] flex items-center justify-between text-xs font-mono">
+                    <span className="text-[#181c1a] font-bold">${item.retailPrice}</span>
+                    <span className="text-[#1b4332] text-[11px]">MRP: ${item.statutoryMrp}</span>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Cart & Fiscal Invoice Stamping (1 Col) */}
-          <div className="p-5 rounded-2xl glass-panel border border-white/10 space-y-4">
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <Receipt className="w-4 h-4 text-emerald-400" />
-              Fiscal POS Terminal
+          {/* Cart & IRN Receipt (1 Col) */}
+          <div className="p-5 rounded gov-card space-y-3">
+            <h3 className="text-sm font-bold text-[#181c1a] flex items-center gap-1.5">
+              <Receipt className="w-4 h-4 text-[#1b4332]" />
+              Point of Sale Register
             </h3>
 
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               <div>
-                <label className="block text-[11px] text-slate-400 mb-1">Customer Name</label>
+                <label className="block text-[11px] text-[#65736a] mb-1">Customer / Entity Name</label>
                 <input
                   type="text"
                   value={buyerName}
                   onChange={(e) => setBuyerName(e.target.value)}
-                  className="glass-input w-full text-xs"
+                  className="gov-input w-full text-xs"
                 />
               </div>
 
-              {/* Cart Item List */}
-              <div className="border-t border-b border-white/10 py-2 space-y-2 max-h-48 overflow-y-auto text-xs">
+              {/* Cart Items */}
+              <div className="border-t border-b border-[#e5e2da] py-2 space-y-2 max-h-48 overflow-y-auto text-xs">
                 {cart.length === 0 ? (
-                  <p className="text-slate-500 text-center py-4">Cart is empty. Click an item to add.</p>
+                  <p className="text-[#65736a] text-center py-4">Register is empty. Click an item to add.</p>
                 ) : (
                   cart.map((c) => {
                     const isOverMrp = c.salePrice > c.item.statutoryMrp;
                     return (
-                      <div key={c.item.id} className="p-2 rounded-lg bg-slate-900/80 border border-white/5 space-y-1">
-                        <div className="flex items-center justify-between font-medium text-slate-200">
+                      <div key={c.item.id} className="p-2 rounded bg-[#f8f7f4] border border-[#e5e2da] space-y-1">
+                        <div className="flex items-center justify-between font-medium text-[#181c1a]">
                           <span>{c.item.productName}</span>
                           <button
                             onClick={() => removeFromCart(c.item.id)}
-                            className="text-slate-500 hover:text-rose-400"
+                            className="text-[#65736a] hover:text-[#8c322c]"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
                         <div className="flex items-center justify-between text-[11px]">
-                          <span className="text-slate-400">Qty: {c.quantity}</span>
+                          <span className="text-[#65736a]">Qty: {c.quantity}</span>
                           <div className="flex items-center gap-1 font-mono">
                             <span>Price $:</span>
                             <input
                               type="number"
                               value={c.salePrice}
                               onChange={(e) => updateCartPrice(c.item.id, Number(e.target.value))}
-                              className={`w-16 px-1 py-0.5 rounded bg-slate-950 text-right font-mono border ${
-                                isOverMrp ? "border-rose-500 text-rose-300 font-bold" : "border-slate-700 text-white"
+                              className={`w-16 px-1 py-0.5 rounded bg-white text-right font-mono border ${
+                                isOverMrp ? "border-[#8c322c] text-[#8c322c] font-bold" : "border-[#d2cebf] text-[#181c1a]"
                               }`}
                             />
                           </div>
                         </div>
                         {isOverMrp && (
-                          <div className="text-[10px] text-rose-400 font-semibold flex items-center gap-1">
+                          <div className="text-[10px] text-[#8c322c] font-semibold flex items-center gap-1">
                             <AlertTriangle className="w-3 h-3" />
                             Gouging Alert: Exceeds MRP ${c.item.statutoryMrp}!
                           </div>
@@ -405,13 +397,12 @@ export default function BusinessPortalPage() {
                 )}
               </div>
 
-              {/* Payment Method & Checkout */}
               <div>
-                <label className="block text-[11px] text-slate-400 mb-1">Payment Method</label>
+                <label className="block text-[11px] text-[#65736a] mb-1">Settlement Method</label>
                 <select
                   value={paymentMethod}
                   onChange={(e) => setPaymentMethod(e.target.value as any)}
-                  className="glass-input w-full text-xs bg-slate-900"
+                  className="gov-input w-full text-xs"
                 >
                   <option value="CARD">Credit / Debit Card</option>
                   <option value="CASH">Cash Currency</option>
@@ -422,18 +413,17 @@ export default function BusinessPortalPage() {
               <button
                 onClick={handlePosCheckout}
                 disabled={cart.length === 0}
-                className="w-full py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-800 disabled:text-slate-600 text-white font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/20"
+                className="w-full py-2 rounded bg-[#1b4332] hover:bg-[#143621] disabled:bg-[#f3f1ec] disabled:text-[#8c9890] text-white font-semibold text-xs transition cursor-pointer"
               >
-                <ShieldCheck className="w-4 h-4" />
                 Issue 13% Fiscal Tax Invoice
               </button>
 
               {posStatus && (
                 <div
-                  className={`p-2.5 rounded-lg text-xs font-semibold ${
+                  className={`p-2 rounded text-xs font-semibold ${
                     posStatus.includes("FLAGGED")
-                      ? "bg-rose-500/20 text-rose-300 border border-rose-500/30"
-                      : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+                      ? "bg-[#fbeeed] text-[#8c322c] border border-[#f2cfcd]"
+                      : "bg-[#eaf0ec] text-[#1b4332] border border-[#cad2c5]"
                   }`}
                 >
                   {posStatus}
@@ -441,13 +431,13 @@ export default function BusinessPortalPage() {
               )}
 
               {lastIssuedInvoice && (
-                <div className="p-3 rounded-xl bg-slate-950 border border-cyan-500/30 text-xs space-y-1">
-                  <span className="text-[10px] font-mono text-cyan-400 block uppercase">IRN Tax Stamp Generated</span>
-                  <div className="font-mono text-white font-bold">{lastIssuedInvoice.invoiceNumber}</div>
-                  <div className="text-[10px] font-mono text-slate-400 break-all">{lastIssuedInvoice.irn}</div>
+                <div className="p-3 rounded bg-[#f8f7f4] border border-[#cad2c5] text-xs space-y-1">
+                  <span className="text-[10px] font-mono text-[#1b4332] uppercase font-bold block">IRN Tax Stamp</span>
+                  <div className="font-mono text-[#181c1a] font-bold">{lastIssuedInvoice.invoiceNumber}</div>
+                  <div className="text-[10px] font-mono text-[#65736a] break-all">{lastIssuedInvoice.irn}</div>
                   <Link
                     href={`/invoices`}
-                    className="text-cyan-400 hover:underline text-[11px] font-medium block pt-1"
+                    className="text-[#1b4332] hover:underline text-[11px] font-semibold block pt-1"
                   >
                     View Official Printable Tax Receipt &rarr;
                   </Link>
@@ -458,17 +448,17 @@ export default function BusinessPortalPage() {
         </div>
       )}
 
-      {/* Tab 3: Inbound Stock Acceptance (Owner Only) */}
+      {/* Tab 3: Receive Inbound */}
       {activeTab === "receive" && isOwner && (
-        <div className="p-6 rounded-2xl glass-panel border border-white/10 max-w-xl mx-auto space-y-4">
-          <h3 className="text-base font-bold text-white">Receive Inbound Manufacturer Consignment</h3>
-          <p className="text-xs text-slate-400">
-            Accepts verified batches from accredited manufacturers into your local retail ledger.
+        <div className="p-6 rounded gov-card max-w-xl mx-auto space-y-4">
+          <h3 className="text-sm font-bold text-[#181c1a]">Accept Manufacturer Stock into Store Inventory</h3>
+          <p className="text-xs text-[#65736a]">
+            Validates cryptographic provenance before stocking items into local register.
           </p>
 
           <form onSubmit={handleReceiveStock} className="space-y-3 text-xs">
             <div>
-              <label className="block text-slate-300 font-medium mb-1">Select Inbound Batch</label>
+              <label className="block text-[#333d37] font-medium mb-1">Select Batch Consignment</label>
               <select
                 value={selectedBatchId}
                 onChange={(e) => {
@@ -476,7 +466,7 @@ export default function BusinessPortalPage() {
                   const b = availableBatches.find((item) => item.id === e.target.value);
                   if (b) setRetailPrice(b.statutoryMrp.toString());
                 }}
-                className="glass-input w-full bg-slate-900"
+                className="gov-input w-full font-mono"
               >
                 {availableBatches.map((b) => (
                   <option key={b.id} value={b.id}>
@@ -488,22 +478,22 @@ export default function BusinessPortalPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Quantity Received</label>
+                <label className="block text-[#333d37] font-medium mb-1">Quantity Received</label>
                 <input
                   type="number"
                   value={receiveQty}
                   onChange={(e) => setReceiveQty(e.target.value)}
-                  className="glass-input w-full font-mono"
+                  className="gov-input w-full font-mono"
                   required
                 />
               </div>
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Retail Selling Price ($)</label>
+                <label className="block text-[#333d37] font-medium mb-1">Retail Selling Price ($)</label>
                 <input
                   type="number"
                   value={retailPrice}
                   onChange={(e) => setRetailPrice(e.target.value)}
-                  className="glass-input w-full font-mono"
+                  className="gov-input w-full font-mono"
                   required
                 />
               </div>
@@ -511,13 +501,13 @@ export default function BusinessPortalPage() {
 
             <button
               type="submit"
-              className="w-full py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition mt-2 cursor-pointer"
+              className="w-full py-2.5 rounded bg-[#1b4332] hover:bg-[#143621] text-white font-semibold text-xs transition mt-2 cursor-pointer"
             >
-              Verify Provenance & Accept Stock
+              Verify Provenance & Stock Inventory
             </button>
 
             {receiveStatus && (
-              <div className="p-2.5 rounded-lg text-xs font-semibold bg-emerald-500/20 text-emerald-300">
+              <div className="p-2 rounded text-xs font-semibold bg-[#eaf0ec] text-[#1b4332]">
                 {receiveStatus}
               </div>
             )}

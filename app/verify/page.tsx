@@ -9,10 +9,8 @@ import {
   XCircle,
   AlertTriangle,
   MapPin,
-  Clock,
   Layers,
   Send,
-  Sparkles,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -74,7 +72,7 @@ export default function ConsumerVerificationPage() {
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        setReportStatus("Thank you! Your whistleblower report has been logged with the National Tax & Anti-Fraud Desk.");
+        setReportStatus("Thank you. Your report has been dispatched to the National Tax Officer Enforcement Desk.");
         setTimeout(() => {
           setIsReportModalOpen(false);
           setReportStatus("");
@@ -84,51 +82,51 @@ export default function ConsumerVerificationPage() {
         setReportStatus(`Error: ${data.message || data.error}`);
       }
     } catch {
-      setReportStatus("Failed to submit whistleblower report.");
+      setReportStatus("Failed to submit report.");
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-4xl mx-auto space-y-6">
       {/* Hero */}
-      <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs font-semibold">
-          <Sparkles className="w-3.5 h-3.5" />
-          Public Consumer Verification Gateway
+      <div className="text-center space-y-2">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#eaf0ec] text-[#1b4332] border border-[#cad2c5] text-xs font-semibold">
+          <ShieldCheck className="w-3.5 h-3.5" />
+          Public Citizen Product Verification Gateway
         </div>
-        <h1 className="text-3xl sm:text-4xl font-black text-white">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#163828]">
           Verify Product Authenticity & Statutory MRP
         </h1>
-        <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
-          Scan or enter the unique serial number on any product packaging to verify manufacturer origin, supply chain custody, and legal price ceilings.
+        <p className="text-xs sm:text-sm text-[#65736a] max-w-xl mx-auto">
+          Scan or enter the unique serial number on any product packaging to verify manufacturer provenance, custody events, and legal price ceilings.
         </p>
       </div>
 
-      {/* Verification Search Box */}
-      <div className="p-6 rounded-2xl glass-panel-glow border border-cyan-500/30 bg-slate-900/90 space-y-4">
+      {/* Search Box */}
+      <div className="p-5 rounded gov-card space-y-3">
         <div className="flex flex-col sm:flex-row gap-2">
           <div className="relative flex-1">
-            <Search className="w-5 h-5 text-slate-400 absolute left-3.5 top-3" />
+            <Search className="w-4 h-4 text-[#65736a] absolute left-3.5 top-3" />
             <input
               type="text"
               value={serialInput}
               onChange={(e) => setSerialInput(e.target.value)}
               placeholder="Enter Serial Number (e.g. APX-OIL-901-000184)"
-              className="glass-input w-full pl-11 text-sm font-mono"
+              className="gov-input w-full pl-10 text-xs sm:text-sm font-mono"
             />
           </div>
           <button
             onClick={() => handleVerify()}
             disabled={isVerifying}
-            className="px-6 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-sm transition cursor-pointer flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20"
+            className="px-5 py-2.5 rounded bg-[#1b4332] hover:bg-[#143621] text-white font-semibold text-xs sm:text-sm transition cursor-pointer flex items-center justify-center gap-2"
           >
             {isVerifying ? "Verifying..." : "Verify Serial Code"}
           </button>
         </div>
 
-        {/* Quick Sample Clickers */}
+        {/* Samples */}
         <div className="flex flex-wrap items-center gap-2 text-xs">
-          <span className="text-slate-400">Sample Serial Numbers:</span>
+          <span className="text-[#65736a]">Sample Serial Codes:</span>
           {sampleSerials.map((s) => (
             <button
               key={s.serial}
@@ -136,7 +134,7 @@ export default function ConsumerVerificationPage() {
                 setSerialInput(s.serial);
                 handleVerify(s.serial);
               }}
-              className="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition"
+              className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#ffffff] hover:bg-[#f3f1ec] text-[#333d37] border border-[#d2cebf] transition"
             >
               {s.label}
             </button>
@@ -144,85 +142,83 @@ export default function ConsumerVerificationPage() {
         </div>
       </div>
 
-      {/* Verification Diagnostic Card */}
+      {/* Diagnostic Card */}
       {verifyData && (
-        <div className="space-y-6 animate-in fade-in duration-300">
+        <div className="space-y-4 animate-in fade-in duration-200">
           <div
-            className={`p-6 rounded-2xl border ${
+            className={`p-5 rounded border ${
               verifyData.isAuthentic
-                ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-100"
-                : "bg-rose-950/40 border-rose-500/40 text-rose-100"
+                ? "bg-[#f4f7f5] border-[#cad2c5] text-[#163828]"
+                : "bg-[#fdf3f2] border-[#f2cfcd] text-[#8c322c]"
             }`}
           >
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 {verifyData.isAuthentic ? (
-                  <CheckCircle2 className="w-8 h-8 text-emerald-400 shrink-0" />
+                  <CheckCircle2 className="w-6 h-6 text-[#1b4332] shrink-0" />
                 ) : (
-                  <XCircle className="w-8 h-8 text-rose-400 shrink-0" />
+                  <XCircle className="w-6 h-6 text-[#8c322c] shrink-0" />
                 )}
                 <div>
-                  <h2 className="text-xl font-bold text-white">
+                  <h2 className="text-base font-bold">
                     {verifyData.isAuthentic ? "GENUINE CERTIFIED PRODUCT" : "COUNTERFEIT / ANOMALY DETECTED"}
                   </h2>
-                  <p className="text-xs text-slate-300">{verifyData.message}</p>
+                  <p className="text-xs text-[#333d37]">{verifyData.message}</p>
                 </div>
               </div>
 
               <button
                 onClick={() => setIsReportModalOpen(true)}
-                className="px-4 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-rose-300 border border-rose-500/40 text-xs font-bold transition flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
+                className="px-3 py-1.5 rounded bg-[#ffffff] hover:bg-[#fdf3f2] text-[#8c322c] border border-[#f2cfcd] text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer self-start sm:self-auto"
               >
-                <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
+                <AlertTriangle className="w-3.5 h-3.5 text-[#8c322c]" />
                 Report Overpricing or Fake
               </button>
             </div>
 
             {verifyData.passport && (
-              <div className="mt-6 pt-6 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
+              <div className="mt-4 pt-4 border-t border-[#e5e2da] grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono text-[#333d37]">
                 <div>
-                  <span className="text-[10px] text-slate-400 block font-sans">Product</span>
-                  <strong className="text-white text-sm">{verifyData.passport.productName}</strong>
+                  <span className="text-[10px] text-[#65736a] block font-sans">Product</span>
+                  <strong className="text-[#181c1a]">{verifyData.passport.productName}</strong>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-400 block font-sans">Statutory Maximum Price</span>
-                  <strong className="text-emerald-400 text-sm">${verifyData.passport.statutoryMrp}</strong>
+                  <span className="text-[10px] text-[#65736a] block font-sans">Statutory Max MRP</span>
+                  <strong className="text-[#1b4332]">${verifyData.passport.statutoryMrp}</strong>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-400 block font-sans">Batch Ref</span>
-                  <strong className="text-cyan-300 text-sm">{verifyData.passport.batchNumber}</strong>
+                  <span className="text-[10px] text-[#65736a] block font-sans">Batch Ref</span>
+                  <strong className="text-[#1b4332]">{verifyData.passport.batchNumber}</strong>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-400 block font-sans">Total Scans</span>
-                  <strong className="text-teal-300 text-sm">{verifyData.passport.scanCount} times</strong>
+                  <span className="text-[10px] text-[#65736a] block font-sans">Total Scans</span>
+                  <strong className="text-[#4c5850]">{verifyData.passport.scanCount} times</strong>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Provenance Journey */}
+          {/* Provenance Chain */}
           {verifyData.passport?.journey && (
-            <div className="p-6 rounded-2xl glass-panel border border-white/10 space-y-4">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Layers className="w-4 h-4 text-cyan-400" />
-                Verified Supply Chain Traceability Journey
+            <div className="p-5 rounded gov-card space-y-3">
+              <h3 className="text-xs font-bold text-[#181c1a] flex items-center gap-1.5">
+                <Layers className="w-4 h-4 text-[#1b4332]" />
+                Supply Chain Traceability & Custody Events
               </h3>
 
-              <div className="relative pl-6 border-l-2 border-cyan-500/30 space-y-6 text-xs">
-                {verifyData.passport.journey.map((step: any, i: number) => (
+              <div className="relative pl-5 border-l border-[#cad2c5] space-y-4 text-xs">
+                {verifyData.passport.journey.map((step: any) => (
                   <div key={step.id} className="relative">
-                    <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full bg-slate-950 border-2 border-cyan-400 flex items-center justify-center">
-                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-400"></div>
-                    </div>
+                    <div className="absolute -left-[25px] top-1 w-3 h-3 rounded-full bg-[#ffffff] border-2 border-[#1b4332]"></div>
 
-                    <div className="p-3.5 rounded-xl bg-slate-900/80 border border-white/5 space-y-1">
+                    <div className="p-3 rounded bg-[#f8f7f4] border border-[#e5e2da] space-y-1">
                       <div className="flex justify-between font-mono text-[11px]">
-                        <span className="font-bold text-cyan-300">{step.stage}</span>
-                        <span className="text-slate-400">{new Date(step.timestamp).toLocaleDateString()}</span>
+                        <span className="font-bold text-[#1b4332]">{step.stage}</span>
+                        <span className="text-[#65736a]">{new Date(step.timestamp).toLocaleDateString()}</span>
                       </div>
-                      <p className="text-slate-200">{step.details}</p>
-                      <div className="text-[10px] text-slate-400 flex items-center gap-1 pt-1">
-                        <MapPin className="w-3 h-3 text-slate-500" />
+                      <p className="text-[#333d37]">{step.details}</p>
+                      <div className="text-[10px] text-[#65736a] flex items-center gap-1">
+                        <MapPin className="w-3 h-3 text-[#8c9890]" />
                         {step.location} &bull; {step.actorOrgName}
                       </div>
                     </div>
@@ -236,16 +232,16 @@ export default function ConsumerVerificationPage() {
 
       {/* Whistleblower Modal */}
       {isReportModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700/80 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2 text-rose-400">
-                <AlertTriangle className="w-5 h-5" />
-                <h3 className="text-base font-bold text-white">Report Counterfeit or Price Gouging</h3>
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-[#ffffff] border border-[#d2cebf] rounded-lg max-w-lg w-full p-6 shadow-md space-y-3">
+            <div className="flex items-center justify-between border-b border-[#e5e2da] pb-3">
+              <div className="flex items-center gap-2 text-[#8c322c]">
+                <AlertTriangle className="w-4 h-4" />
+                <h3 className="text-sm font-bold text-[#181c1a]">Report Counterfeit or Statutory Price Gouging</h3>
               </div>
               <button
                 onClick={() => setIsReportModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1"
+                className="text-[#65736a] hover:text-[#181c1a] p-1"
               >
                 ✕
               </button>
@@ -253,80 +249,77 @@ export default function ConsumerVerificationPage() {
 
             <form onSubmit={handleSubmitReport} className="space-y-3 text-xs">
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Issue Category</label>
+                <label className="block text-[#333d37] font-medium mb-1">Issue Category</label>
                 <select
                   value={issueType}
                   onChange={(e) => setIssueType(e.target.value)}
-                  className="glass-input w-full bg-slate-900"
+                  className="gov-input w-full"
                 >
                   <option value="Price Gouging (Charged Over MRP)">Price Gouging (Charged Over Statutory MRP)</option>
-                  <option value="Suspected Counterfeit Packaging">Suspected Counterfeit Packaging / Cloned QR</option>
-                  <option value="Missing Fiscal Tax Invoice">Retailer Refused Official Tax Invoice</option>
-                  <option value="Expired Goods Sold">Expired / Tampered Medicine or Food</option>
+                  <option value="Suspected Counterfeit Packaging">Suspected Counterfeit Packaging / Cloned Serial</option>
+                  <option value="Missing Fiscal Tax Invoice">Retailer Refused Official 13% Tax Receipt</option>
                 </select>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">Store / Merchant Name</label>
+                  <label className="block text-[#333d37] font-medium mb-1">Store / Outlet Name</label>
                   <input
                     type="text"
                     value={storeName}
                     onChange={(e) => setStoreName(e.target.value)}
-                    placeholder="e.g. Corner Mart 4"
-                    className="glass-input w-full"
+                    placeholder="e.g. City Mart Store 4"
+                    className="gov-input w-full"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">City / Neighborhood</label>
+                  <label className="block text-[#333d37] font-medium mb-1">City / District</label>
                   <input
                     type="text"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    placeholder="e.g. Downtown Central"
-                    className="glass-input w-full"
+                    placeholder="e.g. Central District"
+                    className="gov-input w-full"
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Actual Price Charged by Store ($)</label>
+                <label className="block text-[#333d37] font-medium mb-1">Price Charged by Store ($)</label>
                 <input
                   type="number"
                   value={pricePaid}
                   onChange={(e) => setPricePaid(e.target.value)}
                   placeholder="e.g. 1450"
-                  className="glass-input w-full font-mono"
+                  className="gov-input w-full font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Incident Description & Evidence</label>
+                <label className="block text-[#333d37] font-medium mb-1">Incident Description & Evidence</label>
                 <textarea
                   value={reportDesc}
                   onChange={(e) => setReportDesc(e.target.value)}
-                  placeholder="Describe where you purchased the item and what violation occurred..."
-                  className="glass-input w-full h-20"
+                  placeholder="Describe the purchase details..."
+                  className="gov-input w-full h-20"
                   required
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-2.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer mt-2"
+                className="w-full py-2.5 rounded bg-[#8c322c] hover:bg-[#782823] text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer mt-1"
               >
                 <Send className="w-3.5 h-3.5" />
                 Submit Anonymous Report to Tax Officer Desk
               </button>
 
               {reportStatus && (
-                <div
-                  className={`p-2.5 rounded-lg text-xs font-semibold ${
-                    reportStatus.includes("Error") ? "bg-rose-500/20 text-rose-300" : "bg-emerald-500/20 text-emerald-300"
-                  }`}
-                >
+                <div className={`p-2 rounded text-xs font-semibold ${
+                  reportStatus.includes("Error") ? "bg-[#fbeeed] text-[#8c322c]" : "bg-[#eaf0ec] text-[#1b4332]"
+                }`}>
                   {reportStatus}
                 </div>
               )}

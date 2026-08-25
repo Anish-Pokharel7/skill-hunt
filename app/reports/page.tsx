@@ -1,18 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useAuth } from "@/components/AuthContext";
 import { SystemAuditLog } from "@/lib/db/types";
 import {
   BarChart3,
   ShieldCheck,
-  Download,
-  Filter,
-  FileSpreadsheet,
   Lock,
-  Search,
-  CheckCircle2,
-  AlertTriangle,
 } from "lucide-react";
 
 export default function ReportsPortalPage() {
@@ -91,17 +85,17 @@ export default function ReportsPortalPage() {
 
   if (!isAuthorized) {
     return (
-      <div className="max-w-2xl mx-auto my-12 p-8 rounded-2xl glass-panel border border-rose-500/30 text-center space-y-4">
-        <div className="w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 mx-auto flex items-center justify-center">
-          <Lock className="w-6 h-6" />
+      <div className="max-w-2xl mx-auto my-12 p-8 rounded gov-card text-center space-y-4 border border-[#e5e2da]">
+        <div className="w-10 h-10 rounded bg-[#fbeeed] text-[#8c322c] mx-auto flex items-center justify-center">
+          <Lock className="w-5 h-5" />
         </div>
-        <h2 className="text-xl font-bold text-white">403 Forbidden: Auditor Access Required</h2>
-        <p className="text-xs sm:text-sm text-slate-300">
-          The <strong>Reports & Forensic Audit Portal</strong> requires <code className="bg-slate-900 px-1.5 py-0.5 rounded text-rose-300">AUDITOR</code>, <code className="bg-slate-900 px-1.5 py-0.5 rounded text-amber-300">TAX_OFFICER</code>, or <code className="bg-slate-900 px-1.5 py-0.5 rounded text-purple-300">ADMIN</code> roles.
+        <h2 className="text-lg font-bold text-[#181c1a]">403 Forbidden: Forensic Auditor Access Required</h2>
+        <p className="text-xs text-[#4c5850]">
+          The <strong>Reports & Forensic Audit Portal</strong> requires <code className="bg-[#f3f1ec] px-1.5 py-0.5 rounded text-[#8c322c]">AUDITOR</code>, <code className="bg-[#f3f1ec] px-1.5 py-0.5 rounded text-[#8a5b14]">TAX_OFFICER</code>, or <code className="bg-[#f3f1ec] px-1.5 py-0.5 rounded text-[#1b4332]">ADMIN</code>.
         </p>
         <button
           onClick={() => loginAsRole("AUDITOR")}
-          className="px-5 py-2.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition"
+          className="px-4 py-2 rounded bg-[#1b4332] hover:bg-[#143621] text-white font-semibold text-xs transition"
         >
           Switch to Auditor Role (Arthur Pendelton)
         </button>
@@ -121,15 +115,15 @@ export default function ReportsPortalPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#e5e2da]">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-black text-white">Reports & Forensic Audit Ledger</h1>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">
+            <h1 className="text-xl font-bold text-[#181c1a]">Reports & Forensic Audit Ledger</h1>
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#fbeeed] text-[#8c322c] border border-[#f2cfcd]">
               AUDIT TRAIL
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-[#65736a] mt-0.5">
             Cross-Tier Revenue Reconciliation &bull; Tax Gap Analysis &bull; Zero-Trust Access Logs
           </p>
         </div>
@@ -137,79 +131,76 @@ export default function ReportsPortalPage() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-5 rounded-2xl glass-panel border border-white/10 space-y-1">
-          <span className="text-xs text-slate-400 font-medium">Reconciled Tax Ledgers</span>
-          <div className="text-2xl font-black text-white font-mono">$184.7M</div>
-          <span className="text-[11px] text-emerald-400 font-semibold">100% Tax Trail Verifiable</span>
+        <div className="p-4 rounded gov-card space-y-1">
+          <span className="text-xs text-[#65736a]">Reconciled Tax Ledgers</span>
+          <div className="text-xl font-bold text-[#181c1a] font-mono">$184.7M</div>
+          <span className="text-[11px] text-[#1b4332] font-medium">100% Tax Trail Verifiable</span>
         </div>
-        <div className="p-5 rounded-2xl glass-panel border border-white/10 space-y-1">
-          <span className="text-xs text-slate-400 font-medium">Security & IDOR Blocks</span>
-          <div className="text-2xl font-black text-rose-400 font-mono">100% Guarded</div>
-          <span className="text-[11px] text-slate-400">Zero Cross-Tenant Leakage</span>
+        <div className="p-4 rounded gov-card space-y-1">
+          <span className="text-xs text-[#65736a]">Security & IDOR Interceptions</span>
+          <div className="text-xl font-bold text-[#1b4332] font-mono">100% Guarded</div>
+          <span className="text-[11px] text-[#65736a]">Zero Cross-Tenant Leakage</span>
         </div>
-        <div className="p-5 rounded-2xl glass-panel border border-white/10 space-y-1">
-          <span className="text-xs text-slate-400 font-medium">Compliance Rate</span>
-          <div className="text-2xl font-black text-cyan-400 font-mono">98.4%</div>
-          <span className="text-[11px] text-slate-400">Statutory MRP Adherence</span>
+        <div className="p-4 rounded gov-card space-y-1">
+          <span className="text-xs text-[#65736a]">Statutory MRP Compliance</span>
+          <div className="text-xl font-bold text-[#2d5a45] font-mono">98.4%</div>
+          <span className="text-[11px] text-[#65736a]">Adherence Benchmark</span>
         </div>
       </div>
 
       {/* Audit Log Table */}
-      <div className="p-5 rounded-2xl glass-panel border border-white/10 space-y-4">
+      <div className="p-5 rounded gov-card space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-rose-400" />
-            Immutable System Security & Access Audit Log
+          <h3 className="text-sm font-bold text-[#181c1a] flex items-center gap-1.5">
+            <ShieldCheck className="w-4 h-4 text-[#1b4332]" />
+            System Security & Access Audit Log
           </h3>
 
-          {/* Filter Buttons */}
-          <div className="flex items-center gap-2 text-xs">
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="glass-input text-xs bg-slate-900"
-            >
-              <option value="ALL">All Event Statuses</option>
-              <option value="SUCCESS">Success</option>
-              <option value="BLOCKED_IDOR">Blocked IDOR Attacks</option>
-            </select>
-          </div>
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="gov-input text-xs"
+          >
+            <option value="ALL">All Event Statuses</option>
+            <option value="SUCCESS">Success</option>
+            <option value="BLOCKED_IDOR">Blocked IDOR Attacks</option>
+          </select>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="border-b border-white/10 text-slate-400 font-mono">
+          <table className="w-full text-left text-xs border border-[#e5e2da]">
+            <thead className="bg-[#f8f7f4] border-b border-[#e5e2da] text-[#4c5850] font-mono">
               <tr>
-                <th className="py-2.5 px-3">Timestamp</th>
-                <th className="py-2.5 px-3">Actor (Role)</th>
-                <th className="py-2.5 px-3">Action Type</th>
-                <th className="py-2.5 px-3">Target Resource</th>
-                <th className="py-2.5 px-3">Status</th>
-                <th className="py-2.5 px-3">Audit Details</th>
+                <th className="py-2 px-3">Timestamp</th>
+                <th className="py-2 px-3">Actor (Role)</th>
+                <th className="py-2 px-3">Action Type</th>
+                <th className="py-2 px-3">Target Resource</th>
+                <th className="py-2 px-3">Status</th>
+                <th className="py-2 px-3">Audit Details</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5 text-slate-300 font-mono text-[11px]">
+            <tbody className="divide-y divide-[#e5e2da] text-[#333d37] font-mono text-[11px]">
               {filteredLogs.map((log) => (
-                <tr key={log.id} className="hover:bg-slate-900/60 transition">
-                  <td className="py-3 px-3 text-slate-400">{new Date(log.timestamp).toLocaleTimeString()}</td>
-                  <td className="py-3 px-3">
-                    <div className="font-bold text-white font-sans">{log.userName}</div>
-                    <div className="text-[10px] text-slate-400">{log.userRole}</div>
+                <tr key={log.id} className="hover:bg-[#f8f7f4] transition">
+                  <td className="py-2.5 px-3 text-[#65736a]">{new Date(log.timestamp).toLocaleTimeString()}</td>
+                  <td className="py-2.5 px-3 font-sans">
+                    <div className="font-bold text-[#181c1a]">{log.userName}</div>
+                    <div className="text-[10px] text-[#65736a]">{log.userRole}</div>
                   </td>
-                  <td className="py-3 px-3 font-bold text-cyan-300">{log.action}</td>
-                  <td className="py-3 px-3 text-slate-300">{log.resourceType}: {log.resourceId}</td>
-                  <td className="py-3 px-3">
+                  <td className="py-2.5 px-3 font-bold text-[#1b4332]">{log.action}</td>
+                  <td className="py-2.5 px-3 text-[#4c5850]">{log.resourceType}: {log.resourceId}</td>
+                  <td className="py-2.5 px-3">
                     <span
-                      className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                      className={`px-1.5 py-0.2 rounded text-[10px] font-bold ${
                         log.status === "SUCCESS"
-                          ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                          : "bg-rose-500/20 text-rose-300 border border-rose-500/30"
+                          ? "bg-[#eaf0ec] text-[#1b4332] border border-[#cad2c5]"
+                          : "bg-[#fbeeed] text-[#8c322c] border border-[#f2cfcd]"
                       }`}
                     >
                       {log.status}
                     </span>
                   </td>
-                  <td className="py-3 px-3 text-slate-400 font-sans max-w-xs">{log.details}</td>
+                  <td className="py-2.5 px-3 text-[#65736a] font-sans max-w-xs">{log.details}</td>
                 </tr>
               ))}
             </tbody>

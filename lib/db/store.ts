@@ -193,7 +193,7 @@ class MockDatabase {
         lastScannedAt: "2026-02-24T14:15:00.000Z",
         lastScannedLocation: "Store Terminal 04, Metro SuperMart, Central City",
         digitalSignature: "SIG-ECDSA-SHA256:0x41f8a892b1cd5e6f...",
-        qrPayload: "https://skillhunt.gov/verify/APX-OIL-901-000184?sig=0x41f8a892",
+        qrPayload: "https://veriprice.gov/verify/APX-OIL-901-000184?sig=0x41f8a892",
         journey: [
           {
             id: "j_01",
@@ -254,7 +254,7 @@ class MockDatabase {
         lastScannedAt: "2026-02-25T07:10:00.000Z",
         lastScannedLocation: "Consumer Mobile App (IP: 103.22.45.18, Geo: Central District)",
         digitalSignature: "SIG-ECDSA-SHA256:0x77c2a1b3d4e5f6...",
-        qrPayload: "https://skillhunt.gov/verify/PAC-PHN-801-000492?sig=0x77c2a1b3",
+        qrPayload: "https://veriprice.gov/verify/PAC-PHN-801-000492?sig=0x77c2a1b3",
         journey: [
           {
             id: "jp_01",
@@ -339,7 +339,7 @@ class MockDatabase {
         lastScannedAt: "2026-02-25T08:05:00.000Z",
         lastScannedLocation: "Multiple conflicting geo-locations detected simultaneously",
         digitalSignature: "INVALID_SIGNATURE_MISMATCH_DETECTED",
-        qrPayload: "https://skillhunt.gov/verify/APX-MED-442-999999?sig=INVALID",
+        qrPayload: "https://veriprice.gov/verify/APX-MED-442-999999?sig=INVALID",
         journey: [
           {
             id: "jc_01",
@@ -506,7 +506,7 @@ class MockDatabase {
         fiscalStatus: "VALIDATED",
         issuedByUserId: "usr_mfg_01",
         issuedByName: "Elena Rostova",
-        qrCodeUrl: "https://skillhunt.gov/invoices/inv_fiscal_8801",
+        qrCodeUrl: "https://veriprice.gov/invoices/inv_fiscal_8801",
         fiscalStampHash: "FISC-STAMP:0x9812401f820b92e",
         isPriceGougingDetected: false,
         createdAt: "2026-02-05T10:30:00.000Z",
@@ -551,7 +551,7 @@ class MockDatabase {
         fiscalStatus: "VALIDATED",
         issuedByUserId: "usr_biz_emp_01",
         issuedByName: "Rohan Joshi",
-        qrCodeUrl: "https://skillhunt.gov/invoices/inv_fiscal_8802",
+        qrCodeUrl: "https://veriprice.gov/invoices/inv_fiscal_8802",
         fiscalStampHash: "FISC-STAMP:0x77192a00c8b21",
         isPriceGougingDetected: false,
         createdAt: "2026-02-24T18:30:00.000Z",
