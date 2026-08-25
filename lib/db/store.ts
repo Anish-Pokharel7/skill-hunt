@@ -39,11 +39,11 @@ class MockDatabase {
         hsCode: "3004.90",
         category: "Pharmaceuticals & Healthcare",
         description: "Essential Life-Saving Medicines & Formulations",
-        standardVatRate: 0.05, // 5% preferential VAT
+        standardVatRate: 0.05,
         exciseDutyRate: 0.0,
         customsDutyRate: 0.05,
         luxuryTaxRate: 0.0,
-        maxProfitMarginCap: 0.15, // 15% statutory max margin
+        maxProfitMarginCap: 0.15,
         statutoryPriceCap: 250,
         updatedByRole: "SUPER_ADMIN",
         updatedAt: "2026-01-10T10:00:00.000Z",
@@ -53,7 +53,7 @@ class MockDatabase {
         hsCode: "1509.10",
         category: "Food & Organic Edibles",
         description: "Virgin & Cold-Pressed Olive Oils",
-        standardVatRate: 0.13, // 13% Standard VAT
+        standardVatRate: 0.13,
         exciseDutyRate: 0.02,
         customsDutyRate: 0.15,
         luxuryTaxRate: 0.0,
@@ -68,8 +68,8 @@ class MockDatabase {
         category: "Beverages & Spirits",
         description: "Aged Single Malt & Distilled Spirits",
         standardVatRate: 0.13,
-        exciseDutyRate: 0.35, // 35% High Excise
-        customsDutyRate: 0.40, // 40% Customs Tariffs
+        exciseDutyRate: 0.35,
+        customsDutyRate: 0.40,
         luxuryTaxRate: 0.10,
         maxProfitMarginCap: 0.30,
         statutoryPriceCap: 8500,
@@ -100,22 +100,25 @@ class MockDatabase {
         productName: "Apex Pure Extra Virgin Olive Oil (1L)",
         category: "Food & Organic Edibles",
         hsCode: "1509.10",
-        description: "Cold-pressed organic olive oil bottled under certified ISO 22000 standard.",
+        description:
+          "Cold-pressed organic olive oil bottled under certified ISO 22000 standard.",
         quantity: 5000,
         availableQuantity: 4200,
         unit: "Bottles",
         productionDate: "2026-02-01T00:00:00.000Z",
         expiryDate: "2027-02-01T00:00:00.000Z",
         manufacturerOrgId: "org_mfg_01",
-        manufacturerName: "Apex BioTech & Consumer Goods Mfg Ltd",
+        manufacturerName:
+          "Apex BioTech & Consumer Goods Mfg Ltd",
         factoryLocation: "Plant 4, Industrial Hub B, Sector 9",
-        baseCost: 650, // Factory cost
+        baseCost: 650,
         standardVatRate: 0.13,
         exciseRate: 0.02,
-        statutoryMrp: 1150, // Maximum Retail Price
+        statutoryMrp: 1150,
         status: "IN_STOCK",
         carbonFootprintKg: 1.4,
-        provenanceHash: "0x8f9c1e7a4b2d3e5f6a7b8c9d0e1f2a3b4c5d6e7f",
+        provenanceHash:
+          "0x8f9c1e7a4b2d3e5f6a7b8c9d0e1f2a3b4c5d6e7f",
         serialPrefix: "APX-OIL-901",
         createdAt: "2026-02-02T08:00:00.000Z",
       },
@@ -125,14 +128,16 @@ class MockDatabase {
         productName: "ParaCare Fast-Release 500mg (100 Tabs)",
         category: "Pharmaceuticals & Healthcare",
         hsCode: "3004.90",
-        description: "Pharmaceutical grade antipyretic formulation with batch laser validation.",
+        description:
+          "Pharmaceutical grade antipyretic formulation with batch laser validation.",
         quantity: 20000,
         availableQuantity: 18500,
         unit: "Boxes",
         productionDate: "2026-02-10T00:00:00.000Z",
         expiryDate: "2028-02-10T00:00:00.000Z",
         manufacturerOrgId: "org_mfg_01",
-        manufacturerName: "Apex BioTech & Consumer Goods Mfg Ltd",
+        manufacturerName:
+          "Apex BioTech & Consumer Goods Mfg Ltd",
         factoryLocation: "Sterile Pharma Facility CleanRoom 3",
         baseCost: 85,
         standardVatRate: 0.05,
@@ -140,7 +145,8 @@ class MockDatabase {
         statutoryMrp: 140,
         status: "IN_STOCK",
         carbonFootprintKg: 0.35,
-        provenanceHash: "0x3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b",
+        provenanceHash:
+          "0x3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b",
         serialPrefix: "APX-MED-442",
         createdAt: "2026-02-11T09:30:00.000Z",
       },
@@ -150,22 +156,26 @@ class MockDatabase {
         productName: "Apex Quantum 5G Smartphone 256GB",
         category: "Electronics & Tech",
         hsCode: "8517.13",
-        description: "Flagship mobile computing terminal imported under Customs Concessionary Manifest.",
+        description:
+          "Flagship mobile computing terminal imported under Customs Concessionary Manifest.",
         quantity: 1200,
         availableQuantity: 950,
         unit: "Units",
         productionDate: "2026-01-15T00:00:00.000Z",
         expiryDate: "2030-01-15T00:00:00.000Z",
         manufacturerOrgId: "org_imp_01",
-        manufacturerName: "Pacific Horizon Logistics & Importers Corp",
-        factoryLocation: "Global High-Tech Assembly Line 7, Shenzhen / Busan",
+        manufacturerName:
+          "Pacific Horizon Logistics & Importers Corp",
+        factoryLocation:
+          "Global High-Tech Assembly Line 7, Shenzhen / Busan",
         baseCost: 52000,
         standardVatRate: 0.13,
         exciseRate: 0.05,
         statutoryMrp: 79999,
         status: "CLEARED",
         carbonFootprintKg: 18.2,
-        provenanceHash: "0x77c2a1b3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9",
+        provenanceHash:
+          "0x77c2a1b3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9",
         serialPrefix: "PAC-PHN-801",
         createdAt: "2026-01-20T11:00:00.000Z",
       },
@@ -182,18 +192,23 @@ class MockDatabase {
         category: "Food & Organic Edibles",
         hsCode: "1509.10",
         manufacturerOrgId: "org_mfg_01",
-        manufacturerName: "Apex BioTech & Consumer Goods Mfg Ltd",
+        manufacturerName:
+          "Apex BioTech & Consumer Goods Mfg Ltd",
         currentHolderOrgId: "org_biz_01",
-        currentHolderName: "Metro Retail Distribution & SuperMart Pvt Ltd",
+        currentHolderName:
+          "Metro Retail Distribution & SuperMart Pvt Ltd",
         statutoryMrp: 1150,
         status: "IN_STOCK",
         isAuthentic: true,
         isRecalled: false,
         scanCount: 1,
         lastScannedAt: "2026-02-24T14:15:00.000Z",
-        lastScannedLocation: "Store Terminal 04, Metro SuperMart, Central City",
-        digitalSignature: "SIG-ECDSA-SHA256:0x41f8a892b1cd5e6f...",
-        qrPayload: "https://veriprice.gov/verify/APX-OIL-901-000184?sig=0x41f8a892",
+        lastScannedLocation:
+          "Store Terminal 04, Metro SuperMart, Central City",
+        digitalSignature:
+          "SIG-ECDSA-SHA256:0x41f8a892b1cd5e6f...",
+        qrPayload:
+          "https://veriprice.gov/verify/APX-OIL-901-000184?sig=0x41f8a892",
         journey: [
           {
             id: "j_01",
@@ -201,10 +216,13 @@ class MockDatabase {
             stage: "MANUFACTURED",
             actorRole: "MANUFACTURER",
             actorName: "Elena Rostova",
-            actorOrgName: "Apex BioTech & Consumer Goods Mfg Ltd",
+            actorOrgName:
+              "Apex BioTech & Consumer Goods Mfg Ltd",
             location: "Factory Cleanroom B, Industrial Zone",
-            details: "Batch bottled, sealed with tamper-evident digital RFID and minted into DPP Registry.",
-            hash: "0x8f9c1e7a4b2d3e5f6a7b8c9d0e1f2a3b4c5d6e7f",
+            details:
+              "Batch bottled, sealed with tamper-evident digital RFID and minted into DPP Registry.",
+            hash:
+              "0x8f9c1e7a4b2d3e5f6a7b8c9d0e1f2a3b4c5d6e7f",
             isVerified: true,
           },
           {
@@ -213,10 +231,13 @@ class MockDatabase {
             stage: "DISTRIBUTED",
             actorRole: "MANUFACTURER",
             actorName: "Elena Rostova",
-            actorOrgName: "Apex BioTech & Consumer Goods Mfg Ltd",
+            actorOrgName:
+              "Apex BioTech & Consumer Goods Mfg Ltd",
             location: "Central Logistics Hub Bay 12",
-            details: "Dispatched via Dispatch Manifest #MAN-2026-88 to Metro Retail Distribution.",
-            hash: "0x11aa22bb33cc44dd55ee66ff77aa88bb99cc00dd",
+            details:
+              "Dispatched via Dispatch Manifest #MAN-2026-88 to Metro Retail Distribution.",
+            hash:
+              "0x11aa22bb33cc44dd55ee66ff77aa88bb99cc00dd",
             isVerified: true,
           },
           {
@@ -225,10 +246,13 @@ class MockDatabase {
             stage: "RETAIL_RECEIVED",
             actorRole: "BUSINESS_EMPLOYEE",
             actorName: "Kavita Patel",
-            actorOrgName: "Metro Retail Distribution & SuperMart Pvt Ltd",
+            actorOrgName:
+              "Metro Retail Distribution & SuperMart Pvt Ltd",
             location: "Avenue Mall Retail Depot",
-            details: "Inbound QR scanning verified against National Ledger; Stocked in Store Inventory.",
-            hash: "0x55aa66bb77cc88dd99ee00ff11aa22bb33cc44ee",
+            details:
+              "Inbound QR scanning verified against National Ledger; Stocked in Store Inventory.",
+            hash:
+              "0x55aa66bb77cc88dd99ee00ff11aa22bb33cc44ee",
             isVerified: true,
           },
         ],
@@ -243,18 +267,23 @@ class MockDatabase {
         category: "Electronics & Tech",
         hsCode: "8517.13",
         manufacturerOrgId: "org_imp_01",
-        manufacturerName: "Pacific Horizon Logistics & Importers Corp",
+        manufacturerName:
+          "Pacific Horizon Logistics & Importers Corp",
         currentHolderOrgId: "org_biz_01",
-        currentHolderName: "Metro Retail Distribution & SuperMart Pvt Ltd",
+        currentHolderName:
+          "Metro Retail Distribution & SuperMart Pvt Ltd",
         statutoryMrp: 79999,
         status: "SOLD",
         isAuthentic: true,
         isRecalled: false,
         scanCount: 3,
         lastScannedAt: "2026-02-25T07:10:00.000Z",
-        lastScannedLocation: "Consumer Mobile App (IP: 103.22.45.18, Geo: Central District)",
-        digitalSignature: "SIG-ECDSA-SHA256:0x77c2a1b3d4e5f6...",
-        qrPayload: "https://veriprice.gov/verify/PAC-PHN-801-000492?sig=0x77c2a1b3",
+        lastScannedLocation:
+          "Consumer Mobile App (IP: 103.22.45.18, Geo: Central District)",
+        digitalSignature:
+          "SIG-ECDSA-SHA256:0x77c2a1b3d4e5f6...",
+        qrPayload:
+          "https://veriprice.gov/verify/PAC-PHN-801-000492?sig=0x77c2a1b3",
         journey: [
           {
             id: "jp_01",
@@ -262,10 +291,13 @@ class MockDatabase {
             stage: "MANUFACTURED",
             actorRole: "IMPORTER",
             actorName: "David Chen",
-            actorOrgName: "Pacific Horizon Logistics & Importers Corp",
+            actorOrgName:
+              "Pacific Horizon Logistics & Importers Corp",
             location: "Overseas Assembly Plant 7",
-            details: "Unit tested, IMEI registered, and packed for international marine freight.",
-            hash: "0x77c2a1b3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9",
+            details:
+              "Unit tested, IMEI registered, and packed for international marine freight.",
+            hash:
+              "0x77c2a1b3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9",
             isVerified: true,
           },
           {
@@ -274,10 +306,13 @@ class MockDatabase {
             stage: "CUSTOMS_CLEARED",
             actorRole: "TAX_OFFICER",
             actorName: "Officer Marcus Sterling",
-            actorOrgName: "National Revenue & Customs Authority (Gov)",
+            actorOrgName:
+              "National Revenue & Customs Authority (Gov)",
             location: "Customs Dry Port Terminal A",
-            details: "Bill of Entry #CUST-BOE-2026-4402 cleared. 12% Customs Duty + 13% Import VAT collected.",
-            hash: "0x99aa88bb77cc66dd55ee44ff33aa22bb11cc00dd",
+            details:
+              "Bill of Entry #CUST-BOE-2026-4402 cleared. 12% Customs Duty + 13% Import VAT collected.",
+            hash:
+              "0x99aa88bb77cc66dd55ee44ff33aa22bb11cc00dd",
             isVerified: true,
           },
           {
@@ -286,10 +321,13 @@ class MockDatabase {
             stage: "RETAIL_RECEIVED",
             actorRole: "BUSINESS_EMPLOYEE",
             actorName: "Rohan Joshi",
-            actorOrgName: "Metro Retail Distribution & SuperMart Pvt Ltd",
+            actorOrgName:
+              "Metro Retail Distribution & SuperMart Pvt Ltd",
             location: "Electronics Counter 2, Metro SuperMart",
-            details: "Consignment received, serial logged in POS inventory shelf.",
-            hash: "0x44bb55cc66dd77ee88ff99aa00bb11cc22dd33ee",
+            details:
+              "Consignment received, serial logged in POS inventory shelf.",
+            hash:
+              "0x44bb55cc66dd77ee88ff99aa00bb11cc22dd33ee",
             isVerified: true,
           },
           {
@@ -298,10 +336,13 @@ class MockDatabase {
             stage: "POINT_OF_SALE",
             actorRole: "BUSINESS_EMPLOYEE",
             actorName: "Rohan Joshi",
-            actorOrgName: "Metro Retail Distribution & SuperMart Pvt Ltd",
+            actorOrgName:
+              "Metro Retail Distribution & SuperMart Pvt Ltd",
             location: "POS Terminal 01",
-            details: "Sold to Consumer Maya Lin via Fiscal E-Invoice #INV-2026-8802. Tax stamped.",
-            hash: "0xcc22dd33ee44ff55aa66bb77cc88dd99ee00ff11",
+            details:
+              "Sold to Consumer Maya Lin via Fiscal E-Invoice #INV-2026-8802. Tax stamped.",
+            hash:
+              "0xcc22dd33ee44ff55aa66bb77cc88dd99ee00ff11",
             isVerified: true,
           },
           {
@@ -312,8 +353,10 @@ class MockDatabase {
             actorName: "Maya Lin",
             actorOrgName: "Public Consumer Registry",
             location: "Verified Citizen App Scan",
-            details: "Authenticity verified by buyer; Certificate of Genuine Origin validated.",
-            hash: "0xee33ff44aa55bb66cc77dd88ee99ff00aa11bb22",
+            details:
+              "Authenticity verified by buyer; Certificate of Genuine Origin validated.",
+            hash:
+              "0xee33ff44aa55bb66cc77dd88ee99ff00aa11bb22",
             isVerified: true,
           },
         ],
@@ -328,18 +371,23 @@ class MockDatabase {
         category: "Pharmaceuticals & Healthcare",
         hsCode: "3004.90",
         manufacturerOrgId: "org_mfg_01",
-        manufacturerName: "Apex BioTech & Consumer Goods Mfg Ltd",
+        manufacturerName:
+          "Apex BioTech & Consumer Goods Mfg Ltd",
         currentHolderOrgId: "unknown",
-        currentHolderName: "Unregistered Merchant / Black Market",
+        currentHolderName:
+          "Unregistered Merchant / Black Market",
         statutoryMrp: 140,
         status: "RECALLED",
         isAuthentic: false,
         isRecalled: true,
         scanCount: 14,
         lastScannedAt: "2026-02-25T08:05:00.000Z",
-        lastScannedLocation: "Multiple conflicting geo-locations detected simultaneously",
-        digitalSignature: "INVALID_SIGNATURE_MISMATCH_DETECTED",
-        qrPayload: "https://veriprice.gov/verify/APX-MED-442-999999?sig=INVALID",
+        lastScannedLocation:
+          "Multiple conflicting geo-locations detected simultaneously",
+        digitalSignature:
+          "INVALID_SIGNATURE_MISMATCH_DETECTED",
+        qrPayload:
+          "https://veriprice.gov/verify/APX-MED-442-999999?sig=INVALID",
         journey: [
           {
             id: "jc_01",
@@ -349,8 +397,10 @@ class MockDatabase {
             actorName: "Anonymous Citizen",
             actorOrgName: "Public Consumer Registry",
             location: "City Pharmacy Outer District",
-            details: "Duplicate serial detected! Cloned QR code scan triggered high-priority fraud alert.",
-            hash: "0xDEADBEEF00000000000000000000000000000000",
+            details:
+              "Duplicate serial detected! Cloned QR code scan triggered high-priority fraud alert.",
+            hash:
+              "0xDEADBEEF00000000000000000000000000000000",
             isVerified: false,
           },
         ],
@@ -365,21 +415,25 @@ class MockDatabase {
         consignmentId: "CNS-2026-9901",
         billOfEntryNo: "BOE-CUST-2026-4402",
         importerOrgId: "org_imp_01",
-        importerName: "Pacific Horizon Logistics & Importers Corp",
+        importerName:
+          "Pacific Horizon Logistics & Importers Corp",
         portOfOrigin: "Port of Busan (South Korea)",
-        portOfEntry: "National Dry Port Customs Inland Depot",
+        portOfEntry:
+          "National Dry Port Customs Inland Depot",
         arrivalDate: "2026-01-25T00:00:00.000Z",
         hsCode: "8517.13",
         batchIds: ["batch_imp_801"],
-        productSummary: "1,200 Units of Apex Quantum 5G Smartphones",
+        productSummary:
+          "1,200 Units of Apex Quantum 5G Smartphones",
         declaredValueUsd: 468000,
-        declaredValueLocal: 62400000, // NPR / Local Currency
-        customsDutyRate: 0.12, // 12%
+        declaredValueLocal: 62400000,
+        customsDutyRate: 0.12,
         customsDutyAmount: 7488000,
-        importVatAmount: 9085440, // 13% on (Value + Duty)
+        importVatAmount: 9085440,
         totalCustomsDutyPaid: 16573440,
         clearanceStatus: "CLEARED",
-        officerNotes: "Physical random sampling validated. HS Code 8517.13 duty assessment verified.",
+        officerNotes:
+          "Physical random sampling validated. HS Code 8517.13 duty assessment verified.",
         clearedByTaxOfficerId: "usr_tax_01",
         clearanceTimestamp: "2026-01-28T16:00:00.000Z",
         createdAt: "2026-01-25T09:00:00.000Z",
@@ -389,26 +443,29 @@ class MockDatabase {
         consignmentId: "CNS-2026-9915",
         billOfEntryNo: "BOE-CUST-2026-4405",
         importerOrgId: "org_imp_01",
-        importerName: "Pacific Horizon Logistics & Importers Corp",
+        importerName:
+          "Pacific Horizon Logistics & Importers Corp",
         portOfOrigin: "Hamburg Container Terminal (Germany)",
         portOfEntry: "National Airport Cargo Gate 2",
         arrivalDate: "2026-02-20T00:00:00.000Z",
         hsCode: "2208.30",
         batchIds: [],
-        productSummary: "800 Cases of Aged Single Malt Scotch Spirit",
+        productSummary:
+          "800 Cases of Aged Single Malt Scotch Spirit",
         declaredValueUsd: 120000,
         declaredValueLocal: 16000000,
-        customsDutyRate: 0.40, // 40%
+        customsDutyRate: 0.40,
         customsDutyAmount: 6400000,
         importVatAmount: 2912000,
         totalCustomsDutyPaid: 9312000,
         clearanceStatus: "PENDING_DUTY",
-        officerNotes: "Awaiting payment settlement of excise & luxury surcharge.",
+        officerNotes:
+          "Awaiting payment settlement of excise & luxury surcharge.",
         createdAt: "2026-02-20T10:00:00.000Z",
       },
     ];
 
-    // 5. Business Inventory (Metro Retail SuperMart)
+    // 5. Business Inventory
     this.inventory = [
       {
         id: "inv_item_01",
@@ -420,12 +477,13 @@ class MockDatabase {
         hsCode: "1509.10",
         sku: "SKU-OIL-1001",
         stockQuantity: 450,
-        unitCost: 750, // Wholesale purchase price
-        retailPrice: 1100, // Valid (Under MRP 1150)
+        unitCost: 750,
+        retailPrice: 1100,
         statutoryMrp: 1150,
         isPriceCompliant: true,
         lastRestockedAt: "2026-02-06T13:45:00.000Z",
-        supplierOrgName: "Apex BioTech & Consumer Goods Mfg Ltd",
+        supplierOrgName:
+          "Apex BioTech & Consumer Goods Mfg Ltd",
       },
       {
         id: "inv_item_02",
@@ -438,11 +496,12 @@ class MockDatabase {
         sku: "SKU-PHN-5002",
         stockQuantity: 48,
         unitCost: 65000,
-        retailPrice: 78999, // Valid (Under MRP 79999)
+        retailPrice: 78999,
         statutoryMrp: 79999,
         isPriceCompliant: true,
         lastRestockedAt: "2026-02-01T09:15:00.000Z",
-        supplierOrgName: "Pacific Horizon Logistics & Importers Corp",
+        supplierOrgName:
+          "Pacific Horizon Logistics & Importers Corp",
       },
       {
         id: "inv_item_03",
@@ -459,7 +518,8 @@ class MockDatabase {
         statutoryMrp: 140,
         isPriceCompliant: true,
         lastRestockedAt: "2026-02-12T14:00:00.000Z",
-        supplierOrgName: "Apex BioTech & Consumer Goods Mfg Ltd",
+        supplierOrgName:
+          "Apex BioTech & Consumer Goods Mfg Ltd",
       },
     ];
 
@@ -471,11 +531,14 @@ class MockDatabase {
         irn: "IRN-0x4a9e21b88dfa91b40284c7a912e6bf54",
         invoiceType: "B2B_SUPPLY",
         sellerOrgId: "org_mfg_01",
-        sellerName: "Apex BioTech & Consumer Goods Mfg Ltd",
+        sellerName:
+          "Apex BioTech & Consumer Goods Mfg Ltd",
         sellerTaxPin: "MFG-PAN-9948201",
-        sellerAddress: "Plot 42, High-Tech Industrial Hub, Sector 9",
+        sellerAddress:
+          "Plot 42, High-Tech Industrial Hub, Sector 9",
         buyerOrgId: "org_biz_01",
-        buyerName: "Metro Retail Distribution & SuperMart Pvt Ltd",
+        buyerName:
+          "Metro Retail Distribution & SuperMart Pvt Ltd",
         buyerTaxPin: "BIZ-VAT-8823104",
         buyerType: "BUSINESS",
         items: [
@@ -483,7 +546,8 @@ class MockDatabase {
             id: "item_01",
             batchId: "batch_mfg_901",
             batchNumber: "APX-2026-901B",
-            productName: "Apex Pure Extra Virgin Olive Oil (1L)",
+            productName:
+              "Apex Pure Extra Virgin Olive Oil (1L)",
             hsCode: "1509.10",
             quantity: 500,
             unitPrice: 750,
@@ -506,8 +570,10 @@ class MockDatabase {
         fiscalStatus: "VALIDATED",
         issuedByUserId: "usr_mfg_01",
         issuedByName: "Elena Rostova",
-        qrCodeUrl: "https://veriprice.gov/invoices/inv_fiscal_8801",
-        fiscalStampHash: "FISC-STAMP:0x9812401f820b92e",
+        qrCodeUrl:
+          "https://veriprice.gov/invoices/inv_fiscal_8801",
+        fiscalStampHash:
+          "FISC-STAMP:0x9812401f820b92e",
         isPriceGougingDetected: false,
         createdAt: "2026-02-05T10:30:00.000Z",
       },
@@ -517,9 +583,11 @@ class MockDatabase {
         irn: "IRN-0x992fa1024bc68e0915a772bca01e891f",
         invoiceType: "B2C_RETAIL",
         sellerOrgId: "org_biz_01",
-        sellerName: "Metro Retail Distribution & SuperMart Pvt Ltd",
+        sellerName:
+          "Metro Retail Distribution & SuperMart Pvt Ltd",
         sellerTaxPin: "BIZ-VAT-8823104",
-        sellerAddress: "Avenue Mall, Commercial Plaza 104",
+        sellerAddress:
+          "Avenue Mall, Commercial Plaza 104",
         buyerName: "Maya Lin (Consumer)",
         buyerType: "INDIVIDUAL_CONSUMER",
         items: [
@@ -528,7 +596,8 @@ class MockDatabase {
             serialNumber: "PAC-PHN-801-000492",
             batchId: "batch_imp_801",
             batchNumber: "IMP-PAC-801Z",
-            productName: "Apex Quantum 5G Smartphone 256GB",
+            productName:
+              "Apex Quantum 5G Smartphone 256GB",
             hsCode: "8517.13",
             quantity: 1,
             unitPrice: 78999,
@@ -551,8 +620,10 @@ class MockDatabase {
         fiscalStatus: "VALIDATED",
         issuedByUserId: "usr_biz_emp_01",
         issuedByName: "Rohan Joshi",
-        qrCodeUrl: "https://veriprice.gov/invoices/inv_fiscal_8802",
-        fiscalStampHash: "FISC-STAMP:0x77192a00c8b21",
+        qrCodeUrl:
+          "https://veriprice.gov/invoices/inv_fiscal_8802",
+        fiscalStampHash:
+          "FISC-STAMP:0x77192a00c8b21",
         isPriceGougingDetected: false,
         createdAt: "2026-02-24T18:30:00.000Z",
       },
@@ -563,12 +634,13 @@ class MockDatabase {
       {
         id: "tax_ret_biz_01",
         orgId: "org_biz_01",
-        orgName: "Metro Retail Distribution & SuperMart Pvt Ltd",
+        orgName:
+          "Metro Retail Distribution & SuperMart Pvt Ltd",
         taxPin: "BIZ-VAT-8823104",
         taxPeriod: "2026-Q1",
-        totalOutputVat: 142500, // VAT collected from shoppers
-        totalInputVat: 112000, // VAT paid on wholesale stock (ITC)
-        netVatPayable: 30500, // Net payable to Government
+        totalOutputVat: 142500,
+        totalInputVat: 112000,
+        netVatPayable: 30500,
         totalExcisePayable: 0,
         customsDutyClaimed: 0,
         reconciliationStatus: "MATCHED",
@@ -577,7 +649,8 @@ class MockDatabase {
       {
         id: "tax_ret_mfg_01",
         orgId: "org_mfg_01",
-        orgName: "Apex BioTech & Consumer Goods Mfg Ltd",
+        orgName:
+          "Apex BioTech & Consumer Goods Mfg Ltd",
         taxPin: "MFG-PAN-9948201",
         taxPeriod: "2026-Q1",
         totalOutputVat: 580000,
@@ -596,17 +669,21 @@ class MockDatabase {
         id: "alert_fraud_101",
         type: "DUPLICATE_SCAN",
         severity: "CRITICAL",
-        title: "Counterfeit Cluster: Duplicate DPP Serial Scanned Across Cities",
-        description: "Serial 'APX-MED-442-999999' was scanned 14 times within 30 minutes in different geographic zones. Probable physical counterfeit cloning.",
+        title:
+          "Counterfeit Cluster: Duplicate DPP Serial Scanned Across Cities",
+        description:
+          "Serial 'APX-MED-442-999999' was scanned 14 times within 30 minutes in different geographic zones. Probable physical counterfeit cloning.",
         targetSerialNumber: "APX-MED-442-999999",
         targetBatchId: "batch_mfg_902",
-        targetOrgName: "Apex BioTech & Consumer Goods Mfg Ltd",
+        targetOrgName:
+          "Apex BioTech & Consumer Goods Mfg Ltd",
         riskScore: 96,
         status: "OPEN",
         reportedBy: "AI Risk Sentry & Public Scanner",
         assignedOfficerId: "usr_tax_01",
         assignedOfficerName: "Officer Marcus Sterling",
-        actionNotes: "Issued urgent public safety notice and flagged vendor for forensic seizure.",
+        actionNotes:
+          "Issued urgent public safety notice and flagged vendor for forensic seizure.",
         createdAt: "2026-02-25T08:05:00.000Z",
         updatedAt: "2026-02-25T08:15:00.000Z",
       },
@@ -614,13 +691,17 @@ class MockDatabase {
         id: "alert_fraud_102",
         type: "PRICE_GOUGING",
         severity: "HIGH",
-        title: "Statutory MRP Violation Detected on Retail POS",
-        description: "Unverified retailer attempted to invoice SKU-OIL-1001 at $1,450.00 (Statutory MRP Cap is $1,150.00). Price gouging margin: +26.1%.",
+        title:
+          "Statutory MRP Violation Detected on Retail POS",
+        description:
+          "Unverified retailer attempted to invoice SKU-OIL-1001 at $1,450.00 (Statutory MRP Cap is $1,150.00). Price gouging margin: +26.1%.",
         targetBatchId: "batch_mfg_901",
-        targetOrgName: "Unregistered Retail Terminal 9",
+        targetOrgName:
+          "Unregistered Retail Terminal 9",
         riskScore: 82,
         status: "UNDER_INVESTIGATION",
-        reportedBy: "Automated Fiscal Invoice Engine",
+        reportedBy:
+          "Automated Fiscal Invoice Engine",
         assignedOfficerId: "usr_tax_01",
         assignedOfficerName: "Officer Marcus Sterling",
         createdAt: "2026-02-24T19:00:00.000Z",
@@ -630,10 +711,13 @@ class MockDatabase {
         id: "alert_fraud_103",
         type: "TAX_CAROUSEL_MISMATCH",
         severity: "MEDIUM",
-        title: "Input Tax Credit (ITC) Variance Flag",
-        description: "Importer declared $12,000 ITC but upstream foreign dispatch manifest is pending customs clearance confirmation.",
+        title:
+          "Input Tax Credit (ITC) Variance Flag",
+        description:
+          "Importer declared $12,000 ITC but upstream foreign dispatch manifest is pending customs clearance confirmation.",
         targetOrgId: "org_imp_01",
-        targetOrgName: "Pacific Horizon Logistics & Importers Corp",
+        targetOrgName:
+          "Pacific Horizon Logistics & Importers Corp",
         riskScore: 64,
         status: "OPEN",
         reportedBy: "National Tax Engine",
@@ -651,59 +735,77 @@ class MockDatabase {
         userName: "Elena Rostova",
         userRole: "MANUFACTURER",
         orgId: "org_mfg_01",
-        orgName: "Apex BioTech & Consumer Goods Mfg Ltd",
+        orgName:
+          "Apex BioTech & Consumer Goods Mfg Ltd",
         action: "MINT_BATCH_AND_PASSPORTS",
         resourceType: "BATCH",
         resourceId: "batch_mfg_901",
         ipAddress: "192.168.10.45",
         status: "SUCCESS",
-        details: "Minted 5,000 units with cryptographic DPP QR passports under HS Code 1509.10.",
+        details:
+          "Minted 5,000 units with cryptographic DPP QR passports under HS Code 1509.10.",
       },
       {
         id: "audit_log_002",
         timestamp: "2026-02-25T08:10:00.000Z",
-        userId: "usr_biz_owner_01",
-        userName: "Kavita Patel",
+        userId: "usr_biz_emp_01",
+        userName: "Rohan Joshi",
         userRole: "BUSINESS_EMPLOYEE",
         orgId: "org_biz_01",
-        orgName: "Metro Retail Distribution & SuperMart Pvt Ltd",
+        orgName:
+          "Metro Retail Distribution & SuperMart Pvt Ltd",
         action: "ATTEMPT_CROSS_ORG_INVOICE_READ",
         resourceType: "INVOICE",
         resourceId: "inv_foreign_9921",
         ipAddress: "10.0.4.12",
         status: "BLOCKED_IDOR",
-        details: "Server RBAC successfully blocked user from viewing invoice belonging to third-party tenant.",
+        details:
+          "Server RBAC successfully blocked user from viewing invoice belonging to third-party tenant.",
       },
       {
         id: "audit_log_003",
         timestamp: "2026-02-25T08:20:00.000Z",
-        userId: "usr_gov_01",
-        userName: "Dr. Rajesh Sharma",
+        userId: "usr_super_01",
+        userName: "Sarah Vance",
         userRole: "SUPER_ADMIN",
         orgId: "org_gov_01",
-        orgName: "National Revenue & Customs Authority (Gov)",
+        orgName:
+          "National Revenue & Customs Authority (Gov)",
         action: "UPDATE_TAX_POLICY_RULE",
         resourceType: "TAX_RULE",
         resourceId: "tax_rule_01",
         ipAddress: "172.16.0.5",
         status: "SUCCESS",
-        details: "Updated statutory MRP ceiling for essential medicines (HS Code 3004.90).",
+        details:
+          "Updated statutory MRP ceiling for essential medicines (HS Code 3004.90).",
       },
     ];
   }
 
   // Safe Audit Logger
-  public logAudit(log: Omit<SystemAuditLog, "id" | "timestamp">) {
+  public logAudit(
+    log: Omit<SystemAuditLog, "id" | "timestamp">
+  ) {
     const entry: SystemAuditLog = {
-      id: `audit_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      id: `audit_${Date.now()}_${Math.random()
+        .toString(36)
+        .substring(2, 7)}`,
       timestamp: new Date().toISOString(),
       ...log,
     };
+
     this.auditLogs.unshift(entry);
   }
 }
 
 // Global Singleton to maintain state across Server Components & API Routes during runtime
-const globalForDb = globalThis as unknown as { mockDb: MockDatabase };
-export const db = globalForDb.mockDb || new MockDatabase();
-if (process.env.NODE_ENV !== "production") globalForDb.mockDb = db;
+const globalForDb = globalThis as unknown as {
+  mockDb: MockDatabase;
+};
+
+export const db =
+  globalForDb.mockDb || new MockDatabase();
+
+if (process.env.NODE_ENV !== "production") {
+  globalForDb.mockDb = db;
+}

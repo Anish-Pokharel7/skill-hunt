@@ -133,7 +133,7 @@ async function runTests() {
   const resLoginBiz = await fetch(`${BASE_URL}/api/auth/session`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ role: "BUSINESS_OWNER" }),
+    body: JSON.stringify({ role: "BUSINESS_EMPLOYEE" }),
   });
   const dataLoginBiz = await resLoginBiz.json();
   const bizToken = dataLoginBiz.token;
