@@ -28,7 +28,7 @@ export default function AdminPortalPage() {
   const [policyMessage, setPolicyMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const isAuthorized = role === "SUPER_ADMIN" || role === "GOVERNMENT_ADMIN";
+  const isAuthorized = role === "SUPER_ADMIN";
 
   useEffect(() => {
     fetchData();
@@ -84,18 +84,12 @@ export default function AdminPortalPage() {
         </div>
         <h2 className="text-lg font-bold text-[#181c1a]">403 Forbidden: Authorized Directorate Access Only</h2>
         <p className="text-xs text-[#4c5850]">
-          The <strong>Admin & Government Directorate</strong> is restricted to <code className="bg-[#f3f1ec] px-1.5 py-0.5 rounded text-[#181c1a]">SUPER_ADMIN</code> and <code className="bg-[#f3f1ec] px-1.5 py-0.5 rounded text-[#1b4332]">GOVERNMENT_ADMIN</code>. Your current persona is <strong>{role}</strong>.
+          The <strong>Admin & Government Directorate</strong> is restricted to <code className="bg-[#f3f1ec] px-1.5 py-0.5 rounded text-[#181c1a]">SUPER_ADMIN</code> (the Government Authority). Your current persona is <strong>{role}</strong>.
         </p>
         <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={() => loginAsRole("SUPER_ADMIN")}
             className="px-4 py-2 rounded bg-[#1b4332] hover:bg-[#143621] text-white font-semibold text-xs transition"
-          >
-            Switch to Super Admin
-          </button>
-          <button
-            onClick={() => loginAsRole("GOVERNMENT_ADMIN")}
-            className="px-4 py-2 rounded bg-[#f3f1ec] hover:bg-[#eaf0ec] text-[#1b4332] font-semibold text-xs border border-[#cad2c5] transition"
           >
             Switch to Government Admin
           </button>

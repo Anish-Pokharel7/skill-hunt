@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const auth = await requireRoles(["GOVERNMENT_ADMIN", "SUPER_ADMIN"], req);
+  const auth = await requireRoles(["SUPER_ADMIN"], req);
   if (!auth.authorized || !auth.user) {
     return auth.errorResponse!;
   }

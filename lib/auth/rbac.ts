@@ -100,9 +100,9 @@ export async function requireRoles(
  * Ensures a user cannot view or mutate another organization's records
  * simply by tampering with the ID in the URL/payload.
  *
- * Super Admins, Government Admins, Tax Officers, and Auditors possess
+ * The Super Admin (Government Authority), Tax Officers, and Auditors possess
  * statutory system-wide oversight rights, while commercial actors
- * (Manufacturer, Importer, Business Owner, Business Employee) are STRICTLY
+ * (Manufacturer, Importer, Business Employee) are STRICTLY
  * locked into their assigned organization (orgId).
  */
 export function verifyTenantAccess(
@@ -116,7 +116,6 @@ export function verifyTenantAccess(
   // Statutory oversight roles have cross-organization visibility for compliance/audit
   const statutoryRoles: UserRole[] = [
     "SUPER_ADMIN",
-    "GOVERNMENT_ADMIN",
     "TAX_OFFICER",
     "AUDITOR",
   ];
@@ -154,7 +153,6 @@ export function verifyEntityAccess(
   // Statutory oversight roles can view all records for compliance
   const statutoryRoles: UserRole[] = [
     "SUPER_ADMIN",
-    "GOVERNMENT_ADMIN",
     "TAX_OFFICER",
     "AUDITOR",
   ];

@@ -20,7 +20,6 @@ export default function FraudDeskPage() {
 
   const isAuthorized =
     role === "TAX_OFFICER" ||
-    role === "GOVERNMENT_ADMIN" ||
     role === "AUDITOR" ||
     role === "SUPER_ADMIN";
 

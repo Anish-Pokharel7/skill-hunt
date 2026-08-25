@@ -119,7 +119,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  const auth = await requireRoles(["TAX_OFFICER", "GOVERNMENT_ADMIN", "SUPER_ADMIN"], req);
+  const auth = await requireRoles(["TAX_OFFICER", "SUPER_ADMIN"], req);
   if (!auth.authorized || !auth.user) {
     return auth.errorResponse!;
   }

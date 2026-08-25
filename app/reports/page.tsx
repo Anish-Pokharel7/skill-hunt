@@ -17,7 +17,6 @@ export default function ReportsPortalPage() {
   const isAuthorized =
     role === "AUDITOR" ||
     role === "TAX_OFFICER" ||
-    role === "GOVERNMENT_ADMIN" ||
     role === "SUPER_ADMIN";
 
   const sampleAuditLogs: SystemAuditLog[] = [
@@ -56,7 +55,7 @@ export default function ReportsPortalPage() {
       timestamp: "2026-02-25T08:20:00.000Z",
       userId: "usr_gov_01",
       userName: "Dr. Rajesh Sharma",
-      userRole: "GOVERNMENT_ADMIN",
+      userRole: "SUPER_ADMIN",
       orgId: "org_gov_01",
       orgName: "National Revenue & Customs Authority (Gov)",
       action: "UPDATE_TAX_POLICY_RULE",

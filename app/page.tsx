@@ -57,7 +57,7 @@ export default function HomePage() {
       description: "National tax policy, statutory MRP ceilings, organization licensing, and system audit logs.",
       href: "/admin",
       icon: Building2,
-      roles: ["SUPER_ADMIN", "GOVERNMENT_ADMIN"],
+      roles: ["SUPER_ADMIN"],
     },
     {
       title: "Manufacturer Production Portal",
@@ -78,14 +78,14 @@ export default function HomePage() {
       description: "Store inventory, batch receipt, point-of-sale checkout, and statutory price compliance checks.",
       href: "/business",
       icon: Store,
-      roles: ["BUSINESS_OWNER", "BUSINESS_EMPLOYEE", "SUPER_ADMIN"],
+      roles: ["BUSINESS_EMPLOYEE", "SUPER_ADMIN"],
     },
     {
       title: "Tax & Price Compliance Engine",
       description: "13% Standard VAT, Excise, Customs Duty, Input Tax Credit (ITC) reconciliation, and MRP ceilings.",
       href: "/tax-engine",
       icon: Scale,
-      roles: ["TAX_OFFICER", "GOVERNMENT_ADMIN", "SUPER_ADMIN"],
+      roles: ["TAX_OFFICER", "SUPER_ADMIN"],
     },
     {
       title: "Digital Product Passport (DPP) Registry",
@@ -106,14 +106,14 @@ export default function HomePage() {
       description: "Anomaly detection for duplicate QR scans, price gouging spikes, and carousel VAT evasion.",
       href: "/fraud-desk",
       icon: AlertTriangle,
-      roles: ["TAX_OFFICER", "GOVERNMENT_ADMIN", "AUDITOR", "SUPER_ADMIN"],
+      roles: ["TAX_OFFICER", "AUDITOR", "SUPER_ADMIN"],
     },
     {
       title: "Reports & Forensic Audit Ledger",
       description: "Tax collections gap analysis, revenue reconciliation ledgers, and zero-trust access audit logs.",
       href: "/reports",
       icon: BarChart3,
-      roles: ["AUDITOR", "TAX_OFFICER", "GOVERNMENT_ADMIN", "SUPER_ADMIN"],
+      roles: ["AUDITOR", "TAX_OFFICER", "SUPER_ADMIN"],
     },
     {
       title: "Citizen Product Verification Gateway",

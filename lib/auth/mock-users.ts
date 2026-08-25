@@ -9,7 +9,7 @@ export const SEED_ORGS: Record<string, Organization> = {
     licenseNumber: "GOV-LIC-2026-X",
     jurisdiction: "Central Federal Revenue Service",
     verified: true,
-    address: "Federal Secretariat Complex, Treasury Block, New Delhi / Kathmandu",
+    address: "Federal Secretariat Complex, Treasury Block",
     contactEmail: "oversight@gov-revenue.org",
     createdAt: "2024-01-01T00:00:00.000Z",
   },
@@ -75,28 +75,25 @@ export const SEED_ORGS: Record<string, Organization> = {
   },
 };
 
+/**
+ * SEED_USERS — 7 distinct roles.
+ *
+ * SUPER_ADMIN  = The Government Authority (single top-level role; replaces the former
+ *               separate SUPER_ADMIN + GOVERNMENT_ADMIN split).
+ * BUSINESS_OWNER has been removed — retail stores are registered and managed by
+ *               the government admin. Store staff operate as BUSINESS_EMPLOYEE only.
+ */
 export const SEED_USERS: User[] = [
   {
     id: "usr_super_01",
-    email: "superadmin@veriprice.gov",
+    email: "admin@veriprice.gov",
     name: "Sarah Vance",
     role: "SUPER_ADMIN",
     orgId: "org_gov_01",
     organizationName: "National Revenue & Customs Authority (Gov)",
-    designation: "Principal Systems Architect & Global Controller",
+    designation: "Director General — National Revenue, Fiscal Policy & Platform Administration",
     status: "ACTIVE",
     createdAt: "2024-01-01T00:00:00.000Z",
-  },
-  {
-    id: "usr_gov_01",
-    email: "govadmin@veriprice.gov",
-    name: "Dr. Rajesh Sharma",
-    role: "GOVERNMENT_ADMIN",
-    orgId: "org_gov_01",
-    organizationName: "National Revenue & Customs Authority (Gov)",
-    designation: "Director General of Fiscal Policy & Tax Regulation",
-    status: "ACTIVE",
-    createdAt: "2024-01-05T00:00:00.000Z",
   },
   {
     id: "usr_tax_01",
@@ -130,17 +127,6 @@ export const SEED_USERS: User[] = [
     designation: "Head of Customs Manifests & Cross-Border Logistics",
     status: "ACTIVE",
     createdAt: "2024-04-10T00:00:00.000Z",
-  },
-  {
-    id: "usr_biz_owner_01",
-    email: "owner@metroretail.com",
-    name: "Kavita Patel",
-    role: "BUSINESS_OWNER",
-    orgId: "org_biz_01",
-    organizationName: "Metro Retail Distribution & SuperMart Pvt Ltd",
-    designation: "Managing Director & Chief Commercial Officer",
-    status: "ACTIVE",
-    createdAt: "2024-05-01T00:00:00.000Z",
   },
   {
     id: "usr_biz_emp_01",
@@ -183,15 +169,10 @@ export const ROLE_DETAILS: Record<
   { label: string; badgeColor: string; description: string; homeRoute: string }
 > = {
   SUPER_ADMIN: {
-    label: "Super Admin",
-    badgeColor: "bg-[#1b4332] text-white border border-[#143621]",
-    description: "Full system administration, tenant onboarding, master controls, and security audits.",
-    homeRoute: "/admin",
-  },
-  GOVERNMENT_ADMIN: {
     label: "Government Admin",
-    badgeColor: "bg-[#eaf0ec] text-[#1b4332] border border-[#cad2c5]",
-    description: "National tax policy, statutory MRP ceilings, compliance mandates, and revenue macro-analytics.",
+    badgeColor: "bg-[#1b4332] text-white border border-[#143621]",
+    description:
+      "Single government authority: national tax policy, statutory MRP ceilings, tenant licensing, system administration, and full audit oversight.",
     homeRoute: "/admin",
   },
   TAX_OFFICER: {
@@ -212,16 +193,11 @@ export const ROLE_DETAILS: Record<
     description: "Customs declaration, Port of Entry clearances, import duty calculation, and consignment transfers.",
     homeRoute: "/importer",
   },
-  BUSINESS_OWNER: {
-    label: "Business Owner",
-    badgeColor: "bg-[#f2efe9] text-[#4a4036] border border-[#ded8cc]",
-    description: "Full inventory, retail pricing, employee management, POS sales, and input/output VAT return filing.",
-    homeRoute: "/business",
-  },
   BUSINESS_EMPLOYEE: {
-    label: "Business Employee",
+    label: "Retail Store Staff",
     badgeColor: "bg-[#f6f5f2] text-[#55524c] border border-[#e2ded6]",
-    description: "Scoped operational access: Barcode/QR scanning, Point of Sale checkouts, and e-invoice issuance.",
+    description:
+      "Store staff (registered & managed by Government Admin). Scoped to POS checkouts, barcode scanning, inventory receipt, and e-invoice issuance within their licensed outlet.",
     homeRoute: "/business",
   },
   AUDITOR: {

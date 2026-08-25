@@ -37,8 +37,8 @@ export default function BusinessPortalPage() {
   const [lastIssuedInvoice, setLastIssuedInvoice] = useState<any>(null);
 
   const isAuthorized =
-    role === "BUSINESS_OWNER" || role === "BUSINESS_EMPLOYEE" || role === "SUPER_ADMIN";
-  const isOwner = role === "BUSINESS_OWNER" || role === "SUPER_ADMIN";
+    role === "BUSINESS_EMPLOYEE" || role === "SUPER_ADMIN";
+  const isOwner = role === "SUPER_ADMIN"; // only govt admin can manage stock & settings
 
   useEffect(() => {
     if (isAuthorized) {
@@ -171,10 +171,10 @@ export default function BusinessPortalPage() {
         </p>
         <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
           <button
-            onClick={() => loginAsRole("BUSINESS_OWNER")}
+            onClick={() => loginAsRole("SUPER_ADMIN")}
             className="px-4 py-2 rounded bg-[#1b4332] hover:bg-[#143621] text-white font-semibold text-xs transition"
           >
-            Switch to Business Owner (Kavita)
+            Switch to Government Admin
           </button>
           <button
             onClick={() => loginAsRole("BUSINESS_EMPLOYEE")}
@@ -194,8 +194,10 @@ export default function BusinessPortalPage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold text-[#181c1a]">Metro Retail Distribution & POS Terminal</h1>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#eaf0ec] text-[#1b4332] border border-[#cad2c5]">
-              {role === "BUSINESS_EMPLOYEE" ? "Scoped POS Cashier" : "Business Owner"}
+            <span
+              className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#eaf0ec] text-[#1b4332] border border-[#cad2c5]"
+            >
+              {role === "BUSINESS_EMPLOYEE" ? "Retail Store Staff" : "Government Admin"}
             </span>
           </div>
           <p className="text-xs text-[#65736a] mt-0.5">

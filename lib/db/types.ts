@@ -1,10 +1,8 @@
 export type UserRole =
   | "SUPER_ADMIN"
-  | "GOVERNMENT_ADMIN"
   | "TAX_OFFICER"
   | "MANUFACTURER"
   | "IMPORTER"
-  | "BUSINESS_OWNER"
   | "BUSINESS_EMPLOYEE"
   | "AUDITOR"
   | "CONSUMER";

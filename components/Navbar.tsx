@@ -32,15 +32,15 @@ export default function Navbar() {
   const activeRoleConfig = ROLE_DETAILS[role] || ROLE_DETAILS.CONSUMER;
 
   const navLinks = [
-    { href: "/admin", label: "Admin & Gov", icon: Building2, roles: ["SUPER_ADMIN", "GOVERNMENT_ADMIN"] },
+    { href: "/admin", label: "Admin & Gov", icon: Building2, roles: ["SUPER_ADMIN"] },
     { href: "/manufacturer", label: "Manufacturer", icon: Factory, roles: ["MANUFACTURER", "SUPER_ADMIN"] },
     { href: "/importer", label: "Importer", icon: Ship, roles: ["IMPORTER", "SUPER_ADMIN"] },
-    { href: "/business", label: "Business POS", icon: Store, roles: ["BUSINESS_OWNER", "BUSINESS_EMPLOYEE", "SUPER_ADMIN"] },
-    { href: "/tax-engine", label: "Tax Engine", icon: Scale, roles: ["TAX_OFFICER", "GOVERNMENT_ADMIN", "SUPER_ADMIN"] },
+    { href: "/business", label: "Business POS", icon: Store, roles: ["BUSINESS_EMPLOYEE", "SUPER_ADMIN"] },
+    { href: "/tax-engine", label: "Tax Engine", icon: Scale, roles: ["TAX_OFFICER", "SUPER_ADMIN"] },
     { href: "/passport", label: "DPP Registry", icon: QrCode, roles: ["ALL"] },
     { href: "/invoices", label: "Invoices", icon: FileText, roles: ["ALL"] },
-    { href: "/fraud-desk", label: "Fraud Desk", icon: AlertTriangle, roles: ["TAX_OFFICER", "GOVERNMENT_ADMIN", "AUDITOR", "SUPER_ADMIN"] },
-    { href: "/reports", label: "Audit Ledger", icon: BarChart3, roles: ["AUDITOR", "TAX_OFFICER", "GOVERNMENT_ADMIN", "SUPER_ADMIN"] },
+    { href: "/fraud-desk", label: "Fraud Desk", icon: AlertTriangle, roles: ["TAX_OFFICER", "AUDITOR", "SUPER_ADMIN"] },
+    { href: "/reports", label: "Audit Ledger", icon: BarChart3, roles: ["AUDITOR", "TAX_OFFICER", "SUPER_ADMIN"] },
     { href: "/verify", label: "Verify Citizen Portal", icon: Search, roles: ["ALL"] },
   ];
 

@@ -6,7 +6,7 @@ import { getServerSession } from "@/lib/auth/session";
 
 export async function GET(req: NextRequest) {
   const auth = await requireRoles(
-    ["TAX_OFFICER", "GOVERNMENT_ADMIN", "AUDITOR", "SUPER_ADMIN"],
+    ["TAX_OFFICER", "AUDITOR", "SUPER_ADMIN"],
     req
   );
   if (!auth.authorized || !auth.user) {
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     // Trigger Network Anomaly Scan
     if (action === "RUN_ANOMALY_SCAN") {
       const auth = await requireRoles(
-        ["TAX_OFFICER", "GOVERNMENT_ADMIN", "AUDITOR", "SUPER_ADMIN"],
+        ["TAX_OFFICER", "AUDITOR", "SUPER_ADMIN"],
         req
       );
       if (!auth.authorized || !auth.user) {

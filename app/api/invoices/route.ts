@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   }
 
   const { user } = auth;
-  const oversightRoles: UserRole[] = ["SUPER_ADMIN", "GOVERNMENT_ADMIN", "TAX_OFFICER", "AUDITOR"];
+  const oversightRoles: UserRole[] = ["SUPER_ADMIN", "TAX_OFFICER", "AUDITOR"];
 
   let invoices: Invoice[] = [];
 
@@ -33,7 +33,6 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const allowedRoles: UserRole[] = [
-    "BUSINESS_OWNER",
     "BUSINESS_EMPLOYEE",
     "MANUFACTURER",
     "IMPORTER",
