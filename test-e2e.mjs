@@ -497,12 +497,117 @@ async function runTests() {
     JSON.stringify(dataGovVerify)
   );
 
+  // TEST 12: Phase 5 Core Product CRUD, Anti-IDOR Ownership & Validation
+  console.log("\n--- 12. Testing Phase 5 Product CRUD, IDOR Ownership & Validation ---");
+
+  // 12a. Product Creation by Seller
+  const resP5Create = await fetch(`${BASE_URL}/api/products`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sellerToken}`,
+    },
+    body: JSON.stringify({
+      name: "Himalayan Herbal Immunity Tea 250g",
+      description: "Authentic wild harvested herbal tea blend with tulsi and ginger.",
+      brand: "Himalayan Depot",
+      model: "TEA-IMM-250G",
+      categoryId: dataCategories.data[0].id,
+      actualCost: 200,
+      consumerPrice: 450,
+      vatRate: 0.13,
+      currency: "NPR",
+    }),
+  });
+  const dataP5Create = await resP5Create.json();
+  const p5Product = dataP5Create.data;
+  assert(
+    resP5Create.status === 201 && p5Product?.id && p5Product.verificationStatus === "PENDING",
+    "Seller successfully created product with status PENDING",
+    JSON.stringify(dataP5Create)
+  );
+
+  // 12b. GET /api/products/my for Seller
+  const resP5My = await fetch(`${BASE_URL}/api/products/my`, {
+    headers: { Authorization: `Bearer ${sellerToken}` },
+  });
+  const dataP5My = await resP5My.json();
+  assert(
+    resP5My.status === 200 && dataP5My.success && dataP5My.data.some((p) => p.id === p5Product.id),
+    `GET /api/products/my returned seller's own registered products (total: ${dataP5My.meta?.total})`,
+    JSON.stringify(dataP5My)
+  );
+
+  // 12c. GET /api/products/:id by Owner Seller
+  const resP5Get = await fetch(`${BASE_URL}/api/products/${p5Product.id}`, {
+    headers: { Authorization: `Bearer ${sellerToken}` },
+  });
+  const dataP5Get = await resP5Get.json();
+  assert(
+    resP5Get.status === 200 && dataP5Get.data.id === p5Product.id,
+    "Owner Seller successfully retrieved product details",
+    JSON.stringify(dataP5Get)
+  );
+
+  // 12d. PATCH /api/products/:id by Owner Seller
+  const resP5Patch = await fetch(`${BASE_URL}/api/products/${p5Product.id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sellerToken}`,
+    },
+    body: JSON.stringify({
+      consumerPrice: 480,
+      description: "Updated premium organic herbal immunity tea.",
+    }),
+  });
+  const dataP5Patch = await resP5Patch.json();
+  assert(
+    resP5Patch.status === 200 && dataP5Patch.data.consumerPrice === 480,
+    "Owner Seller successfully updated product details",
+    JSON.stringify(dataP5Patch)
+  );
+
+  // 12e. Anti-IDOR: Cross-Seller Tampering Prevention
+  const resP5Tamper = await fetch(`${BASE_URL}/api/products/${p5Product.id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${mfgToken}`, // Manufacturer Elena trying to edit Seller Anjali's product
+    },
+    body: JSON.stringify({ consumerPrice: 1 }),
+  });
+  assert(
+    resP5Tamper.status === 403,
+    "CRITICAL: Cross-seller modification strictly rejected with HTTP 403 Forbidden",
+    `Status: ${resP5Tamper.status}`
+  );
+
+  // 12f. Anti-IDOR: Cross-Seller Deletion Prevention
+  const resP5IllegalDelete = await fetch(`${BASE_URL}/api/products/${p5Product.id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${mfgToken}` },
+  });
+  assert(
+    resP5IllegalDelete.status === 403,
+    "CRITICAL: Cross-seller deletion strictly rejected with HTTP 403 Forbidden",
+    `Status: ${resP5IllegalDelete.status}`
+  );
+
+  // 12g. DELETE /api/products/:id by Owner Seller
+  const resP5Delete = await fetch(`${BASE_URL}/api/products/${p5Product.id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${sellerToken}` },
+  });
+  assert(
+    resP5Delete.status === 200,
+    "Owner Seller successfully deleted product",
+    `Status: ${resP5Delete.status}`
+  );
+
   console.log("\n==================================================");
   console.log(`TEST SUMMARY: ${passed} PASSED, ${failed} FAILED`);
   console.log("==================================================");
 }
 
 runTests();
-
-
-

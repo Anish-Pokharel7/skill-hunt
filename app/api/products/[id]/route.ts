@@ -1,9 +1,9 @@
 /**
- * /api/products/[id] — Single Product Management
+ * /api/products/[id] — Single Product Management (CRUD)
  *
- * GET    — Authenticated: view product (tenant-scoped)
- * PATCH  — Owner or SUPER_ADMIN: update product details
- * DELETE — SUPER_ADMIN only: remove a product (hard-delete if no documents/images)
+ * GET    — View product details (public for VERIFIED, tenant-scoped for unverified/drafts)
+ * PATCH  — Owner seller, ADMIN, or SUPER_ADMIN: update product details
+ * DELETE — Owner seller, ADMIN, or SUPER_ADMIN: delete product and cascade cleanups
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -16,7 +16,17 @@ import { Logger } from "@/lib/server/logger";
 
 const log = Logger.child("api/products/[id]");
 
-const STATUTORY_ROLES = ["SUPER_ADMIN", "TAX_OFFICER", "AUDITOR"];
+const STATUTORY_ROLES = [
+  "SUPER_ADMIN",
+  "ADMIN",
+  "GOVERNMENT_OFFICIAL",
+  "TAX_OFFICER",
+  "AUDITOR",
+] as const;
+
+function isStatutory(role: string): boolean {
+  return STATUTORY_ROLES.includes(role as (typeof STATUTORY_ROLES)[number]);
+}
 
 async function resolveProduct(id: string) {
   return prisma.product.findUnique({
@@ -58,14 +68,16 @@ export async function GET(
       return NextResponse.json(errorResponse("Product not found"), { status: 404 });
     }
 
-    // Tenant isolation: non-statutory users can only view their own products
-    if (!STATUTORY_ROLES.includes(user.role)) {
-      if (product.seller?.userId !== user.id) {
-        return NextResponse.json(
-          errorResponse("Access denied: this product does not belong to your seller profile"),
-          { status: 403 }
-        );
-      }
+    // Access control:
+    // 1. Statutory roles can view all products
+    // 2. Verified products are accessible to all authenticated users
+    // 3. Unverified (PENDING/REJECTED/FLAGGED) products can ONLY be viewed by the owner seller
+    const isOwner = product.seller?.userId === user.id;
+    if (!isStatutory(user.role) && !isOwner && product.verificationStatus !== "VERIFIED") {
+      return NextResponse.json(
+        errorResponse("Access denied: this product does not belong to your seller profile"),
+        { status: 403 }
+      );
     }
 
     return NextResponse.json(successResponse(product), { status: 200 });
@@ -76,13 +88,16 @@ export async function GET(
 }
 
 // ---------------------------------------------------------------------------
-// PATCH /api/products/[id]
+// PATCH /api/products/[id] — Edit Product
 // ---------------------------------------------------------------------------
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const auth = await requireAuth(req);
+  const auth = await requireRoles(
+    ["SELLER", "BUSINESS_EMPLOYEE", "MANUFACTURER", "IMPORTER", "ADMIN", "SUPER_ADMIN"],
+    req
+  );
   if (!auth.authorized || !auth.user) return auth.errorResponse!;
 
   const { user } = auth;
@@ -95,22 +110,25 @@ export async function PATCH(
       return NextResponse.json(errorResponse("Product not found"), { status: 404 });
     }
 
-    // Tenant isolation
-    if (!STATUTORY_ROLES.includes(user.role) && product.seller?.userId !== user.id) {
-      return NextResponse.json(
-        errorResponse("Access denied: you can only edit your own products"),
-        { status: 403 }
-      );
-    }
+    const isAdmin = user.role === "SUPER_ADMIN" || user.role === "ADMIN";
 
-    // Verified products can only be edited by SUPER_ADMIN (re-editing triggers re-review)
-    if (product.verificationStatus === "VERIFIED" && user.role !== "SUPER_ADMIN") {
-      return NextResponse.json(
-        errorResponse(
-          "This product is already verified. Contact the government authority to make changes."
-        ),
-        { status: 403 }
-      );
+    // Strict Product Ownership Validation: A seller must never be able to modify another seller's product
+    if (!isAdmin) {
+      if (!product.seller || product.seller.userId !== user.id) {
+        return NextResponse.json(
+          errorResponse("Access denied: you can only edit your own products"),
+          { status: 403 }
+        );
+      }
+
+      // Seller Validation: Check user's seller status
+      const ownSeller = await prisma.seller.findUnique({ where: { userId: user.id } });
+      if (!ownSeller) {
+        throw new AppError("Seller profile not found. Please register as a seller first.", 403);
+      }
+      if (ownSeller.verificationStatus === "SUSPENDED") {
+        throw new AppError("Your seller account is suspended. You cannot edit products.", 403);
+      }
     }
 
     const body = await req.json();
@@ -122,17 +140,19 @@ export async function PATCH(
       );
     }
 
-    // If category is changing, validate it
+    // Category Validation: If categoryId is provided, verify it exists and is active
     if (parsed.data.categoryId) {
       const cat = await prisma.category.findUnique({ where: { id: parsed.data.categoryId } });
       if (!cat || !cat.isActive) {
-        throw new AppError("New category not found or inactive", 422);
+        throw new AppError("Category not found or is inactive", 422);
       }
     }
 
-    // Non-admin edits trigger re-verification
+    // Build update payload
     const updateData: Record<string, unknown> = { ...parsed.data };
-    if (user.role !== "SUPER_ADMIN" && product.verificationStatus !== "PENDING") {
+
+    // Non-admin edits to verified/rejected products trigger re-verification workflow
+    if (!isAdmin && product.verificationStatus !== "PENDING") {
       updateData.verificationStatus = "PENDING";
       updateData.verificationNotes = "Product re-submitted for verification after update.";
       updateData.verifiedAt = null;
@@ -143,12 +163,27 @@ export async function PATCH(
       data: updateData,
       include: {
         category: { select: { id: true, name: true, slug: true } },
-        seller: { select: { id: true, businessName: true } },
+        seller: {
+          select: {
+            id: true,
+            businessName: true,
+            panVatNumber: true,
+            verificationStatus: true,
+          },
+        },
       },
     });
 
-    log.info("Product updated", { productId: id, by: user.id, newStatus: updated.verificationStatus });
-    return NextResponse.json(successResponse(updated), { status: 200 });
+    log.info("Product updated", {
+      productId: id,
+      by: user.id,
+      newStatus: updated.verificationStatus,
+    });
+
+    return NextResponse.json(
+      successResponse(updated, { message: "Product updated successfully." }),
+      { status: 200 }
+    );
   } catch (err) {
     if (err instanceof AppError) {
       return NextResponse.json(errorResponse(err.message), { status: err.statusCode });
@@ -159,36 +194,62 @@ export async function PATCH(
 }
 
 // ---------------------------------------------------------------------------
-// DELETE /api/products/[id]
-// SUPER_ADMIN only
+// DELETE /api/products/[id] — Delete Product
 // ---------------------------------------------------------------------------
 export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const auth = await requireRoles(["SUPER_ADMIN"], req);
+  const auth = await requireRoles(
+    ["SELLER", "BUSINESS_EMPLOYEE", "MANUFACTURER", "IMPORTER", "ADMIN", "SUPER_ADMIN"],
+    req
+  );
   if (!auth.authorized || !auth.user) return auth.errorResponse!;
+
+  const { user } = auth;
 
   try {
     const { id } = await params;
-    const product = await prisma.product.findUnique({
-      where: { id },
-      include: { _count: { select: { images: true, documents: true } } },
-    });
+    const product = await resolveProduct(id);
 
     if (!product) {
       return NextResponse.json(errorResponse("Product not found"), { status: 404 });
     }
 
-    // Cascade delete (images and documents are set to cascade in schema)
+    const isAdmin = user.role === "SUPER_ADMIN" || user.role === "ADMIN";
+
+    // Strict Product Ownership Validation: A seller must never be able to delete another seller's product
+    if (!isAdmin) {
+      if (!product.seller || product.seller.userId !== user.id) {
+        return NextResponse.json(
+          errorResponse("Access denied: you can only delete your own products"),
+          { status: 403 }
+        );
+      }
+
+      // Seller Validation: Check user's seller status
+      const ownSeller = await prisma.seller.findUnique({ where: { userId: user.id } });
+      if (!ownSeller) {
+        throw new AppError("Seller profile not found.", 403);
+      }
+      if (ownSeller.verificationStatus === "SUSPENDED") {
+        throw new AppError("Your seller account is suspended. You cannot delete products.", 403);
+      }
+    }
+
+    // Cascade delete product and all related images/documents
     await prisma.product.delete({ where: { id } });
 
-    log.info("Product deleted", { productId: id, by: auth.user.id });
+    log.info("Product deleted", { productId: id, by: user.id });
+
     return NextResponse.json(
-      successResponse({ id }, { message: "Product and all related records deleted" }),
+      successResponse({ id }, { message: "Product and all related records deleted successfully." }),
       { status: 200 }
     );
   } catch (err) {
+    if (err instanceof AppError) {
+      return NextResponse.json(errorResponse(err.message), { status: err.statusCode });
+    }
     log.error("DELETE /api/products/[id] failed", err);
     return NextResponse.json(errorResponse("Failed to delete product"), { status: 500 });
   }

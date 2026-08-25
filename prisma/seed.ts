@@ -1,6 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import { hashPassword } from "../lib/auth/password";
 
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = "file:./dev.db";
+}
+
 const prisma = new PrismaClient();
 
 async function main() {
@@ -198,6 +202,51 @@ async function main() {
   });
 
   await prisma.user.upsert({
+    where: { email: "sysadmin@veriprice.gov" },
+    update: { passwordHash: defaultPasswordHash },
+    create: {
+      id: "usr_admin_01",
+      email: "sysadmin@veriprice.gov",
+      name: "Devendra Karki",
+      role: "ADMIN",
+      passwordHash: defaultPasswordHash,
+      orgId: orgGov.id,
+      designation: "System Administrator & Platform Operations Manager",
+      status: "ACTIVE",
+    },
+  });
+
+  await prisma.user.upsert({
+    where: { email: "gov.officer@veriprice.gov" },
+    update: { passwordHash: defaultPasswordHash },
+    create: {
+      id: "usr_gov_01",
+      email: "gov.officer@veriprice.gov",
+      name: "Prashant Sharma",
+      role: "GOVERNMENT_OFFICIAL",
+      passwordHash: defaultPasswordHash,
+      orgId: orgGov.id,
+      designation: "Senior Compliance & Product Verification Officer",
+      status: "ACTIVE",
+    },
+  });
+
+  const userSeller = await prisma.user.upsert({
+    where: { email: "seller@himalayandepot.com" },
+    update: { passwordHash: defaultPasswordHash },
+    create: {
+      id: "usr_seller_01",
+      email: "seller@himalayandepot.com",
+      name: "Anjali Thapa",
+      role: "SELLER",
+      passwordHash: defaultPasswordHash,
+      orgId: orgBiz.id,
+      designation: "Managing Director & Licensed Distributor",
+      status: "ACTIVE",
+    },
+  });
+
+  await prisma.user.upsert({
     where: { email: "consumer@citizens.org" },
     update: { passwordHash: defaultPasswordHash },
     create: {
@@ -293,6 +342,23 @@ async function main() {
       address: "Plot 42, High-Tech Industrial Hub, Sector 9, Biratnagar",
       verificationStatus: "VERIFIED",
       verificationNotes: "Verified manufacturing license and GMP compliance certified.",
+    },
+  });
+
+  const sellerHimalayan = await prisma.seller.upsert({
+    where: { registrationNumber: "REG-HIM-2023-551" },
+    update: {},
+    create: {
+      id: "seller_himalayan_01",
+      userId: userSeller.id,
+      businessName: "Himalayan Depot & Natural Products Pvt Ltd",
+      registrationNumber: "REG-HIM-2023-551",
+      panVatNumber: "609128374",
+      contactEmail: "compliance@himalayandepot.com",
+      contactPhone: "+977-1-4491023",
+      address: "Thamel Marg, Kathmandu",
+      verificationStatus: "VERIFIED",
+      verificationNotes: "Verified registered trading merchant license.",
     },
   });
 

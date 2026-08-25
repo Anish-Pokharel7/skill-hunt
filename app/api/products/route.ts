@@ -165,7 +165,7 @@ export async function POST(req: NextRequest) {
     // Resolve seller: non-admin users must have a verified seller profile
     let sellerId: string | null = null;
 
-    if (user.role !== "SUPER_ADMIN") {
+    if (user.role !== "SUPER_ADMIN" && user.role !== "ADMIN") {
       const seller = await prisma.seller.findUnique({ where: { userId: user.id } });
       if (!seller) {
         throw new AppError(
@@ -181,11 +181,14 @@ export async function POST(req: NextRequest) {
       }
       sellerId = seller.id;
     } else {
-      // SUPER_ADMIN can optionally link to a specific seller
+      // SUPER_ADMIN / ADMIN can optionally link to a specific seller
       if (body.sellerId) {
         const seller = await prisma.seller.findUnique({ where: { id: body.sellerId } });
         if (!seller) throw new AppError("Specified seller not found", 404);
         sellerId = seller.id;
+      } else {
+        const seller = await prisma.seller.findUnique({ where: { userId: user.id } });
+        if (seller) sellerId = seller.id;
       }
     }
 
