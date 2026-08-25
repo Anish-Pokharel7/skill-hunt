@@ -5,13 +5,13 @@ const SESSION_COOKIE_NAME = "veriprice_session_token";
 
 // Define portal role requirements
 const PROTECTED_ROUTES: Record<string, string[]> = {
-  "/admin": ["SUPER_ADMIN"],
-  "/tax-engine": ["SUPER_ADMIN", "TAX_OFFICER", "AUDITOR"],
-  "/fraud-desk": ["SUPER_ADMIN", "TAX_OFFICER"],
-  "/manufacturer": ["MANUFACTURER", "SUPER_ADMIN"],
-  "/importer": ["IMPORTER", "SUPER_ADMIN"],
-  "/business": ["BUSINESS_EMPLOYEE", "SUPER_ADMIN"],
-  "/reports": ["AUDITOR", "TAX_OFFICER", "SUPER_ADMIN"],
+  "/admin": ["SUPER_ADMIN", "ADMIN", "GOVERNMENT_OFFICIAL"],
+  "/tax-engine": ["SUPER_ADMIN", "ADMIN", "TAX_OFFICER", "AUDITOR"],
+  "/fraud-desk": ["SUPER_ADMIN", "ADMIN", "GOVERNMENT_OFFICIAL", "TAX_OFFICER"],
+  "/manufacturer": ["MANUFACTURER", "SUPER_ADMIN", "ADMIN"],
+  "/importer": ["IMPORTER", "SUPER_ADMIN", "ADMIN"],
+  "/business": ["SELLER", "BUSINESS_EMPLOYEE", "ADMIN", "SUPER_ADMIN"],
+  "/reports": ["AUDITOR", "ADMIN", "TAX_OFFICER", "SUPER_ADMIN"],
 };
 
 export function middleware(request: NextRequest) {

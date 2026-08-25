@@ -42,8 +42,15 @@ export async function GET(req: NextRequest) {
   const search = searchParams.get("search");
 
   try {
-    const statutoryRoles = ["SUPER_ADMIN", "TAX_OFFICER", "AUDITOR"] as const;
+    const statutoryRoles = [
+      "SUPER_ADMIN",
+      "ADMIN",
+      "GOVERNMENT_OFFICIAL",
+      "TAX_OFFICER",
+      "AUDITOR",
+    ] as const;
     const isStatutory = statutoryRoles.includes(user.role as (typeof statutoryRoles)[number]);
+
 
     const where = {
       ...(status ? { verificationStatus: status } : {}),
@@ -89,9 +96,13 @@ export async function GET(req: NextRequest) {
 // POST /api/sellers — Register as a seller
 // ---------------------------------------------------------------------------
 export async function POST(req: NextRequest) {
-  // Sellers are registered by BUSINESS_EMPLOYEE or SUPER_ADMIN
-  const auth = await requireRoles(["BUSINESS_EMPLOYEE", "SUPER_ADMIN"], req);
+  // Sellers are registered by SELLER, BUSINESS_EMPLOYEE, ADMIN, or SUPER_ADMIN
+  const auth = await requireRoles(
+    ["SELLER", "BUSINESS_EMPLOYEE", "ADMIN", "SUPER_ADMIN"],
+    req
+  );
   if (!auth.authorized || !auth.user) return auth.errorResponse!;
+
 
   const { user } = auth;
 

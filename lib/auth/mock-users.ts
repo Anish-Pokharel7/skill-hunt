@@ -96,6 +96,39 @@ export const SEED_USERS: User[] = [
     createdAt: "2024-01-01T00:00:00.000Z",
   },
   {
+    id: "usr_admin_01",
+    email: "sysadmin@veriprice.gov",
+    name: "Devendra Karki",
+    role: "ADMIN",
+    orgId: "org_gov_01",
+    organizationName: "National Revenue & Customs Authority (Gov)",
+    designation: "System Administrator & Platform Operations Manager",
+    status: "ACTIVE",
+    createdAt: "2024-01-05T00:00:00.000Z",
+  },
+  {
+    id: "usr_gov_01",
+    email: "gov.officer@veriprice.gov",
+    name: "Prashant Sharma",
+    role: "GOVERNMENT_OFFICIAL",
+    orgId: "org_gov_01",
+    organizationName: "Department of Commerce & Consumer Protection",
+    designation: "Senior Compliance & Product Verification Officer",
+    status: "ACTIVE",
+    createdAt: "2024-01-12T00:00:00.000Z",
+  },
+  {
+    id: "usr_seller_01",
+    email: "seller@himalayandepot.com",
+    name: "Anjali Thapa",
+    role: "SELLER",
+    orgId: "org_biz_01",
+    organizationName: "Metro Retail Distribution & SuperMart Pvt Ltd",
+    designation: "Managing Director & Licensed Distributor",
+    status: "ACTIVE",
+    createdAt: "2024-02-01T00:00:00.000Z",
+  },
+  {
     id: "usr_tax_01",
     email: "taxofficer@veriprice.gov",
     name: "Officer Marcus Sterling",
@@ -169,11 +202,35 @@ export const ROLE_DETAILS: Record<
   { label: string; badgeColor: string; description: string; homeRoute: string }
 > = {
   SUPER_ADMIN: {
-    label: "Government Admin",
+    label: "Super Admin",
     badgeColor: "bg-[#1b4332] text-white border border-[#143621]",
     description:
-      "Single government authority: national tax policy, statutory MRP ceilings, tenant licensing, system administration, and full audit oversight.",
+      "Supreme government authority: platform administration, permissions management, administrators management, system settings, and full system access.",
     homeRoute: "/admin",
+  },
+  ADMIN: {
+    label: "Admin",
+    badgeColor: "bg-[#2d5a45] text-white border border-[#1b4332]",
+    description: "Manage products, sellers, categories, government users, audit logs, and reports.",
+    homeRoute: "/admin",
+  },
+  GOVERNMENT_OFFICIAL: {
+    label: "Government Official",
+    badgeColor: "bg-[#fbf3e8] text-[#8a5b14] border border-[#eeddc2]",
+    description: "Review submitted products, approve/reject listings, request changes, inspect sellers and verification history.",
+    homeRoute: "/admin",
+  },
+  SELLER: {
+    label: "Seller",
+    badgeColor: "bg-[#eaf0ec] text-[#2d5a45] border border-[#c1d3c8]",
+    description: "Manage own seller profile, create and submit products, view verification status, and resubmit requested changes.",
+    homeRoute: "/business",
+  },
+  CONSUMER: {
+    label: "Consumer",
+    badgeColor: "bg-[#f0f4f1] text-[#2d5a45] border border-[#d2ded5]",
+    description: "View approved products, search, filter, view product details, and submit fraud whistleblower alerts.",
+    homeRoute: "/verify",
   },
   TAX_OFFICER: {
     label: "Tax Officer",
@@ -197,7 +254,7 @@ export const ROLE_DETAILS: Record<
     label: "Retail Store Staff",
     badgeColor: "bg-[#f6f5f2] text-[#55524c] border border-[#e2ded6]",
     description:
-      "Store staff (registered & managed by Government Admin). Scoped to POS checkouts, barcode scanning, inventory receipt, and e-invoice issuance within their licensed outlet.",
+      "Store staff scoped to POS checkouts, barcode scanning, inventory receipt, and e-invoice issuance within their licensed outlet.",
     homeRoute: "/business",
   },
   AUDITOR: {
@@ -206,10 +263,5 @@ export const ROLE_DETAILS: Record<
     description: "Read-only fiscal provenance ledger inspection, supply chain integrity audits, and anomaly reports.",
     homeRoute: "/reports",
   },
-  CONSUMER: {
-    label: "Consumer",
-    badgeColor: "bg-[#f0f4f1] text-[#2d5a45] border border-[#d2ded5]",
-    description: "Public product authenticity scans, Digital Product Passport verification, and counterfeit whistleblower reports.",
-    homeRoute: "/verify",
-  },
 };
+

@@ -21,7 +21,13 @@ import { Logger } from "@/lib/server/logger";
 
 const log = Logger.child("api/products");
 
-const STATUTORY_ROLES = ["SUPER_ADMIN", "TAX_OFFICER", "AUDITOR"] as const;
+const STATUTORY_ROLES = [
+  "SUPER_ADMIN",
+  "ADMIN",
+  "GOVERNMENT_OFFICIAL",
+  "TAX_OFFICER",
+  "AUDITOR",
+] as const;
 type StatutoryRole = (typeof STATUTORY_ROLES)[number];
 
 function isStatutory(role: string): role is StatutoryRole {
@@ -114,8 +120,12 @@ export async function GET(req: NextRequest) {
 // POST /api/products — Register a new product
 // ---------------------------------------------------------------------------
 export async function POST(req: NextRequest) {
-  const auth = await requireRoles(["BUSINESS_EMPLOYEE", "MANUFACTURER", "IMPORTER", "SUPER_ADMIN"], req);
+  const auth = await requireRoles(
+    ["SELLER", "BUSINESS_EMPLOYEE", "MANUFACTURER", "IMPORTER", "ADMIN", "SUPER_ADMIN"],
+    req
+  );
   if (!auth.authorized || !auth.user) return auth.errorResponse!;
+
 
   const { user } = auth;
 

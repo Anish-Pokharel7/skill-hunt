@@ -1,6 +1,26 @@
-import { User, UserRole, SystemAuditLog } from "@/lib/db/types";
+import { User, UserRole, SystemAuditLog, Permission } from "@/lib/db/types";
 import { getServerSession } from "@/lib/auth/session";
+import {
+  hasPermission,
+  hasAnyPermission,
+  hasAllPermissions,
+  getRolePermissions,
+  requirePermission,
+  requireAnyPermission,
+  ROLE_PERMISSIONS,
+} from "@/lib/auth/permissions";
 import { NextResponse } from "next/server";
+
+export {
+  hasPermission,
+  hasAnyPermission,
+  hasAllPermissions,
+  getRolePermissions,
+  requirePermission,
+  requireAnyPermission,
+  ROLE_PERMISSIONS,
+};
+
 
 export interface AuthGuardResult {
   authorized: boolean;

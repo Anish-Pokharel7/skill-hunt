@@ -26,7 +26,10 @@ export async function GET(req: NextRequest) {
 
     // Require auth for inactive visibility
     if (includeInactive) {
-      const auth = await requireRoles(["SUPER_ADMIN", "TAX_OFFICER", "AUDITOR"], req);
+      const auth = await requireRoles(
+        ["SUPER_ADMIN", "ADMIN", "GOVERNMENT_OFFICIAL", "TAX_OFFICER", "AUDITOR"],
+        req
+      );
       if (!auth.authorized) return auth.errorResponse!;
     }
 
@@ -48,11 +51,12 @@ export async function GET(req: NextRequest) {
 
 // ---------------------------------------------------------------------------
 // POST /api/categories
-// SUPER_ADMIN only: create a new product category
+// SUPER_ADMIN and ADMIN: create a new product category
 // ---------------------------------------------------------------------------
 export async function POST(req: NextRequest) {
-  const auth = await requireRoles(["SUPER_ADMIN"], req);
+  const auth = await requireRoles(["SUPER_ADMIN", "ADMIN"], req);
   if (!auth.authorized || !auth.user) return auth.errorResponse!;
+
 
   const { user } = auth;
 

@@ -23,10 +23,14 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const auth = await requireRoles(["SUPER_ADMIN"], req);
+  const auth = await requireRoles(
+    ["SUPER_ADMIN", "ADMIN", "GOVERNMENT_OFFICIAL", "TAX_OFFICER"],
+    req
+  );
   if (!auth.authorized || !auth.user) return auth.errorResponse!;
 
   const { user } = auth;
+
 
   try {
     const { id } = await params;

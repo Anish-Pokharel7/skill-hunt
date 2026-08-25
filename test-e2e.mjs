@@ -417,11 +417,92 @@ async function runTests() {
     JSON.stringify(dataLogout)
   );
 
+  // TEST 11: Phase 4 Role-Based Authorization & Granular Permissions
+  console.log("\n--- 11. Testing Phase 4 Permissions Matrix & RBAC Guards ---");
+
+  // 11a. Test Permission Endpoint for SUPER_ADMIN
+  const resPermSuper = await fetch(`${BASE_URL}/api/auth/permissions`, {
+    headers: { Authorization: `Bearer ${adminToken}` },
+  });
+  const dataPermSuper = await resPermSuper.json();
+  assert(
+    resPermSuper.status === 200 &&
+      dataPermSuper.success &&
+      dataPermSuper.data.isSuperAdmin === true &&
+      dataPermSuper.data.matrix.SUPER_ADMIN.includes("SYSTEM_FULL_ACCESS"),
+    "Super Admin possesses full system permissions and SYSTEM_FULL_ACCESS",
+    JSON.stringify(dataPermSuper)
+  );
+
+  // 11b. Test Permission Endpoint for SELLER
+  const resLoginSeller = await fetch(`${BASE_URL}/api/auth/session`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ role: "SELLER" }),
+  });
+  const dataLoginSeller = await resLoginSeller.json();
+  const sellerToken = dataLoginSeller.token;
+
+  const resPermSeller = await fetch(`${BASE_URL}/api/auth/permissions`, {
+    headers: { Authorization: `Bearer ${sellerToken}` },
+  });
+  const dataPermSeller = await resPermSeller.json();
+  assert(
+    resPermSeller.status === 200 &&
+      dataPermSeller.data.permissions.includes("PRODUCTS_CREATE") &&
+      dataPermSeller.data.permissions.includes("PRODUCTS_EDIT_OWN") &&
+      !dataPermSeller.data.permissions.includes("PRODUCTS_APPROVE"),
+    "Seller role possesses product creation permissions but lacks product approval permissions",
+    JSON.stringify(dataPermSeller)
+  );
+
+  // 11c. Test Permission Endpoint for GOVERNMENT_OFFICIAL
+  const resLoginGov = await fetch(`${BASE_URL}/api/auth/session`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ role: "GOVERNMENT_OFFICIAL" }),
+  });
+  const dataLoginGov = await resLoginGov.json();
+  const govToken = dataLoginGov.token;
+
+  const resPermGov = await fetch(`${BASE_URL}/api/auth/permissions`, {
+    headers: { Authorization: `Bearer ${govToken}` },
+  });
+  const dataPermGov = await resPermGov.json();
+  assert(
+    resPermGov.status === 200 &&
+      dataPermGov.data.permissions.includes("PRODUCTS_APPROVE") &&
+      dataPermGov.data.permissions.includes("PRODUCTS_REJECT") &&
+      dataPermGov.data.permissions.includes("SELLERS_VIEW"),
+    "Government Official possesses approval, rejection, and seller inspection permissions",
+    JSON.stringify(dataPermGov)
+  );
+
+  // 11d. Test Government Official executing product verification
+  const resGovVerify = await fetch(`${BASE_URL}/api/products/${targetProduct.id}/verify`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${govToken}`,
+    },
+    body: JSON.stringify({
+      status: "VERIFIED",
+      verificationNotes: "Government official verified product documents and MRP statutory pricing.",
+    }),
+  });
+  const dataGovVerify = await resGovVerify.json();
+  assert(
+    resGovVerify.status === 200 && dataGovVerify.success,
+    "Government Official successfully verified product under RBAC permission guard",
+    JSON.stringify(dataGovVerify)
+  );
+
   console.log("\n==================================================");
   console.log(`TEST SUMMARY: ${passed} PASSED, ${failed} FAILED`);
   console.log("==================================================");
 }
 
 runTests();
+
 
 

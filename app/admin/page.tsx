@@ -49,6 +49,9 @@ import {
 
 const ROLE_BADGE_COLORS: Record<UserRole, string> = {
   SUPER_ADMIN: "bg-[#1b4332] text-white",
+  ADMIN: "bg-[#2d5a45] text-white border border-[#1b4332]",
+  GOVERNMENT_OFFICIAL: "bg-[#fbf3e8] text-[#8a5b14] border border-[#eeddc2]",
+  SELLER: "bg-[#eaf0ec] text-[#2d5a45] border border-[#c1d3c8]",
   TAX_OFFICER: "bg-[#fbf3e8] text-[#8a5b14] border border-[#eeddc2]",
   MANUFACTURER: "bg-[#eaf0ec] text-[#2d5a45] border border-[#c1d3c8]",
   IMPORTER: "bg-[#eef2f6] text-[#2b4c6f] border border-[#d0dbe7]",
@@ -56,6 +59,7 @@ const ROLE_BADGE_COLORS: Record<UserRole, string> = {
   AUDITOR: "bg-[#fbeeed] text-[#8c322c] border border-[#f2cfcd]",
   CONSUMER: "bg-[#f0f4f1] text-[#2d5a45] border border-[#d2ded5]",
 };
+
 
 const ORG_TYPE_BADGE_COLORS: Record<string, string> = {
   GOVERNMENT: "bg-[#1b4332] text-white",
