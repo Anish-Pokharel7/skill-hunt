@@ -45,7 +45,7 @@ class MockDatabase {
         luxuryTaxRate: 0.0,
         maxProfitMarginCap: 0.15, // 15% statutory max margin
         statutoryPriceCap: 250,
-        updatedByRole: "GOVERNMENT_ADMIN",
+        updatedByRole: "SUPER_ADMIN",
         updatedAt: "2026-01-10T10:00:00.000Z",
       },
       {
@@ -59,7 +59,7 @@ class MockDatabase {
         luxuryTaxRate: 0.0,
         maxProfitMarginCap: 0.25,
         statutoryPriceCap: 1500,
-        updatedByRole: "GOVERNMENT_ADMIN",
+        updatedByRole: "SUPER_ADMIN",
         updatedAt: "2026-01-12T11:00:00.000Z",
       },
       {
@@ -73,7 +73,7 @@ class MockDatabase {
         luxuryTaxRate: 0.10,
         maxProfitMarginCap: 0.30,
         statutoryPriceCap: 8500,
-        updatedByRole: "GOVERNMENT_ADMIN",
+        updatedByRole: "SUPER_ADMIN",
         updatedAt: "2026-01-15T09:30:00.000Z",
       },
       {
@@ -87,7 +87,7 @@ class MockDatabase {
         luxuryTaxRate: 0.05,
         maxProfitMarginCap: 0.20,
         statutoryPriceCap: 120000,
-        updatedByRole: "GOVERNMENT_ADMIN",
+        updatedByRole: "SUPER_ADMIN",
         updatedAt: "2026-02-01T14:20:00.000Z",
       },
     ];
@@ -223,7 +223,7 @@ class MockDatabase {
             id: "j_03",
             timestamp: "2026-02-06T13:45:00.000Z",
             stage: "RETAIL_RECEIVED",
-            actorRole: "BUSINESS_OWNER",
+            actorRole: "BUSINESS_EMPLOYEE",
             actorName: "Kavita Patel",
             actorOrgName: "Metro Retail Distribution & SuperMart Pvt Ltd",
             location: "Avenue Mall Retail Depot",
@@ -664,7 +664,7 @@ class MockDatabase {
         timestamp: "2026-02-25T08:10:00.000Z",
         userId: "usr_biz_owner_01",
         userName: "Kavita Patel",
-        userRole: "BUSINESS_OWNER",
+        userRole: "BUSINESS_EMPLOYEE",
         orgId: "org_biz_01",
         orgName: "Metro Retail Distribution & SuperMart Pvt Ltd",
         action: "ATTEMPT_CROSS_ORG_INVOICE_READ",
@@ -679,7 +679,7 @@ class MockDatabase {
         timestamp: "2026-02-25T08:20:00.000Z",
         userId: "usr_gov_01",
         userName: "Dr. Rajesh Sharma",
-        userRole: "GOVERNMENT_ADMIN",
+        userRole: "SUPER_ADMIN",
         orgId: "org_gov_01",
         orgName: "National Revenue & Customs Authority (Gov)",
         action: "UPDATE_TAX_POLICY_RULE",

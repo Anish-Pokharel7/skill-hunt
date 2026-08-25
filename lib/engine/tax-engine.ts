@@ -63,7 +63,7 @@ export class TaxAndPriceEngine {
       luxuryTaxRate: 0.0,
       maxProfitMarginCap: 0.20,
       statutoryPriceCap: undefined,
-      updatedByRole: "GOVERNMENT_ADMIN",
+      updatedByRole: "SUPER_ADMIN",
       updatedAt: new Date().toISOString(),
     };
   }

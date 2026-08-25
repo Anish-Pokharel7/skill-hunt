@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   const { user } = auth;
   let items: BusinessInventoryItem[] = [];
 
-  if (user.role === "BUSINESS_OWNER" || user.role === "BUSINESS_EMPLOYEE") {
+  if (user.role === "BUSINESS_EMPLOYEE") {
     items = db.inventory.filter((inv) => inv.businessOrgId === user.orgId);
   } else {
     // Oversight roles can view all inventory
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const auth = await requireRoles(["BUSINESS_OWNER", "BUSINESS_EMPLOYEE", "SUPER_ADMIN"], req);
+  const auth = await requireRoles(["BUSINESS_EMPLOYEE", "SUPER_ADMIN"], req);
   if (!auth.authorized || !auth.user) {
     return auth.errorResponse!;
   }

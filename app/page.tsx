@@ -19,6 +19,7 @@ import {
   XCircle,
   ArrowRight,
   Lock,
+  LayoutDashboard,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -53,11 +54,18 @@ export default function HomePage() {
 
   const portals = [
     {
-      title: "Admin & Government Directorate",
-      description: "National tax policy, statutory MRP ceilings, organization licensing, and system audit logs.",
+      title: "Super Admin Directorate",
+      description: "National tax policy, statutory MRP ceilings, organization licensing, user management, system audit logs, and full platform governance.",
       href: "/admin",
       icon: Building2,
       roles: ["SUPER_ADMIN"],
+    },
+    {
+      title: "Admin Enforcement Dashboard",
+      description: "Fraud detection, tax reconciliation, audit trail monitoring, and compliance oversight for Tax Officers and Auditors.",
+      href: "/dashboard",
+      icon: LayoutDashboard,
+      roles: ["TAX_OFFICER", "AUDITOR", "SUPER_ADMIN"],
     },
     {
       title: "Manufacturer Production Portal",

@@ -38,9 +38,9 @@ export default function ReportsPortalPage() {
     {
       id: "audit_log_002",
       timestamp: "2026-02-25T08:10:00.000Z",
-      userId: "usr_biz_owner_01",
-      userName: "Kavita Patel",
-      userRole: "BUSINESS_OWNER",
+      userId: "usr_biz_emp_01",
+      userName: "Rohan Joshi",
+      userRole: "BUSINESS_EMPLOYEE",
       orgId: "org_biz_01",
       orgName: "Metro Retail Distribution & SuperMart Pvt Ltd",
       action: "ATTEMPT_CROSS_ORG_INVOICE_READ",

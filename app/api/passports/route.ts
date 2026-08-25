@@ -20,6 +20,6 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({
     success: true,
-    batches: db.batches,
+    passports: db.passports,
   });
 }
