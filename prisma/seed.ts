@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("🌱 Seeding VERIPRICE database...");
+  console.log("🌱 Seeding VERIPRICE database with Phase 2 core models...");
 
   // 1. Seed Organizations
   const orgGov = await prisma.organization.upsert({
@@ -17,7 +17,7 @@ async function main() {
       licenseNumber: "GOV-LIC-2026-X",
       jurisdiction: "Central Federal Revenue Service",
       verified: true,
-      address: "Federal Secretariat Complex, Treasury Block",
+      address: "Federal Secretariat Complex, Treasury Block, Kathmandu",
       contactEmail: "oversight@gov-revenue.org",
     },
   });
@@ -31,7 +31,7 @@ async function main() {
       type: "MANUFACTURER",
       taxPin: "MFG-PAN-9948201",
       licenseNumber: "MFG-IND-8849-01",
-      jurisdiction: "Industrial Manufacturing Zone B",
+      jurisdiction: "Industrial Manufacturing Zone B, Biratnagar",
       verified: true,
       address: "Plot 42, High-Tech Industrial Hub, Sector 9",
       contactEmail: "compliance@apexbiotech.com",
@@ -47,7 +47,7 @@ async function main() {
       type: "IMPORTER",
       taxPin: "IMP-PAN-4410982",
       licenseNumber: "IMP-CUST-7721-04",
-      jurisdiction: "Customs Dry Port Clearance Terminal A",
+      jurisdiction: "Birgunj Dry Port Customs Terminal",
       verified: true,
       address: "Cargo Terminal Gate 3, International Port Complex",
       contactEmail: "manifest@pacifichorizon.com",
@@ -63,9 +63,9 @@ async function main() {
       type: "RETAILER_DISTRIBUTOR",
       taxPin: "BIZ-VAT-8823104",
       licenseNumber: "RET-REG-3391-22",
-      jurisdiction: "Metropolitan Commercial District",
+      jurisdiction: "Kathmandu Valley Commercial Zone",
       verified: true,
-      address: "Avenue Mall, Commercial Plaza 104",
+      address: "Avenue Mall, Commercial Plaza 104, New Road",
       contactEmail: "accounts@metroretail.com",
     },
   });
@@ -81,7 +81,7 @@ async function main() {
       licenseNumber: "ICAI-AUD-99120",
       jurisdiction: "Chartered Forensic Registry",
       verified: true,
-      address: "Financial Tower 8, Suite 1200",
+      address: "Financial Tower 8, Suite 1200, Naxal",
       contactEmail: "audit-desk@sterlingvance.com",
     },
   });
@@ -103,7 +103,7 @@ async function main() {
   });
 
   // 2. Seed Users
-  await prisma.user.upsert({
+  const userGov = await prisma.user.upsert({
     where: { email: "admin@veriprice.gov" },
     update: {},
     create: {
@@ -131,7 +131,7 @@ async function main() {
     },
   });
 
-  await prisma.user.upsert({
+  const userMfg = await prisma.user.upsert({
     where: { email: "manufacturer@apexbiotech.com" },
     update: {},
     create: {
@@ -159,7 +159,7 @@ async function main() {
     },
   });
 
-  await prisma.user.upsert({
+  const userRetail = await prisma.user.upsert({
     where: { email: "cashier@metroretail.com" },
     update: {},
     create: {
@@ -169,7 +169,7 @@ async function main() {
       role: "BUSINESS_EMPLOYEE",
       orgId: orgBiz.id,
       employeeCode: "METRO-EMP-504",
-      designation: "Senior POS Operator & Inventory Gatekeeper",
+      designation: "Store Manager & Retail Operations Lead",
       status: "ACTIVE",
     },
   });
@@ -202,7 +202,233 @@ async function main() {
     },
   });
 
-  // 3. Seed Tax Rules
+  // 3. Seed Categories (Phase 2)
+  const catFood = await prisma.category.upsert({
+    where: { slug: "food-organic-edibles" },
+    update: {},
+    create: {
+      id: "cat_food_01",
+      name: "Food & Organic Edibles",
+      slug: "food-organic-edibles",
+      description: "Essential staple foods, oils, grains, and organic consumables.",
+      isActive: true,
+    },
+  });
+
+  const catPharma = await prisma.category.upsert({
+    where: { slug: "pharmaceuticals-healthcare" },
+    update: {},
+    create: {
+      id: "cat_pharma_01",
+      name: "Pharmaceuticals & Healthcare",
+      slug: "pharmaceuticals-healthcare",
+      description: "Essential life-saving medicines, OTC products, and medical devices.",
+      isActive: true,
+    },
+  });
+
+  const catElectronics = await prisma.category.upsert({
+    where: { slug: "electronics-hardware" },
+    update: {},
+    create: {
+      id: "cat_elec_01",
+      name: "Electronics & Tech Hardware",
+      slug: "electronics-hardware",
+      description: "Smartphones, computers, telecom equipment, and smart devices.",
+      isActive: true,
+    },
+  });
+
+  const catBeverages = await prisma.category.upsert({
+    where: { slug: "beverages-spirits" },
+    update: {},
+    create: {
+      id: "cat_bev_01",
+      name: "Beverages & Spirits",
+      slug: "beverages-spirits",
+      description: "Bottled beverages, packaged tea/coffee, and distilled spirits.",
+      isActive: true,
+    },
+  });
+
+  // 4. Seed Sellers (Phase 2)
+  const sellerRetail = await prisma.seller.upsert({
+    where: { registrationNumber: "REG-METRO-2024-889" },
+    update: {},
+    create: {
+      id: "seller_metro_01",
+      userId: userRetail.id,
+      businessName: "Metro Retail Distribution & SuperMart Pvt Ltd",
+      registrationNumber: "REG-METRO-2024-889",
+      panVatNumber: "601982734",
+      contactEmail: "compliance@metroretail.com",
+      contactPhone: "+977-1-4239841",
+      address: "Avenue Mall, Commercial Plaza 104, New Road, Kathmandu",
+      verificationStatus: "VERIFIED",
+      verificationNotes: "Verified by Department of Commerce and Inland Revenue Department.",
+    },
+  });
+
+  const sellerMfg = await prisma.seller.upsert({
+    where: { registrationNumber: "REG-APEX-2021-304" },
+    update: {},
+    create: {
+      id: "seller_apex_01",
+      userId: userMfg.id,
+      businessName: "Apex BioTech & Consumer Goods Mfg Ltd",
+      registrationNumber: "REG-APEX-2021-304",
+      panVatNumber: "302819475",
+      contactEmail: "sales@apexbiotech.com",
+      contactPhone: "+977-21-523190",
+      address: "Plot 42, High-Tech Industrial Hub, Sector 9, Biratnagar",
+      verificationStatus: "VERIFIED",
+      verificationNotes: "Verified manufacturing license and GMP compliance certified.",
+    },
+  });
+
+  // 5. Seed Products (Phase 2)
+  const productOliveOil = await prisma.product.upsert({
+    where: { id: "prod_oil_001" },
+    update: {},
+    create: {
+      id: "prod_oil_001",
+      name: "Apex Pure Cold-Pressed Virgin Olive Oil 1L",
+      description: "100% natural cold-pressed virgin olive oil, fortified with Vitamin E and essential Omega-3 fatty acids.",
+      brand: "Apex Pure",
+      model: "EVOO-1000ML",
+      categoryId: catFood.id,
+      sellerId: sellerMfg.id,
+      manufacturerName: "Apex BioTech & Consumer Goods Mfg Ltd",
+      countryOfOrigin: "Nepal",
+      originType: "DOMESTIC_MANUFACTURED",
+      isNepalManufactured: true,
+      isVatApplicable: true,
+      vatRate: 0.13,
+      vatPaid: 97.50,
+      actualCost: 750.00,
+      consumerPrice: 1500.00,
+      currency: "NPR",
+      verificationStatus: "VERIFIED",
+      verificationNotes: "Complies with statutory maximum retail price cap (NPR 1,500) and Food Quality Standard #84/2080.",
+      verifiedAt: new Date("2026-01-15T10:00:00.000Z"),
+      images: {
+        create: [
+          {
+            url: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&q=80&w=800",
+            metadata: JSON.stringify({ alt: "Apex Olive Oil Bottle Packaging", resolution: "1920x1080", isHero: true }),
+          },
+        ],
+      },
+      documents: {
+        create: [
+          {
+            documentType: "LAB_CERTIFICATE",
+            filename: "lab_purity_test_dftqc_882.pdf",
+            storageReference: "secure://dftqc-nepal.gov/cert/882-EVOO-2026.pdf",
+            status: "VERIFIED",
+          },
+          {
+            documentType: "TAX_CLEARANCE",
+            filename: "vat_clearance_ird_2080_q3.pdf",
+            storageReference: "secure://ird.gov.np/clearance/2080-Q3-302819475.pdf",
+            status: "VERIFIED",
+          },
+        ],
+      },
+    },
+  });
+
+  const productParacetamol = await prisma.product.upsert({
+    where: { id: "prod_med_002" },
+    update: {},
+    create: {
+      id: "prod_med_002",
+      name: "Paracetamol IP 500mg Fast-Action Tablets (100 Tabs)",
+      description: "Statutory essential antipyretic and analgesic oral tablets manufactured under strict GMP compliance.",
+      brand: "Apex PharmaCare",
+      model: "PCM-500-100T",
+      categoryId: catPharma.id,
+      sellerId: sellerMfg.id,
+      manufacturerName: "Apex BioTech & Consumer Goods Mfg Ltd",
+      countryOfOrigin: "Nepal",
+      originType: "DOMESTIC_MANUFACTURED",
+      isNepalManufactured: true,
+      isVatApplicable: false, // Essential medicine exempt or 0%
+      vatRate: 0.00,
+      vatPaid: 0.00,
+      actualCost: 120.00,
+      consumerPrice: 200.00,
+      currency: "NPR",
+      verificationStatus: "VERIFIED",
+      verificationNotes: "Verified with Department of Drug Administration (DDA) registry code DDA-REG-98214.",
+      verifiedAt: new Date("2026-01-20T11:30:00.000Z"),
+      images: {
+        create: [
+          {
+            url: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800",
+            metadata: JSON.stringify({ alt: "Paracetamol 500mg Blister Packaging", resolution: "1200x800", isHero: true }),
+          },
+        ],
+      },
+      documents: {
+        create: [
+          {
+            documentType: "LAB_CERTIFICATE",
+            filename: "dda_approval_cert_98214.pdf",
+            storageReference: "secure://dda.gov.np/licenses/DDA-98214.pdf",
+            status: "VERIFIED",
+          },
+        ],
+      },
+    },
+  });
+
+  const productPhone = await prisma.product.upsert({
+    where: { id: "prod_elec_003" },
+    update: {},
+    create: {
+      id: "prod_elec_003",
+      name: "Horizon X9 Pro 5G Smartphone (256GB / 12GB RAM)",
+      description: "Flagship 5G smartphone with official NTA IMEI type approval, customs duty cleared with cryptographic DPP passport.",
+      brand: "Horizon Tech",
+      model: "HX-9PRO-5G",
+      categoryId: catElectronics.id,
+      sellerId: sellerRetail.id,
+      manufacturerName: "Pacific Horizon Electronics Corp",
+      countryOfOrigin: "Vietnam",
+      originType: "IMPORTED",
+      isNepalManufactured: false,
+      isVatApplicable: true,
+      vatRate: 0.13,
+      vatPaid: 11050.00,
+      actualCost: 65000.00,
+      consumerPrice: 85000.00,
+      currency: "NPR",
+      verificationStatus: "VERIFIED",
+      verificationNotes: "Customs declaration #CUST-2026-7892 cleared at Birgunj Dry Port; NTA Type Approval verified.",
+      verifiedAt: new Date("2026-02-02T14:00:00.000Z"),
+      images: {
+        create: [
+          {
+            url: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=800",
+            metadata: JSON.stringify({ alt: "Horizon X9 Pro Smartphone", resolution: "1920x1080", isHero: true }),
+          },
+        ],
+      },
+      documents: {
+        create: [
+          {
+            documentType: "BILL_OF_ENTRY",
+            filename: "customs_boe_birgunj_7892.pdf",
+            storageReference: "secure://customs.gov.np/boe/2026-7892.pdf",
+            status: "VERIFIED",
+          },
+        ],
+      },
+    },
+  });
+
+  // 6. Seed Tax Rules
   const taxRules = [
     {
       hsCode: "3004.90",
@@ -242,7 +468,7 @@ async function main() {
     },
     {
       hsCode: "8517.13",
-      category: "Electronics & Tech",
+      category: "Electronics & Tech Hardware",
       description: "Smartphones & Cellular Communication Units",
       standardVatRate: 0.13,
       exciseDutyRate: 0.05,
@@ -262,14 +488,14 @@ async function main() {
     });
   }
 
-  // 4. Seed Batches
+  // 7. Seed Batches
   const batch1 = await prisma.batchItem.upsert({
     where: { batchNumber: "APX-2026-901B" },
     update: {},
     create: {
       id: "batch_mfg_901",
       batchNumber: "APX-2026-901B",
-      productName: "Apex Pure Extra Virgin Olive Oil (1L)",
+      productName: "Apex Pure Cold-Pressed Virgin Olive Oil 1L",
       category: "Food & Organic Edibles",
       hsCode: "1509.10",
       description: "Cold-pressed extra virgin olive oil certified organic.",
@@ -279,7 +505,7 @@ async function main() {
       productionDate: new Date("2026-02-01T08:00:00.000Z"),
       expiryDate: new Date("2028-02-01T08:00:00.000Z"),
       manufacturerOrgId: orgMfg.id,
-      factoryLocation: "Plant Alpha, Mediterranean Agro-Valley",
+      factoryLocation: "Plant Alpha, Biratnagar Agro-Valley",
       baseCost: 750,
       standardVatRate: 0.13,
       exciseRate: 0.02,
@@ -291,7 +517,7 @@ async function main() {
     },
   });
 
-  // 5. Seed Passports
+  // 8. Seed Passports
   await prisma.productPassport.upsert({
     where: { serialNumber: "APX-OIL-901-000184" },
     update: {},
@@ -311,7 +537,7 @@ async function main() {
       isRecalled: false,
       scanCount: 1,
       lastScannedAt: new Date("2026-02-24T14:15:00.000Z"),
-      lastScannedLocation: "Store Terminal 04, Metro SuperMart, Central City",
+      lastScannedLocation: "Store Terminal 04, Metro SuperMart, New Road Kathmandu",
       digitalSignature: "SIG-ECDSA-SHA256:0x41f8a892b1cd5e6f",
       qrPayload: "https://veriprice.gov/verify/APX-OIL-901-000184?sig=0x41f8a892",
       journey: {
@@ -321,7 +547,7 @@ async function main() {
             actorRole: "MANUFACTURER",
             actorName: "Elena Rostova",
             actorOrgName: "Apex BioTech & Consumer Goods Mfg Ltd",
-            location: "Factory Cleanroom B, Industrial Zone",
+            location: "Factory Cleanroom B, Industrial Zone Biratnagar",
             details: "Batch bottled, sealed with tamper-evident digital RFID and minted into DPP Registry.",
             hash: "0x8f9c1e7a4b2d3e5f6a7b8c9d0e1f2a3b4c5d6e7f",
             isVerified: true,
@@ -331,7 +557,7 @@ async function main() {
             actorRole: "BUSINESS_EMPLOYEE",
             actorName: "Rohan Joshi",
             actorOrgName: "Metro Retail Distribution & SuperMart Pvt Ltd",
-            location: "Avenue Mall Retail Depot",
+            location: "Avenue Mall Retail Depot, Kathmandu",
             details: "Inbound QR scanning verified against National Ledger; Stocked in Store Inventory.",
             hash: "0x55aa66bb77cc88dd99ee00ff11aa22bb33cc44ee",
             isVerified: true,
@@ -341,7 +567,7 @@ async function main() {
     },
   });
 
-  console.log("✅ VERIPRICE database seeded successfully!");
+  console.log("✅ VERIPRICE database seeded successfully with all Phase 2 models!");
 }
 
 main()

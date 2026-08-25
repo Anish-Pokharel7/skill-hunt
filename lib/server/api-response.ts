@@ -135,3 +135,51 @@ export function apiInternalError(
 ): NextResponse<ApiResponse<null>> {
   return apiError("Internal Server Error", message, "INTERNAL_SERVER_ERROR", 500);
 }
+
+// Aliases for standard response helpers
+export function successResponse<T>(data: T, meta?: Record<string, unknown>) {
+  return {
+    success: true,
+    data,
+    ...(meta?.message ? { message: meta.message as string } : {}),
+    meta: {
+      timestamp: new Date().toISOString(),
+      ...meta,
+    },
+  };
+}
+
+export function paginatedResponse<T>(
+  data: T[],
+  total: number,
+  page = 1,
+  limit = 25,
+  meta?: Record<string, unknown>
+) {
+  return {
+    success: true,
+    data,
+    meta: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+      timestamp: new Date().toISOString(),
+      ...meta,
+    },
+  };
+}
+
+export function errorResponse(error: string, details?: unknown, code = "BAD_REQUEST") {
+  return {
+    success: false,
+    error,
+    message: error,
+    code,
+    ...(details ? { details } : {}),
+    meta: {
+      timestamp: new Date().toISOString(),
+    },
+  };
+}
+

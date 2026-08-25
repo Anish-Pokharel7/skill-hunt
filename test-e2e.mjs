@@ -222,9 +222,59 @@ async function runTests() {
     JSON.stringify(dataWhistle)
   );
 
+  // TEST 9: Phase 2 Categories & Products Verification
+  console.log("\n--- 9. Testing Phase 2 Core Models (Category, Seller, Product) ---");
+  const resCategories = await fetch(`${BASE_URL}/api/categories`);
+  const dataCategories = await resCategories.json();
+  assert(
+    resCategories.status === 200 && dataCategories.success && dataCategories.data.length >= 4,
+    `Retrieved ${dataCategories.data?.length} active product categories from Prisma DB`,
+    JSON.stringify(dataCategories)
+  );
+
+  // Test Product Listing with Super Admin
+  const resLoginAdmin = await fetch(`${BASE_URL}/api/auth/session`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ role: "SUPER_ADMIN" }),
+  });
+  const dataLoginAdmin = await resLoginAdmin.json();
+  const adminToken = dataLoginAdmin.token;
+
+  const resProducts = await fetch(`${BASE_URL}/api/products`, {
+    headers: { Authorization: `Bearer ${adminToken}` },
+  });
+  const dataProducts = await resProducts.json();
+  assert(
+    resProducts.status === 200 && dataProducts.success && dataProducts.data.length >= 3,
+    `Super Admin retrieved ${dataProducts.data?.length} verified products from national database`,
+    JSON.stringify(dataProducts)
+  );
+
+  // Test Product Verification by Government Authority
+  const targetProduct = dataProducts.data[0];
+  const resVerifyProd = await fetch(`${BASE_URL}/api/products/${targetProduct.id}/verify`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${adminToken}`,
+    },
+    body: JSON.stringify({
+      status: "VERIFIED",
+      verificationNotes: "Verified statutory compliance with National Quality Standards.",
+    }),
+  });
+  const dataVerifyProd = await resVerifyProd.json();
+  assert(
+    resVerifyProd.status === 200 && dataVerifyProd.success && dataVerifyProd.data.verificationStatus === "VERIFIED",
+    `Government Authority successfully verified product ${targetProduct.id}`,
+    JSON.stringify(dataVerifyProd)
+  );
+
   console.log("\n==================================================");
   console.log(`TEST SUMMARY: ${passed} PASSED, ${failed} FAILED`);
   console.log("==================================================");
 }
 
 runTests();
+

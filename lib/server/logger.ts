@@ -64,7 +64,25 @@ class Logger {
       })
     );
   }
+
+  public child(context: string) {
+    return {
+      debug: (msg: string, meta?: LogMeta) => this.debug(`[${context}] ${msg}`, meta),
+      info: (msg: string, meta?: LogMeta) => this.info(`[${context}] ${msg}`, meta),
+      warn: (msg: string, meta?: LogMeta) => this.warn(`[${context}] ${msg}`, meta),
+      error: (msg: string, err?: Error | unknown, meta?: LogMeta) =>
+        this.error(`[${context}] ${msg}`, err, meta),
+      security: (action: string, details: string, meta?: LogMeta) =>
+        this.security(`${context}:${action}`, details, meta),
+    };
+  }
+
+  public static child(context: string) {
+    return logger.child(context);
+  }
 }
 
 export const logger = new Logger();
+export { Logger };
 export default logger;
+
