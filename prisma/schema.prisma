@@ -119,25 +119,42 @@ model Product {
   images              ProductImage[]
   documents           ProductDocument[]
   submissions         ProductSubmissionHistory[]
+  history             ProductHistory[]
 }
 
 model ProductImage {
-  id        String   @id @default(cuid())
-  productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  url       String
-  metadata  String?  // JSON metadata (alt, dimensions, size)
-  createdAt DateTime @default(now())
+  id               String   @id @default(cuid())
+  productId        String
+  product          Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  storageReference String   // Relative path within uploads/public/images/<productId>/
+  url              String   // Served public URL path e.g. /api/products/:id/images/:imageId/serve
+  originalFilename String
+  mimeType         String
+  sizeBytes        Int
+  sha256           String
+  altText          String?
+  isPrimary        Boolean  @default(false)
+  sortOrder        Int      @default(0)
+  metadata         String?  // JSON metadata (dimensions, etc.)
+  uploadedByUserId String
+  createdAt        DateTime @default(now())
 }
 
 model ProductDocument {
   id               String   @id @default(cuid())
   productId        String
   product          Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  documentType     String   // LAB_CERTIFICATE, BILL_OF_ENTRY, TAX_CLEARANCE, INVOICE_COPY, MANUFACTURER_AUTHORIZATION, OTHER
-  storageReference String
-  filename         String
+  documentType     String   // LAB_CERTIFICATE, BILL_OF_ENTRY, TAX_CLEARANCE, INVOICE_COPY, MANUFACTURER_AUTHORIZATION, QUALITY_CERTIFICATE, IMPORT_LICENSE, VAT_REGISTRATION, FOOD_DRUG_APPROVAL, OTHER
+  storageReference String   // Relative path within uploads/private/documents/<productId>/ — NEVER public
+  originalFilename String
+  mimeType         String
+  sizeBytes        Int
+  sha256           String
   status           String   @default("PENDING_REVIEW") // PENDING_REVIEW, VERIFIED, REJECTED
+  verifiedByUserId String?
+  verifiedAt       DateTime?
+  rejectionReason  String?
+  uploadedByUserId String
   createdAt        DateTime @default(now())
   updatedAt        DateTime @default(now()) @updatedAt
 }
@@ -158,6 +175,23 @@ model ProductSubmissionHistory {
   imagesCount       Int      @default(0)
   timestamp         DateTime @default(now())
 }
+
+model ProductHistory {
+  id                String   @id @default(cuid())
+  productId         String
+  product           Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  changeType        String   // PRICE_CHANGE, SELLER_CHANGE, STATUS_CHANGE, ADMIN_OVERRIDE, FIELD_UPDATE, SPEC_UPDATE
+  fieldName         String   // consumerPrice, actualCost, sellerId, verificationStatus, name, etc.
+  oldValue          String?  // Previous value (e.g. "Rs. 2,500")
+  newValue          String?  // New value (e.g. "Rs. 2,300")
+  changedByUserId   String
+  changedByName     String
+  changedByRole     String
+  reason            String?  // Explanation or administrative rationale
+  metadata          String?  // JSON metadata (e.g. IP address, field metadata)
+  createdAt         DateTime @default(now())
+}
+
 
 model BatchItem {
   id                String            @id @default(cuid())
@@ -365,20 +399,24 @@ model FraudAlert {
 }
 
 model SystemAuditLog {
-  id           String   @id @default(cuid())
-  timestamp    DateTime @default(now())
-  userId       String
-  userName     String
-  userRole     String
-  orgId        String
-  orgName      String
-  action       String
-  resourceType String
-  resourceId   String
-  ipAddress    String
-  status       String
-  details      String
+  id            String   @id @default(cuid())
+  timestamp     DateTime @default(now())
+  userId        String
+  userName      String
+  userRole      String
+  orgId         String
+  orgName       String
+  action        String   // USER_CREATED, USER_UPDATED, SELLER_REGISTERED, PRODUCT_CREATED, PRODUCT_EDITED, PRODUCT_SUBMITTED, PRODUCT_REVIEWED, PRODUCT_APPROVED, PRODUCT_REJECTED, CHANGES_REQUESTED, PRODUCT_RESUBMITTED, ADMIN_PRODUCT_CHANGED, ADMIN_SELLER_CHANGED, CATEGORY_CREATED, CATEGORY_MODIFIED, ADMIN_LOGIN, PERMISSION_CHANGED
+  resourceType  String   // USER, SELLER, PRODUCT, CATEGORY, PERMISSION, AUTH, SYSTEM, INVOICE, BATCH
+  resourceId    String
+  previousValue String?
+  newValue      String?
+  ipAddress     String   @default("127.0.0.1")
+  status        String   @default("SUCCESS")
+  details       String
+  metadata      String?
 }
+
 
 model PasswordResetToken {
   id        String   @id @default(cuid())

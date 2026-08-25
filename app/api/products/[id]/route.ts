@@ -11,6 +11,7 @@ import { prisma } from "@/lib/db/prisma";
 import { requireAuth, requireRoles } from "@/lib/auth/rbac";
 import { updateProductSchema } from "@/lib/server/validators";
 import { successResponse, errorResponse } from "@/lib/server/api-response";
+import { recordProductFieldDiffs } from "@/lib/server/product-history";
 import { AppError } from "@/lib/server/errors";
 import { Logger } from "@/lib/server/logger";
 
@@ -45,9 +46,11 @@ async function resolveProduct(id: string) {
       images: true,
       documents: true,
       submissions: { orderBy: { timestamp: "desc" } },
+      history: { orderBy: { createdAt: "desc" } },
     },
   });
 }
+
 
 // ---------------------------------------------------------------------------
 // GET /api/products/[id]
@@ -172,10 +175,24 @@ export async function PATCH(
             verificationStatus: true,
           },
         },
+        images: true,
+        documents: true,
+        history: { orderBy: { createdAt: "desc" }, take: 20 },
       },
     });
 
-    log.info("Product updated", {
+    // Record granular field history
+    const reason = typeof body.reason === "string" ? body.reason : null;
+    await recordProductFieldDiffs({
+      productId: id,
+      oldProduct: product,
+      updatedData: updateData,
+      user: { id: user.id, name: user.name, role: user.role },
+      reason,
+      metadata: { ip: req.headers.get("x-forwarded-for") || "127.0.0.1" },
+    });
+
+    log.info("Product updated and change history recorded", {
       productId: id,
       by: user.id,
       newStatus: updated.verificationStatus,
@@ -185,6 +202,7 @@ export async function PATCH(
       successResponse(updated, { message: "Product updated successfully." }),
       { status: 200 }
     );
+
   } catch (err) {
     if (err instanceof AppError) {
       return NextResponse.json(errorResponse(err.message), { status: err.statusCode });

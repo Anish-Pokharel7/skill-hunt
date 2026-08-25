@@ -73,13 +73,43 @@ export async function PATCH(
       }
     }
 
+    const existingCategory = await prisma.category.findUnique({ where: { id } });
+    if (!existingCategory) {
+      throw new AppError("Category not found", 404);
+    }
+
     const updated = await prisma.category.update({
       where: { id },
       data: parsed.data,
     });
 
+    // Centralized Audit Log
+    try {
+      await prisma.systemAuditLog.create({
+        data: {
+          userId: auth.user.id,
+          userName: auth.user.name,
+          userRole: auth.user.role,
+          orgId: auth.user.orgId || "org_gov_01",
+          orgName: auth.user.organizationName || "Government Authority",
+          action: "CATEGORY_MODIFIED",
+          resourceType: "CATEGORY",
+          resourceId: id,
+          previousValue: JSON.stringify(existingCategory),
+          newValue: JSON.stringify(updated),
+          ipAddress: req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "127.0.0.1",
+          status: "SUCCESS",
+          details: `Category '${updated.name}' modified by ${auth.user.name}.`,
+          metadata: JSON.stringify({ changes: parsed.data }),
+        },
+      });
+    } catch {
+      // Non-blocking
+    }
+
     log.info("Category updated", { categoryId: id, by: auth.user.id });
     return NextResponse.json(successResponse(updated), { status: 200 });
+
   } catch (err) {
     if (err instanceof AppError) {
       return NextResponse.json(errorResponse(err.message), { status: err.statusCode });

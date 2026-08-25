@@ -33,8 +33,6 @@ export default function Navbar() {
   const activeRoleConfig = ROLE_DETAILS[role] || ROLE_DETAILS.CONSUMER;
 
   const navLinks = [
-    { href: "/admin", label: "Super Admin", icon: Building2, roles: ["SUPER_ADMIN"] },
-    { href: "/dashboard", label: "Admin Dashboard", icon: LayoutDashboard, roles: ["TAX_OFFICER", "AUDITOR", "SUPER_ADMIN"] },
     { href: "/manufacturer", label: "Manufacturer", icon: Factory, roles: ["MANUFACTURER", "SUPER_ADMIN"] },
     { href: "/importer", label: "Importer", icon: Ship, roles: ["IMPORTER", "SUPER_ADMIN"] },
     { href: "/business", label: "Business POS", icon: Store, roles: ["BUSINESS_EMPLOYEE", "SUPER_ADMIN"] },

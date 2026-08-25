@@ -131,6 +131,29 @@ export async function POST(req: NextRequest) {
       role: user.role,
     });
 
+    // Centralized Audit Log for administrative and portal logins
+    const isAdmin = ["SUPER_ADMIN", "ADMIN", "GOVERNMENT_OFFICIAL", "TAX_OFFICER", "AUDITOR"].includes(user.role);
+    try {
+      await prisma.systemAuditLog.create({
+        data: {
+          userId: user.id,
+          userName: user.name,
+          userRole: user.role,
+          orgId: user.orgId || "org_gov_01",
+          orgName: user.organizationName || "National Authority",
+          action: isAdmin ? "ADMIN_LOGIN" : "USER_LOGIN",
+          resourceType: "AUTH",
+          resourceId: user.id,
+          ipAddress: req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "127.0.0.1",
+          status: "SUCCESS",
+          details: `${isAdmin ? "Administrator" : "User"} login authenticated: '${user.name}' (${user.email}) as role '${user.role}'.`,
+          metadata: JSON.stringify({ email: user.email, role: user.role }),
+        },
+      });
+    } catch {
+      // Non-blocking
+    }
+
     const response = NextResponse.json(
       successResponse(
         {
@@ -142,6 +165,7 @@ export async function POST(req: NextRequest) {
       ),
       { status: 200 }
     );
+
 
     // Set secure HTTP-only cookies
     response.cookies.set({

@@ -390,7 +390,16 @@ async function main() {
       images: {
         create: [
           {
-            url: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&q=80&w=800",
+            storageReference: "seed/images/prod_oil_001/olive_oil_hero.jpg",
+            url: "/api/products/prod_oil_001/images/img_oil_001/serve",
+            originalFilename: "olive_oil_hero.jpg",
+            mimeType: "image/jpeg",
+            sizeBytes: 245760,
+            sha256: "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+            altText: "Apex Olive Oil Bottle Packaging",
+            isPrimary: true,
+            sortOrder: 0,
+            uploadedByUserId: "usr_seller_01",
             metadata: JSON.stringify({ alt: "Apex Olive Oil Bottle Packaging", resolution: "1920x1080", isHero: true }),
           },
         ],
@@ -399,15 +408,23 @@ async function main() {
         create: [
           {
             documentType: "LAB_CERTIFICATE",
-            filename: "lab_purity_test_dftqc_882.pdf",
-            storageReference: "secure://dftqc-nepal.gov/cert/882-EVOO-2026.pdf",
+            storageReference: "private/documents/prod_oil_001/lab_cert_882.pdf",
+            originalFilename: "lab_purity_test_dftqc_882.pdf",
+            mimeType: "application/pdf",
+            sizeBytes: 512000,
+            sha256: "b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3",
             status: "VERIFIED",
+            uploadedByUserId: "usr_seller_01",
           },
           {
             documentType: "TAX_CLEARANCE",
-            filename: "vat_clearance_ird_2080_q3.pdf",
-            storageReference: "secure://ird.gov.np/clearance/2080-Q3-302819475.pdf",
+            storageReference: "private/documents/prod_oil_001/vat_clearance.pdf",
+            originalFilename: "vat_clearance_ird_2080_q3.pdf",
+            mimeType: "application/pdf",
+            sizeBytes: 204800,
+            sha256: "c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4",
             status: "VERIFIED",
+            uploadedByUserId: "usr_seller_01",
           },
         ],
       },
@@ -441,7 +458,16 @@ async function main() {
       images: {
         create: [
           {
-            url: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800",
+            storageReference: "seed/images/prod_med_002/paracetamol_hero.jpg",
+            url: "/api/products/prod_med_002/images/img_med_001/serve",
+            originalFilename: "paracetamol_blister.jpg",
+            mimeType: "image/jpeg",
+            sizeBytes: 189440,
+            sha256: "d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5",
+            altText: "Paracetamol 500mg Blister Packaging",
+            isPrimary: true,
+            sortOrder: 0,
+            uploadedByUserId: "usr_seller_01",
             metadata: JSON.stringify({ alt: "Paracetamol 500mg Blister Packaging", resolution: "1200x800", isHero: true }),
           },
         ],
@@ -450,9 +476,13 @@ async function main() {
         create: [
           {
             documentType: "LAB_CERTIFICATE",
-            filename: "dda_approval_cert_98214.pdf",
-            storageReference: "secure://dda.gov.np/licenses/DDA-98214.pdf",
+            storageReference: "private/documents/prod_med_002/dda_approval_98214.pdf",
+            originalFilename: "dda_approval_cert_98214.pdf",
+            mimeType: "application/pdf",
+            sizeBytes: 358400,
+            sha256: "e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6",
             status: "VERIFIED",
+            uploadedByUserId: "usr_seller_01",
           },
         ],
       },
@@ -486,7 +516,16 @@ async function main() {
       images: {
         create: [
           {
-            url: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=800",
+            storageReference: "seed/images/prod_elec_003/smartphone_hero.jpg",
+            url: "/api/products/prod_elec_003/images/img_elec_001/serve",
+            originalFilename: "horizon_x9_pro_smartphone.jpg",
+            mimeType: "image/jpeg",
+            sizeBytes: 312320,
+            sha256: "f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1",
+            altText: "Horizon X9 Pro Smartphone",
+            isPrimary: true,
+            sortOrder: 0,
+            uploadedByUserId: "usr_seller_01",
             metadata: JSON.stringify({ alt: "Horizon X9 Pro Smartphone", resolution: "1920x1080", isHero: true }),
           },
         ],
@@ -495,9 +534,13 @@ async function main() {
         create: [
           {
             documentType: "BILL_OF_ENTRY",
-            filename: "customs_boe_birgunj_7892.pdf",
-            storageReference: "secure://customs.gov.np/boe/2026-7892.pdf",
+            storageReference: "private/documents/prod_elec_003/customs_boe_7892.pdf",
+            originalFilename: "customs_boe_birgunj_7892.pdf",
+            mimeType: "application/pdf",
+            sizeBytes: 430080,
+            sha256: "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
             status: "VERIFIED",
+            uploadedByUserId: "usr_seller_01",
           },
         ],
       },

@@ -1086,10 +1086,11 @@ export default function AdminPortalPage() {
                       </td>
                       <td className="py-2.5 px-3 font-semibold text-[#181c1a]">{log.userName}</td>
                       <td className="py-2.5 px-3">
-                        <span className={`px-1.5 py-0.2 rounded text-[10px] font-mono font-semibold ${ROLE_BADGE_COLORS[log.userRole] || "bg-[#f3f1ec] text-[#333d37] border border-[#e5e2da]"}`}>
+                        <span className={`px-1.5 py-0.2 rounded text-[10px] font-mono font-semibold ${ROLE_BADGE_COLORS[log.userRole as UserRole] || "bg-[#f3f1ec] text-[#333d37] border border-[#e5e2da]"}`}>
                           {log.userRole}
                         </span>
                       </td>
+
                       <td className="py-2.5 px-3 text-[11px] text-[#65736a]">{log.orgName}</td>
                       <td className="py-2.5 px-3 font-mono text-[10px]">{log.action}</td>
                       <td className="py-2.5 px-3 font-mono text-[10px]">{log.resourceType}: {log.resourceId}</td>

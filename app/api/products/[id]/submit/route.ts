@@ -258,6 +258,8 @@ export async function POST(
     );
   } catch (err) {
     log.error("POST /api/products/[id]/submit failed", err);
-    return NextResponse.json(errorResponse("Failed to submit product for review"), { status: 500 });
+    const message = err instanceof Error ? err.message : "Failed to submit product for review";
+    return NextResponse.json(errorResponse(message), { status: 500 });
   }
 }
+

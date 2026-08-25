@@ -62,11 +62,36 @@ export async function POST(
       },
     });
 
+    // Centralized Audit Log
+    try {
+      await prisma.systemAuditLog.create({
+        data: {
+          userId: user.id,
+          userName: user.name,
+          userRole: user.role,
+          orgId: user.orgId || "org_gov_01",
+          orgName: user.organizationName || "Government Authority",
+          action: "ADMIN_SELLER_CHANGED",
+          resourceType: "SELLER",
+          resourceId: id,
+          previousValue: JSON.stringify({ verificationStatus: seller.verificationStatus }),
+          newValue: JSON.stringify({ verificationStatus: status }),
+          ipAddress: req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "127.0.0.1",
+          status: "SUCCESS",
+          details: `Admin changed seller '${seller.businessName}' verification status: ${seller.verificationStatus} -> ${status}. Notes: ${verificationNotes || "None"}`,
+          metadata: JSON.stringify({ verificationNotes, businessName: seller.businessName }),
+        },
+      });
+    } catch {
+      // Non-blocking
+    }
+
     log.info("Seller verification updated", {
       sellerId: id,
       newStatus: status,
       officerId: user.id,
     });
+
 
     return NextResponse.json(
       successResponse(updated, {

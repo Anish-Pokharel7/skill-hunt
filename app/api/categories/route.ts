@@ -82,12 +82,36 @@ export async function POST(req: NextRequest) {
       data: { name, slug, description, isActive },
     });
 
+    // Centralized Audit Log
+    try {
+      await prisma.systemAuditLog.create({
+        data: {
+          userId: user.id,
+          userName: user.name,
+          userRole: user.role,
+          orgId: user.orgId || "org_gov_01",
+          orgName: user.organizationName || "Government Authority",
+          action: "CATEGORY_CREATED",
+          resourceType: "CATEGORY",
+          resourceId: category.id,
+          newValue: JSON.stringify({ name, slug, description, isActive }),
+          ipAddress: req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "127.0.0.1",
+          status: "SUCCESS",
+          details: `Category '${category.name}' (${category.slug}) created by ${user.name}.`,
+          metadata: JSON.stringify({ slug, isActive }),
+        },
+      });
+    } catch {
+      // Non-blocking
+    }
+
     log.info("Category created", { categoryId: category.id, by: user.id });
 
     return NextResponse.json(
       successResponse(category, { message: "Category created successfully" }),
       { status: 201 }
     );
+
   } catch (err) {
     if (err instanceof AppError) {
       return NextResponse.json(errorResponse(err.message), { status: err.statusCode });

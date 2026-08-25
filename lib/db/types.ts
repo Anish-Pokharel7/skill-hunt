@@ -93,7 +93,7 @@ export interface User {
   updatedAt?: string;
 }
 
-export type VerificationStatus = "PENDING" | "VERIFIED" | "REJECTED" | "FLAGGED" | "SUSPENDED";
+export type SellerVerificationStatus = "PENDING" | "VERIFIED" | "REJECTED" | "FLAGGED" | "SUSPENDED";
 
 export interface Seller {
   id: string;
@@ -104,11 +104,12 @@ export interface Seller {
   contactEmail: string;
   contactPhone?: string;
   address: string;
-  verificationStatus: VerificationStatus;
+  verificationStatus: SellerVerificationStatus;
   verificationNotes?: string;
   createdAt: string;
   updatedAt: string;
 }
+
 
 export interface Category {
   id: string;
@@ -149,6 +150,7 @@ export interface ProductDocument {
 }
 
 export type VerificationStatus =
+  | "DRAFT"
   | "PENDING"
   | "SUBMITTED"
   | "UNDER_REVIEW"
@@ -158,6 +160,30 @@ export type VerificationStatus =
   | "FLAGGED"
   | "CHANGES_REQUESTED"
   | "RESUBMITTED";
+
+
+export type ProductHistoryChangeType =
+  | "PRICE_CHANGE"
+  | "SELLER_CHANGE"
+  | "STATUS_CHANGE"
+  | "ADMIN_OVERRIDE"
+  | "FIELD_UPDATE"
+  | "SPEC_UPDATE";
+
+export interface ProductHistory {
+  id: string;
+  productId: string;
+  changeType: ProductHistoryChangeType | string;
+  fieldName: string;
+  oldValue?: string | null;
+  newValue?: string | null;
+  changedByUserId: string;
+  changedByName: string;
+  changedByRole: string;
+  reason?: string | null;
+  metadata?: string | null;
+  createdAt: string;
+}
 
 export interface Product {
   id: string;
@@ -197,6 +223,7 @@ export interface Product {
   images?: ProductImage[];
   documents?: ProductDocument[];
   submissions?: ProductSubmissionHistory[];
+  history?: ProductHistory[];
 }
 
 export interface ProductSubmissionHistory {
@@ -441,18 +468,63 @@ export interface FraudAlert {
   updatedAt: string;
 }
 
+export type AuditAction =
+  | "USER_CREATED"
+  | "USER_UPDATED"
+  | "USER_STATUS_CHANGED"
+  | "SELLER_REGISTERED"
+  | "SELLER_VERIFIED"
+  | "PRODUCT_CREATED"
+  | "PRODUCT_EDITED"
+  | "PRODUCT_SUBMITTED"
+  | "PRODUCT_REVIEWED"
+  | "PRODUCT_APPROVED"
+  | "PRODUCT_REJECTED"
+  | "CHANGES_REQUESTED"
+  | "PRODUCT_RESUBMITTED"
+  | "ADMIN_PRODUCT_CHANGED"
+  | "ADMIN_SELLER_CHANGED"
+  | "CATEGORY_CREATED"
+  | "CATEGORY_MODIFIED"
+  | "ADMIN_LOGIN"
+  | "USER_LOGIN"
+  | "PERMISSION_CHANGED"
+  | "BATCH_MINTED"
+  | "INVOICE_ISSUED"
+  | "CUSTOMS_CLEARED"
+  | "TAX_RULE_UPDATED";
+
+export type AuditResourceType =
+  | "USER"
+  | "SELLER"
+  | "PRODUCT"
+  | "CATEGORY"
+  | "PERMISSION"
+  | "AUTH"
+  | "SYSTEM"
+  | "BATCH"
+  | "PASSPORT"
+  | "INVOICE"
+  | "TAX_RULE"
+  | "CUSTOMS"
+  | "FRAUD_ALERT";
+
 export interface SystemAuditLog {
   id: string;
   timestamp: string;
   userId: string;
   userName: string;
-  userRole: UserRole;
+  userRole: UserRole | string;
   orgId: string;
   orgName: string;
-  action: string;
-  resourceType: "BATCH" | "PASSPORT" | "INVOICE" | "TAX_RULE" | "CUSTOMS" | "USER" | "FRAUD_ALERT" | "PRODUCT" | "SELLER";
+  action: AuditAction | string;
+  resourceType: AuditResourceType | string;
   resourceId: string;
+  previousValue?: string | null;
+  newValue?: string | null;
   ipAddress: string;
-  status: "SUCCESS" | "BLOCKED_UNAUTHORIZED" | "BLOCKED_IDOR" | "FLAGGED_ANOMALY";
+  status: "SUCCESS" | "FAILURE" | "BLOCKED_UNAUTHORIZED" | "BLOCKED_IDOR" | "FLAGGED_ANOMALY" | string;
   details: string;
+  metadata?: string | null;
 }
+

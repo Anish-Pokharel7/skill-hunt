@@ -66,12 +66,37 @@ export async function POST(
       });
     }
 
+    // Centralized Audit Log
+    try {
+      await prisma.systemAuditLog.create({
+        data: {
+          userId: adminUser.id,
+          userName: adminUser.name,
+          userRole: adminUser.role,
+          orgId: adminUser.orgId || "org_gov_01",
+          orgName: adminUser.organizationName || "Government Authority",
+          action: "USER_STATUS_CHANGED",
+          resourceType: "USER",
+          resourceId: id,
+          previousValue: JSON.stringify({ status: targetUser.status }),
+          newValue: JSON.stringify({ status }),
+          ipAddress: req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "127.0.0.1",
+          status: "SUCCESS",
+          details: `User '${targetUser.name}' status changed: ${targetUser.status} -> ${status}. Reason: ${reason}`,
+          metadata: JSON.stringify({ reason, targetEmail: targetUser.email }),
+        },
+      });
+    } catch {
+      // Non-blocking
+    }
+
     log.info("User account status updated", {
       targetUserId: id,
       newStatus: status,
       reason,
       changedBy: adminUser.id,
     });
+
 
     return NextResponse.json(
       successResponse(

@@ -39,9 +39,10 @@ export async function POST(
 
     const alreadyUnderReviewBySelf = product.verificationStatus === "UNDER_REVIEW" && product.reviewerId === user.id;
 
-    if (!["SUBMITTED"].includes(product.verificationStatus) && !alreadyUnderReviewBySelf) {
-      throw new AppError(`Cannot start review from status "${product.verificationStatus}". Product must be SUBMITTED.`, 400);
+    if (!["SUBMITTED", "RESUBMITTED"].includes(product.verificationStatus) && !alreadyUnderReviewBySelf) {
+      throw new AppError(`Cannot start review from status "${product.verificationStatus}". Product must be SUBMITTED or RESUBMITTED.`, 400);
     }
+
 
     if (product.verificationStatus === "UNDER_REVIEW" && product.reviewerId && product.reviewerId !== user.id) {
       throw new AppError(`This product is already under review by another reviewer (${product.reviewerName ?? product.reviewerId}).`, 409);
