@@ -277,11 +277,16 @@ export const updateProductSchema = createProductSchema.partial().refine(
 );
 
 export const verifyProductSchema = z.object({
-  status: z.enum(["VERIFIED", "REJECTED", "FLAGGED"]),
+  status: z.enum(["VERIFIED", "REJECTED", "FLAGGED", "UNDER_REVIEW", "CHANGES_REQUESTED"]),
   verificationNotes: z
     .string()
     .min(10, "Verification notes must be at least 10 characters"),
   rejectionReason: z.string().optional(),
+});
+
+export const submitProductSchema = z.object({
+  submissionNotes: z.string().max(1000).optional(),
+  declarationConfirmed: z.boolean().optional(),
 });
 
 export const uploadProductDocumentSchema = z.object({
@@ -296,4 +301,63 @@ export const uploadProductDocumentSchema = z.object({
   ]),
   filename: z.string().min(1, "Filename is required"),
   storageReference: z.string().min(1, "Storage reference (URL/path) is required"),
+});
+
+// ── Phase 7: Government Verification Schemas ──────────────────────────────────
+
+/** POST /api/products/:id/review — Gov Official takes ownership */
+export const reviewProductSchema = z.object({
+  notes: z
+    .string()
+    .min(10, "Review notes must be at least 10 characters")
+    .max(2000)
+    .optional(),
+});
+
+/** POST /api/products/:id/approve — Gov Official approves the product */
+export const approveProductSchema = z.object({
+  approvalNotes: z
+    .string()
+    .min(10, "Approval notes must be at least 10 characters")
+    .max(2000),
+  conditions: z
+    .string()
+    .max(1000, "Conditions must not exceed 1000 characters")
+    .optional(),
+});
+
+/** POST /api/products/:id/reject — Gov Official permanently rejects the product */
+export const rejectProductSchema = z.object({
+  rejectionReason: z
+    .string()
+    .min(20, "Rejection reason must be at least 20 characters")
+    .max(2000),
+  verificationNotes: z
+    .string()
+    .min(10, "Verification notes must be at least 10 characters")
+    .max(2000),
+});
+
+/** POST /api/products/:id/request-changes — Gov Official requests changes from the seller */
+export const requestChangesSchema = z.object({
+  changesRequired: z
+    .string()
+    .min(20, "Changes description must be at least 20 characters")
+    .max(2000),
+  deadline: z
+    .string()
+    .datetime({ message: "Deadline must be a valid ISO 8601 date-time" })
+    .optional(),
+});
+
+/** POST /api/products/:id/resubmit — Seller re-enters review queue after changes */
+export const resubmitProductSchema = z.object({
+  resubmissionNotes: z
+    .string()
+    .min(10, "Resubmission notes must be at least 10 characters")
+    .max(2000),
+  changesDescription: z
+    .string()
+    .max(2000, "Changes description must not exceed 2000 characters")
+    .optional(),
 });

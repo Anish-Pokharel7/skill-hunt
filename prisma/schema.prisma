@@ -100,15 +100,25 @@ model Product {
   actualCost          Float
   consumerPrice       Float             // Statutory Maximum Retail Price (MRP)
   currency            String            @default("NPR")
-  verificationStatus  String            @default("PENDING") // PENDING, VERIFIED, REJECTED, FLAGGED
-  verificationNotes   String?
-  rejectionReason     String?
-  verifiedAt          DateTime?
-  createdAt           DateTime          @default(now())
-  updatedAt           DateTime          @default(now()) @updatedAt
+  verificationStatus     String            @default("PENDING") // DRAFT, PENDING, SUBMITTED, UNDER_REVIEW, VERIFIED, REJECTED, CHANGES_REQUESTED
+  verificationNotes      String?
+  rejectionReason        String?
+  verifiedAt             DateTime?
+  approvedAt             DateTime?
+  submittedAt            DateTime?
+  submissionNotes        String?
+  reviewerId             String?           // Government reviewer user ID
+  reviewerName           String?           // Denormalized for fast display
+  reviewerRole           String?           // Role at time of review assignment
+  reviewStartedAt        DateTime?         // When review was taken / assigned
+  changesRequestedAt     DateTime?         // Last time changes were requested
+  changesRequestedNotes  String?           // Current outstanding change request (visible to seller)
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @default(now()) @updatedAt
 
   images              ProductImage[]
   documents           ProductDocument[]
+  submissions         ProductSubmissionHistory[]
 }
 
 model ProductImage {
@@ -130,6 +140,23 @@ model ProductDocument {
   status           String   @default("PENDING_REVIEW") // PENDING_REVIEW, VERIFIED, REJECTED
   createdAt        DateTime @default(now())
   updatedAt        DateTime @default(now()) @updatedAt
+}
+
+model ProductSubmissionHistory {
+  id                String   @id @default(cuid())
+  productId         String
+  product           Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  fromStatus        String
+  toStatus          String
+  action            String   @default("STATUS_CHANGE") // SUBMITTED, REVIEW_STARTED, APPROVED, REJECTED, CHANGES_REQUESTED, RESUBMITTED
+  submittedByUserId String
+  submittedByName   String
+  submittedByRole   String
+  reviewerId        String?  // Set when action is a reviewer action
+  submissionNotes   String?
+  documentsCount    Int      @default(0)
+  imagesCount       Int      @default(0)
+  timestamp         DateTime @default(now())
 }
 
 model BatchItem {

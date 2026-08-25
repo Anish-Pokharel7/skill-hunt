@@ -80,6 +80,22 @@ export async function POST(
       },
     });
 
+    // Record Status Transition History
+    await prisma.productSubmissionHistory.create({
+      data: {
+        productId: id,
+        fromStatus: product.verificationStatus,
+        toStatus: status,
+        submittedByUserId: user.id,
+        submittedByName: user.name,
+        submittedByRole: user.role,
+        submissionNotes: verificationNotes,
+        documentsCount: updated.documents?.length || 0,
+        imagesCount: updated.images?.length || 0,
+        timestamp: new Date(),
+      },
+    });
+
     log.info("Product verification status updated", {
       productId: id,
       newStatus: status,

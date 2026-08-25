@@ -605,6 +605,116 @@ async function runTests() {
     `Status: ${resP5Delete.status}`
   );
 
+  // TEST 13: Phase 6 Product Submission System & History Lifecycle
+  console.log("\n--- 13. Testing Phase 6 Product Submission System & Audit Trail ---");
+
+  // 13a. Create a fresh draft product
+  const resP6Create = await fetch(`${BASE_URL}/api/products`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sellerToken}`,
+    },
+    body: JSON.stringify({
+      name: "Organic Himalayan Shilajit Resin 50g",
+      description: "Purified Himalayan gold-grade shilajit resin with 75% fulvic acid.",
+      brand: "Himalayan Depot",
+      model: "SHILAJIT-50G",
+      categoryId: dataCategories.data[0].id,
+      actualCost: 600,
+      consumerPrice: 1450,
+      vatRate: 0.13,
+      currency: "NPR",
+    }),
+  });
+  const dataP6Create = await resP6Create.json();
+  const p6Product = dataP6Create.data;
+  assert(
+    resP6Create.status === 201 && p6Product?.id,
+    "Created draft product for submission lifecycle tests",
+    JSON.stringify(dataP6Create)
+  );
+
+  // 13b. Required document verification (Submission without doc rejected)
+  const resP6NoDoc = await fetch(`${BASE_URL}/api/products/${p6Product.id}/submit`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sellerToken}`,
+    },
+  });
+  const dataP6NoDoc = await resP6NoDoc.json();
+  assert(
+    resP6NoDoc.status === 422 && dataP6NoDoc.code === "DOCUMENTS_REQUIRED",
+    "Product submission rejected when no compliance documents are attached (DOCUMENTS_REQUIRED)",
+    JSON.stringify(dataP6NoDoc)
+  );
+
+  // 13c. Attach mandatory compliance document
+  const resP6Doc = await fetch(`${BASE_URL}/api/products/${p6Product.id}/documents`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sellerToken}`,
+    },
+    body: JSON.stringify({
+      documentType: "LAB_CERTIFICATE",
+      filename: "Shilajit_Purity_Lab_Report_2026.pdf",
+      storageReference: "https://documents.veriprice.gov.np/cert/shilajit_2026.pdf",
+    }),
+  });
+  assert(resP6Doc.status === 201, "Attached verified lab compliance certificate to product");
+
+  // 13d. Submit product for statutory review (DRAFT -> SUBMITTED)
+  const resP6Submit = await fetch(`${BASE_URL}/api/products/${p6Product.id}/submit`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sellerToken}`,
+    },
+    body: JSON.stringify({
+      submissionNotes: "Formally submitted for National Health & Tax Registry verification.",
+    }),
+  });
+  const dataP6Submit = await resP6Submit.json();
+  assert(
+    resP6Submit.status === 200 &&
+      dataP6Submit.data?.product?.verificationStatus === "SUBMITTED" &&
+      dataP6Submit.data?.product?.submittedAt,
+    `Product transitioned to SUBMITTED state with timestamp ${dataP6Submit.data?.product?.submittedAt}`,
+    JSON.stringify(dataP6Submit)
+  );
+
+  // 13e. Check duplicate submission blocking
+  const resP6Dup = await fetch(`${BASE_URL}/api/products/${p6Product.id}/submit`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sellerToken}`,
+    },
+  });
+  assert(
+    resP6Dup.status === 409,
+    "Duplicate submission of already SUBMITTED product rejected with HTTP 409 Conflict"
+  );
+
+  // 13f. Review transition history
+  const resP6Hist = await fetch(`${BASE_URL}/api/products/${p6Product.id}/history`, {
+    headers: { Authorization: `Bearer ${sellerToken}` },
+  });
+  const dataP6Hist = await resP6Hist.json();
+  assert(
+    resP6Hist.status === 200 && dataP6Hist.data.some((h) => h.toStatus === "SUBMITTED"),
+    "Retrieved immutable product submission history audit log",
+    JSON.stringify(dataP6Hist)
+  );
+
+  // Clean up
+  await fetch(`${BASE_URL}/api/products/${p6Product.id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${adminToken}` },
+  });
+
   console.log("\n==================================================");
   console.log(`TEST SUMMARY: ${passed} PASSED, ${failed} FAILED`);
   console.log("==================================================");

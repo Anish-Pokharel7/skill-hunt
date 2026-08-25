@@ -148,6 +148,17 @@ export interface ProductDocument {
   updatedAt: string;
 }
 
+export type VerificationStatus =
+  | "PENDING"
+  | "SUBMITTED"
+  | "UNDER_REVIEW"
+  | "VERIFIED"
+  | "APPROVED"
+  | "REJECTED"
+  | "FLAGGED"
+  | "CHANGES_REQUESTED"
+  | "RESUBMITTED";
+
 export interface Product {
   id: string;
   name: string;
@@ -159,23 +170,49 @@ export interface Product {
   sellerId?: string;
   seller?: Seller;
   manufacturerName?: string;
-  countryOfOrigin: string; // e.g. "Nepal", "India", "Germany"
+  countryOfOrigin: string;
   originType: "IMPORTED" | "DOMESTIC_MANUFACTURED";
   isNepalManufactured: boolean;
   isVatApplicable: boolean;
-  vatRate: number; // 0.13
+  vatRate: number;
   vatPaid: number;
   actualCost: number;
-  consumerPrice: number; // Statutory MRP
-  currency: string; // "NPR", "USD"
+  consumerPrice: number;
+  currency: string;
   verificationStatus: VerificationStatus;
   verificationNotes?: string;
   rejectionReason?: string;
   verifiedAt?: string;
+  approvedAt?: string;
+  submittedAt?: string;
+  submissionNotes?: string;
+  reviewerId?: string;
+  reviewerName?: string;
+  reviewerRole?: string;
+  reviewStartedAt?: string;
+  changesRequestedAt?: string;
+  changesRequestedNotes?: string;
   createdAt: string;
   updatedAt: string;
   images?: ProductImage[];
   documents?: ProductDocument[];
+  submissions?: ProductSubmissionHistory[];
+}
+
+export interface ProductSubmissionHistory {
+  id: string;
+  productId: string;
+  fromStatus: string;
+  toStatus: string;
+  action: string; // SUBMITTED, REVIEW_STARTED, APPROVED, REJECTED, CHANGES_REQUESTED, RESUBMITTED
+  submittedByUserId: string;
+  submittedByName: string;
+  submittedByRole: string;
+  reviewerId?: string;
+  submissionNotes?: string;
+  documentsCount: number;
+  imagesCount: number;
+  timestamp: string;
 }
 
 export interface AuthSession {

@@ -44,6 +44,7 @@ async function resolveProduct(id: string) {
       },
       images: true,
       documents: true,
+      submissions: { orderBy: { timestamp: "desc" } },
     },
   });
 }
