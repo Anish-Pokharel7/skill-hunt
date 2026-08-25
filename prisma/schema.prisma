@@ -1,4 +1,5 @@
 // Prisma Schema for VERIPRICE: National Supply Chain & Tax Ledger
+// Phase 2: Core Database Models (User, Seller, Category, Product, ProductImage, ProductDocument, and National Ledger Entities)
 
 generator client {
   provider = "prisma-client-js"
@@ -20,6 +21,7 @@ model Organization {
   address       String
   contactEmail  String
   createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
 
   users         User[]
   batches       BatchItem[]
@@ -30,20 +32,104 @@ model Organization {
 }
 
 model User {
-  id               String       @id @default(cuid())
-  email            String       @unique
+  id               String        @id @default(cuid())
   name             String
-  role             String       // SUPER_ADMIN, TAX_OFFICER, MANUFACTURER, IMPORTER, BUSINESS_EMPLOYEE, AUDITOR, CONSUMER
+  email            String        @unique
   passwordHash     String?
-  orgId            String
-  organization     Organization @relation(fields: [orgId], references: [id])
+  role             String        // SUPER_ADMIN, TAX_OFFICER, MANUFACTURER, IMPORTER, BUSINESS_EMPLOYEE, AUDITOR, CONSUMER
+  status           String        @default("ACTIVE") // ACTIVE, SUSPENDED, PENDING_VERIFICATION
+  orgId            String?
+  organization     Organization? @relation(fields: [orgId], references: [id])
   employeeCode     String?
   designation      String?
-  status           String       @default("ACTIVE")
-  createdAt        DateTime     @default(now())
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @default(now()) @updatedAt
 
+  seller           Seller?
   issuedInvoices   Invoice[]
   assignedAlerts   FraudAlert[]
+}
+
+model Seller {
+  id                 String    @id @default(cuid())
+  userId             String    @unique
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessName       String
+  registrationNumber String    @unique
+  panVatNumber       String    @unique
+  contactEmail       String
+  contactPhone       String?
+  address            String
+  verificationStatus String    @default("PENDING") // PENDING, VERIFIED, REJECTED, SUSPENDED
+  verificationNotes  String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @default(now()) @updatedAt
+
+  products           Product[]
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+
+  products    Product[]
+}
+
+model Product {
+  id                  String            @id @default(cuid())
+  name                String
+  description         String?
+  brand               String?
+  model               String?
+  categoryId          String
+  category            Category          @relation(fields: [categoryId], references: [id])
+  sellerId            String?
+  seller              Seller?           @relation(fields: [sellerId], references: [id])
+  manufacturerName    String?
+  countryOfOrigin     String            @default("Nepal")
+  originType          String            @default("DOMESTIC_MANUFACTURED") // IMPORTED, DOMESTIC_MANUFACTURED
+  isNepalManufactured Boolean           @default(true)
+  isVatApplicable     Boolean           @default(true)
+  vatRate             Float             @default(0.13)
+  vatPaid             Float             @default(0.0)
+  actualCost          Float
+  consumerPrice       Float             // Statutory Maximum Retail Price (MRP)
+  currency            String            @default("NPR")
+  verificationStatus  String            @default("PENDING") // PENDING, VERIFIED, REJECTED, FLAGGED
+  verificationNotes   String?
+  rejectionReason     String?
+  verifiedAt          DateTime?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @default(now()) @updatedAt
+
+  images              ProductImage[]
+  documents           ProductDocument[]
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  metadata  String?  // JSON metadata (alt, dimensions, size)
+  createdAt DateTime @default(now())
+}
+
+model ProductDocument {
+  id               String   @id @default(cuid())
+  productId        String
+  product          Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  documentType     String   // LAB_CERTIFICATE, BILL_OF_ENTRY, TAX_CLEARANCE, INVOICE_COPY, MANUFACTURER_AUTHORIZATION, OTHER
+  storageReference String
+  filename         String
+  status           String   @default("PENDING_REVIEW") // PENDING_REVIEW, VERIFIED, REJECTED
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now()) @updatedAt
 }
 
 model BatchItem {
@@ -70,6 +156,7 @@ model BatchItem {
   provenanceHash    String
   serialPrefix      String
   createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @default(now()) @updatedAt
 
   passports         ProductPassport[]
 }
@@ -95,6 +182,7 @@ model ProductPassport {
   digitalSignature    String
   qrPayload           String
   createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @default(now()) @updatedAt
 
   journey             PassportJourneyEvent[]
 }
@@ -134,6 +222,7 @@ model CustomsDeclaration {
   clearanceStatus      String       @default("PENDING_DUTY")
   officerNotes         String?
   createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @default(now()) @updatedAt
 }
 
 model BusinessInventoryItem {
@@ -153,6 +242,8 @@ model BusinessInventoryItem {
   isPriceCompliant Boolean      @default(true)
   lastRestockedAt  DateTime     @default(now())
   supplierOrgName  String
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @default(now()) @updatedAt
 }
 
 model Invoice {
@@ -184,6 +275,7 @@ model Invoice {
   fiscalStampHash        String
   isPriceGougingDetected Boolean           @default(false)
   createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @default(now()) @updatedAt
 
   items                  InvoiceLineItem[]
 }

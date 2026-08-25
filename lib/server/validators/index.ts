@@ -146,3 +146,101 @@ export const receiveInventorySchema = z.object({
   unitCost: z.number().positive().optional(),
   retailPrice: z.number().positive("Retail selling price must be positive"),
 });
+
+// ==========================================
+// Phase 2 — Category Management Schemas
+// ==========================================
+export const createCategorySchema = z.object({
+  name: z.string().min(2, "Category name must be at least 2 characters").max(120),
+  slug: z
+    .string()
+    .min(2)
+    .max(120)
+    .regex(/^[a-z0-9-]+$/, "Slug must be lowercase letters, numbers, and hyphens only"),
+  description: z.string().max(500).optional(),
+  isActive: z.boolean().default(true),
+});
+
+export const updateCategorySchema = createCategorySchema.partial().refine(
+  (data) => Object.keys(data).length > 0,
+  { message: "At least one field must be provided for update" }
+);
+
+// ==========================================
+// Phase 2 — Seller Registration Schemas
+// ==========================================
+export const createSellerSchema = z.object({
+  businessName: z
+    .string()
+    .min(2, "Business name must be at least 2 characters")
+    .max(200),
+  registrationNumber: z
+    .string()
+    .min(5, "Business registration number is required"),
+  panVatNumber: z
+    .string()
+    .min(9, "PAN/VAT number must be at least 9 characters")
+    .max(20),
+  contactEmail: z.string().email("Valid contact email is required"),
+  contactPhone: z.string().optional(),
+  address: z.string().min(5, "Full business address is required").max(300),
+});
+
+export const updateSellerSchema = createSellerSchema.partial().refine(
+  (data) => Object.keys(data).length > 0,
+  { message: "At least one field must be provided for update" }
+);
+
+export const verifySellerSchema = z.object({
+  status: z.enum(["VERIFIED", "REJECTED", "SUSPENDED"]),
+  verificationNotes: z
+    .string()
+    .min(10, "Verification notes must be at least 10 characters"),
+});
+
+// ==========================================
+// Phase 2 — Product Management Schemas
+// ==========================================
+export const createProductSchema = z.object({
+  name: z.string().min(2, "Product name is required").max(300),
+  description: z.string().max(2000).optional(),
+  brand: z.string().max(100).optional(),
+  model: z.string().max(100).optional(),
+  categoryId: z.string().min(1, "Category is required"),
+  manufacturerName: z.string().max(200).optional(),
+  countryOfOrigin: z.string().default("Nepal"),
+  originType: z.enum(["IMPORTED", "DOMESTIC_MANUFACTURED"]).default("DOMESTIC_MANUFACTURED"),
+  isNepalManufactured: z.boolean().default(true),
+  isVatApplicable: z.boolean().default(true),
+  vatRate: z.number().min(0).max(1).default(0.13),
+  actualCost: z.number().positive("Actual cost must be positive"),
+  consumerPrice: z.number().positive("Consumer/MRP price must be positive"),
+  currency: z.string().default("NPR"),
+});
+
+export const updateProductSchema = createProductSchema.partial().refine(
+  (data) => Object.keys(data).length > 0,
+  { message: "At least one field must be provided for update" }
+);
+
+export const verifyProductSchema = z.object({
+  status: z.enum(["VERIFIED", "REJECTED", "FLAGGED"]),
+  verificationNotes: z
+    .string()
+    .min(10, "Verification notes must be at least 10 characters"),
+  rejectionReason: z.string().optional(),
+});
+
+export const uploadProductDocumentSchema = z.object({
+  productId: z.string().min(1, "Product ID is required"),
+  documentType: z.enum([
+    "LAB_CERTIFICATE",
+    "BILL_OF_ENTRY",
+    "TAX_CLEARANCE",
+    "INVOICE_COPY",
+    "MANUFACTURER_AUTHORIZATION",
+    "OTHER",
+  ]),
+  filename: z.string().min(1, "Filename is required"),
+  storageReference: z.string().min(1, "Storage reference (URL/path) is required"),
+});

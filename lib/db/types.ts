@@ -27,6 +27,7 @@ export interface Organization {
   address: string;
   contactEmail: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface User {
@@ -34,14 +35,101 @@ export interface User {
   email: string;
   name: string;
   role: UserRole;
-  orgId: string;
-  organizationName: string;
+  passwordHash?: string;
+  orgId: string; // All authenticated system users belong to an organization
+  organizationName: string; // Resolved from session or org lookup
   phone?: string;
   avatarUrl?: string;
   employeeCode?: string;
   designation?: string;
   status: "ACTIVE" | "SUSPENDED" | "PENDING_VERIFICATION";
   createdAt: string;
+  updatedAt?: string;
+}
+
+export type VerificationStatus = "PENDING" | "VERIFIED" | "REJECTED" | "FLAGGED" | "SUSPENDED";
+
+export interface Seller {
+  id: string;
+  userId: string;
+  businessName: string;
+  registrationNumber: string;
+  panVatNumber: string;
+  contactEmail: string;
+  contactPhone?: string;
+  address: string;
+  verificationStatus: VerificationStatus;
+  verificationNotes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProductImage {
+  id: string;
+  productId: string;
+  url: string;
+  storageKey?: string;
+  metadata?: string; // JSON metadata
+  createdAt: string;
+}
+
+export type DocumentType =
+  | "LAB_CERTIFICATE"
+  | "BILL_OF_ENTRY"
+  | "TAX_CLEARANCE"
+  | "INVOICE_COPY"
+  | "MANUFACTURER_AUTHORIZATION"
+  | "OTHER";
+
+export interface ProductDocument {
+  id: string;
+  productId: string;
+  documentType: DocumentType;
+  storageReference: string;
+  filename: string;
+  status: "PENDING_REVIEW" | "VERIFIED" | "REJECTED";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  description?: string;
+  brand?: string;
+  model?: string;
+  categoryId: string;
+  category?: Category;
+  sellerId?: string;
+  seller?: Seller;
+  manufacturerName?: string;
+  countryOfOrigin: string; // e.g. "Nepal", "India", "Germany"
+  originType: "IMPORTED" | "DOMESTIC_MANUFACTURED";
+  isNepalManufactured: boolean;
+  isVatApplicable: boolean;
+  vatRate: number; // 0.13
+  vatPaid: number;
+  actualCost: number;
+  consumerPrice: number; // Statutory MRP
+  currency: string; // "NPR", "USD"
+  verificationStatus: VerificationStatus;
+  verificationNotes?: string;
+  rejectionReason?: string;
+  verifiedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+  images?: ProductImage[];
+  documents?: ProductDocument[];
 }
 
 export interface AuthSession {
@@ -76,6 +164,7 @@ export interface BatchItem {
   provenanceHash: string;
   serialPrefix: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface ProductPassport {
@@ -101,6 +190,7 @@ export interface ProductPassport {
   qrPayload: string; // Encrypted / signed payload URL
   journey: PassportJourneyEvent[];
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface PassportJourneyEvent {
@@ -139,6 +229,7 @@ export interface CustomsDeclaration {
   clearedByTaxOfficerId?: string;
   clearanceTimestamp?: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface BusinessInventoryItem {
@@ -157,6 +248,8 @@ export interface BusinessInventoryItem {
   isPriceCompliant: boolean;
   lastRestockedAt: string;
   supplierOrgName: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface InvoiceLineItem {
@@ -205,6 +298,7 @@ export interface Invoice {
   fiscalStampHash: string;
   isPriceGougingDetected: boolean;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface TaxRule {
@@ -273,7 +367,7 @@ export interface SystemAuditLog {
   orgId: string;
   orgName: string;
   action: string;
-  resourceType: "BATCH" | "PASSPORT" | "INVOICE" | "TAX_RULE" | "CUSTOMS" | "USER" | "FRAUD_ALERT";
+  resourceType: "BATCH" | "PASSPORT" | "INVOICE" | "TAX_RULE" | "CUSTOMS" | "USER" | "FRAUD_ALERT" | "PRODUCT" | "SELLER";
   resourceId: string;
   ipAddress: string;
   status: "SUCCESS" | "BLOCKED_UNAUTHORIZED" | "BLOCKED_IDOR" | "FLAGGED_ANOMALY";
