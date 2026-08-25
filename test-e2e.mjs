@@ -19,8 +19,18 @@ async function runTests() {
     }
   }
 
+  // TEST 0: Core API Health & DB Connectivity Check
+  console.log("--- 0. Testing Core API & Database Health ---");
+  const resHealth = await fetch(`${BASE_URL}/api/health`);
+  const dataHealth = await resHealth.json();
+  assert(
+    resHealth.status === 200 && dataHealth.status === "HEALTHY" && dataHealth.checks.database.status === "HEALTHY",
+    "System health check reports HEALTHY with active database and crypto engine",
+    JSON.stringify(dataHealth)
+  );
+
   // TEST 1: Public Consumer DPP Verification
-  console.log("--- 1. Testing Public Consumer Product Verification ---");
+  console.log("\n--- 1. Testing Public Consumer Product Verification ---");
   const resValid = await fetch(`${BASE_URL}/api/verify/APX-OIL-901-000184`);
   const dataValid = await resValid.json();
   assert(
