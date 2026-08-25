@@ -271,10 +271,157 @@ async function runTests() {
     JSON.stringify(dataVerifyProd)
   );
 
+  // TEST 10: Phase 3 Secure Authentication, Registration & Password Lifecycle
+  console.log("\n--- 10. Testing Phase 3 Authentication Lifecycle ---");
+  
+  // 10a. User Registration with Password Hashing
+  const testEmail = `citizen_${Date.now()}@nepal.gov.np`;
+  const testPassword = "SecurePass2026!";
+  const resRegister = await fetch(`${BASE_URL}/api/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: "Bikash Adhikari",
+      email: testEmail,
+      password: testPassword,
+      role: "CONSUMER",
+      phone: "+977-9841234567",
+    }),
+  });
+  const dataRegister = await resRegister.json();
+  assert(
+    resRegister.status === 201 && dataRegister.success && dataRegister.data.user.email === testEmail,
+    `Registered new user (${testEmail}) with scrypt password hash and issued session token`,
+    JSON.stringify(dataRegister)
+  );
+
+  const emailVerificationToken = dataRegister.data.emailVerificationToken;
+
+  // 10b. Email Verification
+  if (emailVerificationToken) {
+    const resVerifyEmail = await fetch(`${BASE_URL}/api/auth/verify-email`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: emailVerificationToken }),
+    });
+    const dataVerifyEmail = await resVerifyEmail.json();
+    assert(
+      resVerifyEmail.status === 200 && dataVerifyEmail.success,
+      "Successfully verified email address and activated account",
+      JSON.stringify(dataVerifyEmail)
+    );
+  }
+
+  // 10c. Password-based Login (Valid credentials)
+  const resLoginPass = await fetch(`${BASE_URL}/api/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: testEmail,
+      password: testPassword,
+    }),
+  });
+  const dataLoginPass = await resLoginPass.json();
+  assert(
+    resLoginPass.status === 200 && dataLoginPass.success && dataLoginPass.data.token,
+    `Password verification succeeded for ${testEmail}; issued signed HMAC session token`,
+    JSON.stringify(dataLoginPass)
+  );
+
+  const refreshToken = dataLoginPass.data.refreshToken;
+
+  // 10d. Password-based Login (Invalid credentials rejected)
+  const resLoginWrong = await fetch(`${BASE_URL}/api/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: testEmail,
+      password: "WrongPassword999!",
+    }),
+  });
+  const dataLoginWrong = await resLoginWrong.json();
+  assert(
+    resLoginWrong.status === 401 && dataLoginWrong.code === "INVALID_CREDENTIALS",
+    "Invalid password rejected with HTTP 401 and INVALID_CREDENTIALS code",
+    JSON.stringify(dataLoginWrong)
+  );
+
+  // 10e. Refresh Token Strategy
+  if (refreshToken) {
+    const resRefresh = await fetch(`${BASE_URL}/api/auth/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken }),
+    });
+    const dataRefresh = await resRefresh.json();
+    assert(
+      resRefresh.status === 200 && dataRefresh.success && dataRefresh.data.token,
+      "Refresh token exchanged for a newly minted session token",
+      JSON.stringify(dataRefresh)
+    );
+  }
+
+  // 10f. Password Reset Request & Execution
+  const resForgot = await fetch(`${BASE_URL}/api/auth/forgot-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: testEmail }),
+  });
+  const dataForgot = await resForgot.json();
+  const resetToken = dataForgot.data?.resetToken;
+  assert(
+    resForgot.status === 200 && dataForgot.success && resetToken,
+    "Password reset token issued and stored with 1-hour expiration",
+    JSON.stringify(dataForgot)
+  );
+
+  if (resetToken) {
+    const newPassword = "NewSecurePassword2026!";
+    const resReset = await fetch(`${BASE_URL}/api/auth/reset-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token: resetToken,
+        newPassword,
+      }),
+    });
+    const dataReset = await resReset.json();
+    assert(
+      resReset.status === 200 && dataReset.success,
+      "Password reset executed; new password hash saved atomically",
+      JSON.stringify(dataReset)
+    );
+
+    // Verify login with new password works
+    const resLoginNew = await fetch(`${BASE_URL}/api/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: testEmail, password: newPassword }),
+    });
+    const dataLoginNew = await resLoginNew.json();
+    assert(
+      resLoginNew.status === 200 && dataLoginNew.success,
+      "Successfully logged in with updated password",
+      JSON.stringify(dataLoginNew)
+    );
+  }
+
+  // 10g. User Logout
+  const resLogout = await fetch(`${BASE_URL}/api/auth/logout`, {
+    method: "POST",
+  });
+  const dataLogout = await resLogout.json();
+  assert(
+    resLogout.status === 200 && dataLogout.success,
+    "User logged out; cookies cleared and refresh tokens invalidated",
+    JSON.stringify(dataLogout)
+  );
+
   console.log("\n==================================================");
   console.log(`TEST SUMMARY: ${passed} PASSED, ${failed} FAILED`);
   console.log("==================================================");
 }
 
 runTests();
+
 

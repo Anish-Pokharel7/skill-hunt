@@ -3,8 +3,14 @@ import { z } from "zod";
 // ==========================================
 // Authentication Schemas
 // ==========================================
-export const loginSchema = z.object({
-  email: z.string().email("Invalid email address format").optional(),
+export const registerSchema = z.object({
+  name: z.string().min(2, "Full name must be at least 2 characters").max(100),
+  email: z.string().email("Invalid email address format"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number"),
   role: z
     .enum([
       "SUPER_ADMIN",
@@ -15,11 +21,64 @@ export const loginSchema = z.object({
       "AUDITOR",
       "CONSUMER",
     ])
-    .optional(),
-  password: z.string().min(6, "Password must be at least 6 characters").optional(),
-}).refine((data) => data.email || data.role, {
-  message: "Either email or role must be provided for authentication",
+    .default("CONSUMER"),
+  orgId: z.string().optional(),
+  organizationName: z.string().optional(),
+  phone: z.string().optional(),
+  designation: z.string().optional(),
 });
+
+export const loginSchema = z
+  .object({
+    email: z.string().email("Invalid email address format").optional(),
+    role: z
+      .enum([
+        "SUPER_ADMIN",
+        "TAX_OFFICER",
+        "MANUFACTURER",
+        "IMPORTER",
+        "BUSINESS_EMPLOYEE",
+        "AUDITOR",
+        "CONSUMER",
+      ])
+      .optional(),
+    password: z.string().min(6, "Password must be at least 6 characters").optional(),
+  })
+  .refine((data) => data.email || data.role, {
+    message: "Either email or role must be provided for authentication",
+  });
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Invalid email address format"),
+});
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(10, "Reset token is required"),
+  newPassword: z
+    .string()
+    .min(8, "New password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number"),
+});
+
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, "Current password is required"),
+  newPassword: z
+    .string()
+    .min(8, "New password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number"),
+});
+
+export const verifyEmailSchema = z.object({
+  token: z.string().min(10, "Verification token is required"),
+});
+
+export const updateUserStatusSchema = z.object({
+  status: z.enum(["ACTIVE", "SUSPENDED", "PENDING_VERIFICATION"]),
+  reason: z.string().min(5, "Reason for status change must be at least 5 characters"),
+});
+
 
 // ==========================================
 // Batch Registration & DPP Minting Schemas

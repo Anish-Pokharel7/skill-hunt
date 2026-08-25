@@ -1,9 +1,12 @@
 import { PrismaClient } from "@prisma/client";
+import { hashPassword } from "../lib/auth/password";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("🌱 Seeding VERIPRICE database with Phase 2 core models...");
+  console.log("🌱 Seeding VERIPRICE database with Phase 2 core models and Phase 3 secure credentials...");
+
+  const defaultPasswordHash = await hashPassword("VeriPrice2026!");
 
   // 1. Seed Organizations
   const orgGov = await prisma.organization.upsert({
@@ -105,12 +108,13 @@ async function main() {
   // 2. Seed Users
   const userGov = await prisma.user.upsert({
     where: { email: "admin@veriprice.gov" },
-    update: {},
+    update: { passwordHash: defaultPasswordHash },
     create: {
       id: "usr_super_01",
       email: "admin@veriprice.gov",
       name: "Sarah Vance",
       role: "SUPER_ADMIN",
+      passwordHash: defaultPasswordHash,
       orgId: orgGov.id,
       designation: "Director General — National Revenue, Fiscal Policy & Platform Administration",
       status: "ACTIVE",
@@ -119,12 +123,13 @@ async function main() {
 
   await prisma.user.upsert({
     where: { email: "taxofficer@veriprice.gov" },
-    update: {},
+    update: { passwordHash: defaultPasswordHash },
     create: {
       id: "usr_tax_01",
       email: "taxofficer@veriprice.gov",
       name: "Officer Marcus Sterling",
       role: "TAX_OFFICER",
+      passwordHash: defaultPasswordHash,
       orgId: orgGov.id,
       designation: "Chief VAT & Anti-Smuggling Enforcement Officer",
       status: "ACTIVE",
@@ -133,12 +138,13 @@ async function main() {
 
   const userMfg = await prisma.user.upsert({
     where: { email: "manufacturer@apexbiotech.com" },
-    update: {},
+    update: { passwordHash: defaultPasswordHash },
     create: {
       id: "usr_mfg_01",
       email: "manufacturer@apexbiotech.com",
       name: "Elena Rostova",
       role: "MANUFACTURER",
+      passwordHash: defaultPasswordHash,
       orgId: orgMfg.id,
       designation: "VP of Quality Assurance & Production Operations",
       status: "ACTIVE",
@@ -147,12 +153,13 @@ async function main() {
 
   await prisma.user.upsert({
     where: { email: "importer@pacifichorizon.com" },
-    update: {},
+    update: { passwordHash: defaultPasswordHash },
     create: {
       id: "usr_imp_01",
       email: "importer@pacifichorizon.com",
       name: "David Chen",
       role: "IMPORTER",
+      passwordHash: defaultPasswordHash,
       orgId: orgImp.id,
       designation: "Head of Customs Manifests & Cross-Border Logistics",
       status: "ACTIVE",
@@ -161,12 +168,13 @@ async function main() {
 
   const userRetail = await prisma.user.upsert({
     where: { email: "cashier@metroretail.com" },
-    update: {},
+    update: { passwordHash: defaultPasswordHash },
     create: {
       id: "usr_biz_emp_01",
       email: "cashier@metroretail.com",
       name: "Rohan Joshi",
       role: "BUSINESS_EMPLOYEE",
+      passwordHash: defaultPasswordHash,
       orgId: orgBiz.id,
       employeeCode: "METRO-EMP-504",
       designation: "Store Manager & Retail Operations Lead",
@@ -176,12 +184,13 @@ async function main() {
 
   await prisma.user.upsert({
     where: { email: "auditor@sterlingvance.com" },
-    update: {},
+    update: { passwordHash: defaultPasswordHash },
     create: {
       id: "usr_auditor_01",
       email: "auditor@sterlingvance.com",
       name: "Arthur Pendelton",
       role: "AUDITOR",
+      passwordHash: defaultPasswordHash,
       orgId: orgAudit.id,
       designation: "Senior Forensic Provenance & Tax Auditor",
       status: "ACTIVE",
@@ -190,12 +199,13 @@ async function main() {
 
   await prisma.user.upsert({
     where: { email: "consumer@citizens.org" },
-    update: {},
+    update: { passwordHash: defaultPasswordHash },
     create: {
       id: "usr_consumer_01",
       email: "consumer@citizens.org",
       name: "Maya Lin",
       role: "CONSUMER",
+      passwordHash: defaultPasswordHash,
       orgId: orgConsumer.id,
       designation: "Verified Citizen Consumer",
       status: "ACTIVE",
