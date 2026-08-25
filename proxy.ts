@@ -14,7 +14,7 @@ const PROTECTED_ROUTES: Record<string, string[]> = {
   "/reports": ["AUDITOR", "ADMIN", "TAX_OFFICER", "SUPER_ADMIN"],
 };
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Check if the current route matches any protected portal prefix
@@ -79,6 +79,8 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 }
+
+export default proxy;
 
 export const config = {
   matcher: [
